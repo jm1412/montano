@@ -10,7 +10,7 @@ function showRegister() {
     byId("login-form").style.display = "none";
     byId("register-form").style.display = "block";
     return false;
-}
+} 
 
 function showLogin() {
     console.log("function: showLogin")
