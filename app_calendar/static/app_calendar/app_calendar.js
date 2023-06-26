@@ -18,6 +18,7 @@ function showLogin() {
     byId("register-form").style.display = "none";
 }
 
+// Main listener/caller
 document.addEventListener('DOMContentLoaded', function() {
     byId("show-register").onclick = function(){showRegister()};
     byId("show-login").onclick = function(){showLogin()};
