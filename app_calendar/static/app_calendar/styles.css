@@ -1,0 +1,14 @@
+.wholesite{
+    width: 100vw;
+    height: 100vh;
+}
+
+#login-card{
+    margin: 0;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(50%);
+    border-radius: 15px;
+    box-shadow: 10px 10px 10px 10px
+}
+

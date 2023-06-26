@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Calendar{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'app_calendar/styles.css' %}">
+        {% block script %}
+        <script src="{% static 'app_calendar/app_calendar.js' %}"></script>
+        {% endblock %}
+    </head>
+    <body>
+        <div class="wholesite">
+            <div class="shadow-lg text-center border border-primary mb-3 mx-auto" id="login-card" style="max-width: 25rem;">
+                <div class="card-body" id="login-form" style="display:block;">
+                    <h5 class="card-title">Calendar</h5>
+                    <form action="{% url 'login' %}" method="post">
+                        <input autofocus class="form-control m-1" type="email" name="email" placeholder="Email">
+                        <input class="form-control m-1" type="password" name="password" placeholder="Password">
+                        <input class="btn btn-primary" type="submit" value="Login">
+                    </form>
+                    Don't have an account? <a href="#" id="show-register">Register here.</a>
+                </div>
+
+                <div class="card-body" id="register-form" style="display:none;">
+                    <h5 class="card-title">Calendar</h5>
+                    <form action="{% url 'login' %}" method="post">
+                        <input autofocus class="form-control m-1" type="email" name="email" placeholder="Email">
+                        <input class="form-control m-1" type="password" name="password" placeholder="Password">
+                        <input class="btn btn-primary" type="submit" value="Login">
+                    </form>
+                    Already have an account? <a href="#" id="show-login">Login instead.</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
