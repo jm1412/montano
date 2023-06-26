@@ -17,6 +17,7 @@
                 <div class="card-body" id="login-form" style="display:block;">
                     <h5 class="card-title">Calendar</h5>
                     <form action="{% url 'login' %}" method="post">
+                        {% csrf_token %}
                         <input autofocus class="form-control m-1" type="email" name="email" placeholder="Email">
                         <input class="form-control m-1" type="password" name="password" placeholder="Password">
                         <input class="btn btn-primary m-1" type="submit" value="Login">
@@ -28,6 +29,7 @@
                 <div class="card-body" id="register-form" style="display:none;">
                     <h5 class="card-title">Calendar</h5>
                     <form action="{% url 'register' %}" method="post">
+                        {% csrf_token %}
                         <input autofocus type="text" class="form-control m-1" name="first-name" placeholder="First Name">
                         <input type="text" class="form-control m-1" name="last-name" placeholder="Last Name">
                         <input type="email" class="form-control m-1" name="email" placeholder="Email">
