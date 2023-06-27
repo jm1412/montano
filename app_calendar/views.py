@@ -10,7 +10,7 @@ def index(request):
 
     # Authenticated users view their inbox
     if request.user.is_authenticated:
-        return render(request, "app_calendar/inbox.html")
+        return HttpResponseRedirect("year")
 
     # Everyone else is prompted to sign in
     else:
@@ -74,3 +74,10 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "register.html")
+
+@login_required
+def year_view(request):
+    if request.user.is_authenticated:
+        return render(request, "app_calendar/year.html")
+    else:
+        return render(request, "app_calendar/index.html")
