@@ -81,3 +81,7 @@ def year_view(request):
         return render(request, "app_calendar/year.html")
     else:
         return render(request, "app_calendar/index.html")
+    
+
+def calendarhome(request):
+    return render(request, "app_calendar/year.html")
