@@ -7,7 +7,16 @@
         <link rel="stylesheet" href="{% static 'app_calendar/styles.css' %}">
         {% block script %}
         <script src="{% static 'app_calendar/app_calendar.js' %}"></script>
+        <script src="{% static 'app_calendar/app_calendar.js' %}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         {% endblock %}
+
+        <script>
+            var $el = $("html");
+            $el.css({width: $el.width(), height: $el.height()});
+        </script>
+
     </head>
     <body>
         <div class="wholesite">
@@ -39,9 +48,21 @@
                     </form>
                     Already have an account? <a href="#" id="show-login">Login instead.</a>
                 </div>
-
-            </div>
-        </div>
+            </div>  
     </body>
+    <footer class="footer">
+        <div class="container d-flex justify-content-center py-2">
+            <a href="https://www.facebook.com/juansymontano" target="_blank">
+                <button type="button" class="btn btn-primary btn-lg btn-floating mx-2" style="background-color: #54456b;">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </button>
+            </a>
+            <a href="https://www.instagram.com/juansymontano" target="_blank">
+                <button type="button" class="btn btn-primary btn-lg btn-floating mx-2" style="background-color: #54456b;">
+                    <i class="fa-brands fa-instagram"></i>
+                </button>
+            </a>
+        </div>
+      </footer>
 </html>
 
