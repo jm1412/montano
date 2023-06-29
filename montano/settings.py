@@ -32,17 +32,11 @@ ALLOWED_HOSTS = [
     'montano.ph',
     '127.0.0.1',
     'localhost',
-    'api.localhost',
-    'api.mysite',
-    'mysite',
-    'api.montano',
-    'montano',
     'calendar.localhost'
 ]
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'app_calendar',
     'django.contrib.admin',
