@@ -13,8 +13,23 @@
         <link rel="stylesheet" href="{% static 'app_calendar/template.css' %}">
         <link rel="stylesheet" href="{% static 'app_calendar/styles.css' %}">
         <script src="{% static 'app_calendar/template.js' %}"></script>
+        <script src="{% static 'app_calendar/layout.js' %}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    
+        <script>
+            $(function(){
+
+                $(".dropdown-menu li a").click(function(){
+            
+                  $(".btn:first-child").text($(this).text());
+                  $(".btn:first-child").val($(this).text());
+            
+               });
+            
+            });
+        </script>
+    
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -25,10 +40,11 @@
             <!-- Navbar Search, DO NOT remove-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
             </form>
+
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4 my-2 my-md-0 pe-3">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Year<i class="arrow_drop_down"></i></a>
+                    <a class="nav-link dropdown-toggle" id="navbardropdown-views" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="arrow_drop_down"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="/year">Year</a></li>
                         <li><a class="dropdown-item" href="/month">Month</a></li>
@@ -36,7 +52,7 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-gear"></i></a>
+                    <a class="nav-link" id="navbardropdown-tools" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-gear"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#!">Foo</a></li>
                         <li><a class="dropdown-item" href="#!">Bar</a></li>
