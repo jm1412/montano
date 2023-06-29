@@ -1,60 +1,27 @@
 {% extends 'app_calendar/layout.html' %}
 
 {% block body %}
+<script>
+  var $el = $("html");
+  $el.css({width: $el.width(), height: $el.height()});
+</script>
+
 <body>
-  <div class="container-fluid text-center calendar">
-    <!-- MONTH -->
-    <div class="row calendar-year">
-      JANUARY 2023
+  <div class="container-fluid text-center calendar-year-container">
+    <div class="d-flex flex-row mb-3">
+      <div class="p-1 month-col flex-shrink-0">January</div>
+      <div class="p-1 month-col flex-shrink-0">February</div>
+      <div class="p-1 month-col flex-shrink-0">March</div>
+      <div class="p-1 month-col flex-shrink-0">April</div>
+      <div class="p-1 month-col flex-shrink-0">May</div>
+      <div class="p-1 month-col flex-shrink-0">June</div>
+      <div class="p-1 month-col flex-shrink-0">July</div>
+      <div class="p-1 month-col flex-shrink-0">August</div>
+      <div class="p-1 month-col flex-shrink-0">September</div>
+      <div class="p-1 month-col flex-shrink-0">October</div>
+      <div class="p-1 month-col flex-shrink-0">November</div>
+      <div class="p-1 month-col flex-shrink-0">December</div>
     </div>
-
-    <!-- DAYS -->
-    <div class="row calendar-days-row">
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-    </div>
-    <div class="row calendar-days-row">
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-    </div>
-    <div class="row calendar-days-row">
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-    </div>
-    <div class="row calendar-days-row">
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-    </div>
-    <div class="row calendar-days-row">
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-      <div class="col calendar-days">col</div>
-    </div>
-
   </div>
 
 

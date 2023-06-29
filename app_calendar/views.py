@@ -77,11 +77,19 @@ def register(request):
 
 @login_required
 def year_view(request):
-    if request.user.is_authenticated:
-        return render(request, "app_calendar/year.html")
-    else:
+    if request.user.is_authenticated == False:
         return render(request, "app_calendar/index.html")
-    
+    return render(request, "app_calendar/year.html")
+
+
+@login_required
+def month_view(request):
+    if request.user.is_authenticated == False:
+        return render(request, "app_calendar/index.html")
+    return render(request, "app_calendar/month.html")
+
+def test(request):
+    return render(request, "app_calendar/layout.html")
 
 def calendarhome(request):
     return render(request, "app_calendar/year.html")
