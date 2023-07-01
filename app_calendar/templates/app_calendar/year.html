@@ -1,211 +1,21 @@
 {% extends 'app_calendar/layout.html' %}
+{% load static %}
 
 {% block body %}
 <script>
   var $el = $("html");
   $el.css({width: $el.width(), height: $el.height()});
 </script>
-
 <body>
   <div class="container-fluid text-center calendar-year-container"> <!-- body container -->
-    <div class="d-flex flex-row mb-3"> <!-- flex container -->
-
-      <div class="p-1 yv-m flex-shrink-0" style="background-color:#A7C7E7"> <!-- monthly containers -->
-
-        <div class="yv-m-label">January</div>
-
-        <div class="yv-d-container d-flex"> <!-- transfer to JS -->
-          <div class="yv-d">1</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-        <div class="yv-d-container d-flex">
-          <div class="yv-d">2</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-      </div>
-
-      <div class="p-1 yv-m flex-shrink-0" style="background-color:#A7C7E7"> <!-- monthly containers -->
-
-        <div class="yv-m-label">February</div>
-
-        <div class="yv-d-container d-flex"> <!-- transfer to JS -->
-          <div class="yv-d">1</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-        <div class="yv-d-container d-flex">
-          <div class="yv-d">2</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-      </div>
-
-      <div class="p-1 yv-m flex-shrink-0" style="background-color:#A7C7E7"> <!-- monthly containers -->
-
-        <div class="yv-m-label">March</div>
-
-        <div class="yv-d-container d-flex"> <!-- transfer to JS -->
-          <div class="yv-d">1</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-        <div class="yv-d-container d-flex">
-          <div class="yv-d">2</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-      </div>
-
-      <div class="p-1 yv-m flex-shrink-0" style="background-color:#A7C7E7"> <!-- monthly containers -->
-
-        <div class="yv-m-label">April</div>
-
-        <div class="yv-d-container d-flex"> <!-- transfer to JS -->
-          <div class="yv-d">1</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-        <div class="yv-d-container d-flex">
-          <div class="yv-d">2</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-      </div>
-
-      <div class="p-1 yv-m flex-shrink-0" style="background-color:#A7C7E7"> <!-- monthly containers -->
-
-        <div class="yv-m-label">May</div>
-
-        <div class="yv-d-container d-flex"> <!-- transfer to JS -->
-          <div class="yv-d">1</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-        <div class="yv-d-container d-flex">
-          <div class="yv-d">2</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-      </div>
-
-      <div class="p-1 yv-m flex-shrink-0" style="background-color:#A7C7E7"> <!-- monthly containers -->
-
-        <div class="yv-m-label">June</div>
-
-        <div class="yv-d-container d-flex"> <!-- transfer to JS -->
-          <div class="yv-d">1</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-        <div class="yv-d-container d-flex">
-          <div class="yv-d">2</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-      </div>
-
-      <div class="p-1 yv-m flex-shrink-0" style="background-color:#A7C7E7"> <!-- monthly containers -->
-
-        <div class="yv-m-label">July</div>
-
-        <div class="yv-d-container d-flex"> <!-- transfer to JS -->
-          <div class="yv-d">1</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-        <div class="yv-d-container d-flex">
-          <div class="yv-d">2</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-      </div>
-
-      <div class="p-1 yv-m flex-shrink-0" style="background-color:#A7C7E7"> <!-- monthly containers -->
-
-        <div class="yv-m-label">August</div>
-
-        <div class="yv-d-container d-flex"> <!-- transfer to JS -->
-          <div class="yv-d">1</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-        <div class="yv-d-container d-flex">
-          <div class="yv-d">2</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-      </div>
-
-      <div class="p-1 yv-m flex-shrink-0" style="background-color:#A7C7E7"> <!-- monthly containers -->
-
-        <div class="yv-m-label">September</div>
-
-        <div class="yv-d-container d-flex"> <!-- transfer to JS -->
-          <div class="yv-d">1</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-        <div class="yv-d-container d-flex">
-          <div class="yv-d">2</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-      </div>
-
-      <div class="p-1 yv-m flex-shrink-0" style="background-color:#A7C7E7"> <!-- monthly containers -->
-
-        <div class="yv-m-label">October</div>
-
-        <div class="yv-d-container d-flex"> <!-- transfer to JS -->
-          <div class="yv-d">1</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-        <div class="yv-d-container d-flex">
-          <div class="yv-d">2</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-      </div>
-
-      <div class="p-1 yv-m flex-shrink-0" style="background-color:#A7C7E7"> <!-- monthly containers -->
-
-        <div class="yv-m-label">November</div>
-
-        <div class="yv-d-container d-flex"> <!-- transfer to JS -->
-          <div class="yv-d">1</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-        <div class="yv-d-container d-flex">
-          <div class="yv-d">2</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-      </div>
-
-      <div class="p-1 yv-m flex-shrink-0" style="background-color:#A7C7E7"> <!-- monthly containers -->
-
-        <div class="yv-m-label">December</div>
-
-        <div class="yv-d-container d-flex"> <!-- transfer to JS -->
-          <div class="yv-d">1</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-        <div class="yv-d-container d-flex">
-          <div class="yv-d">2</div>
-          <div class="yv-todo flex-grow-1" id="todo-1">The quick brown fox</div>
-        </div>
-
-      </div>
-
-
-
+    <div id="months-container" class="d-flex flex-row mb-3"> <!-- flex container -->
+      <!-- propagated by javascript -->
     </div>
   </div>
 
 </body>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'app_calendar/layout.js' %}"></script>
 {% endblock %}

@@ -5,6 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from .models import *
 
+import json
+from django.http import JsonResponse
+
 # Create your views here.
 def index(request):
 
@@ -93,3 +96,23 @@ def test(request):
 
 def calendarhome(request):
     return render(request, "app_calendar/year.html")
+
+# API for creating new calendar entries 
+def create_entry(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request requried."}, status=400)
+    
+    data = json.loads(request.body)
+    user = request.user
+    todo = data.get("subject", "")
+    detail = data.get("body", "")
+    complete_by = data.get("complete-by", "")
+    
+    todo = Calendar(
+        user=user,
+        todo=todo,
+        detail=detail,
+        complete_by=complete_by
+    )
+
+    todo.save()
