@@ -56,10 +56,10 @@ body {
     border-width: 1px;
     margin:-1px;
     border-color:blue;
-
+    font-size: 14px;
 }
 
-.month-col {
+.yv-m { 
     width: 8.33%;
     flex-shrink:0;
 }
@@ -70,3 +70,27 @@ body {
     width: 100%;
     background-color: lightskyblue;
 }
+
+.yv-todo {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* debug border */
+/* 
+.yv-m, .yv-m-label, .yv-d-container, .yv-d, .yv-todo {
+    border-style: solid;
+    border-width:1px;
+    border-color:lightslategray;
+}
+ */
+
+/* 
+yv : year view
+mv : month view
+dv : day view
+m : month
+y : year
+d : day
+*/
