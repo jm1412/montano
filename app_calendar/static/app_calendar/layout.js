@@ -5,14 +5,47 @@ const byId = document.getElementById.bind(document);
 const byClass = document.getElementsByClassName.bind(document);
 const byTag = document.getElementsByTagName.bind(document);
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
-function year_onclickday_save(obj, id){
+function year_onclickday_save(todo, complete_by){
+    console.log("year_on_clickday_save is running")
+    console.log(`todo: ${todo}`)
+    console.log(`complete_by: ${complete_by}`)
     // This is a helper function
     // that saves the value on textbox
     // I separated this to a smaller function because
     // I am adding various listeners to the main function
-    console.log(obj)
-    console.log(id)
+
+
+    // save
+    // tic year_highlight
+
+    fetch('/create_entry', {
+        method: 'POST',
+        headers: {'X-CSRFToken': getCookie('csrftoken')},
+        mode:"same-origin",
+        body: JSON.stringify({
+            subject: todo,
+            body:"",
+            complete_by: complete_by,
+            year_highlight: true
+        })
+    })
+    console.log("saved")
     
 }
 
@@ -23,10 +56,10 @@ function year_onclickday() {
         // on Enter
         // on out of focus
             //then calls save function
-    console.log(this);
+    target_date = this.id
     
     // Show text box
-    this.innerHTML=`<input id="new-calendar-entry" type="text">`
+    this.innerHTML=`<input class="abcd" id="new-calendar-entry" type="text">`
     byId("new-calendar-entry").focus()
 
     // Add listeners to text box
@@ -41,7 +74,7 @@ function year_onclickday() {
 
     input.addEventListener("focusout", function(){
         this.outerHTML = this.value;
-        year_onclickday_save(this.value, this);
+        year_onclickday_save(this.value, target_date);
     }); 
 };
 
@@ -100,7 +133,7 @@ function generateYearPlaceholder(){
 
 // fetch year todo and insert received json file to corresponding html id
 function getCalendarYear() { 
-
+    console.log("getCalendarYear is running")
     fetch('./get_calendar_year')
     .then(response => response.json())
     .then(calendar => {
