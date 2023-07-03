@@ -101,6 +101,7 @@ def calendarhome(request):
 
 # API for creating new calendar entries 
 def create_entry(request):
+
     if request.method != "POST":
         return JsonResponse({"error": "POST request requried."}, status=400)
     
@@ -108,16 +109,22 @@ def create_entry(request):
     user = request.user
     todo = data.get("subject", "")
     detail = data.get("body", "")
-    complete_by = data.get("complete-by", "")
-    
+    complete_by = data.get("complete_by", "")
+    year_highlight = data.get("year_highlight", "")
+
+    #TODO: convert year_highlight to YYYY-MM-DDnote    
+
     todo = Calendar(
         user=user,
-        todo=todo,
-        detail=detail,
-        complete_by=complete_by
+        todo="testbaba",
+        detail="detail",
+        complete_by="2023-01-01",
+        year_highlight=True
     )
 
     todo.save()
+
+    return JsonResponse({"message": "Email sent successfully."}, status=201)
 
 def get_calendar_year(request):
     logger = logging.getLogger('app_api')
