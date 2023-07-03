@@ -5,6 +5,7 @@ const byId = document.getElementById.bind(document);
 const byClass = document.getElementsByClassName.bind(document);
 const byTag = document.getElementsByTagName.bind(document);
 
+// For csrf_token
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -21,45 +22,24 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function year_onclickday_save(todo, complete_by){
-    console.log("year_on_clickday_save is running")
-    console.log(`todo: ${todo}`)
-    console.log(`complete_by: ${complete_by}`)
-    // This is a helper function
-    // that saves the value on textbox
-    // I separated this to a smaller function because
-    // I am adding various listeners to the main function
-
-
-    // save
-    // tic year_highlight
-
-    fetch('/create_entry', {
-        method: 'POST',
-        headers: {'X-CSRFToken': getCookie('csrftoken')},
-        mode:"same-origin",
-        body: JSON.stringify({
-            subject: todo,
-            body:"",
-            complete_by: complete_by,
-            year_highlight: true
-        })
-    })
-    console.log("saved")
-    
-}
-
 function year_onclickday() {
     // When year view day entry is clicked, this function gets called
     // This function creates a textbox where user can enter new todo
     // Adds various listeners to text box:
         // on Enter
         // on out of focus
-            //then calls save function
+            //then PUTS
+    console.log(`year_onclickday : ${this.innerHTML}`)
     target_date = this.id
+
+    if (this.innerHTML.length > 0) {
+        var write_type = "edit";
+    } else {
+        var write_type = "new";
+    }
     
     // Show text box
-    this.innerHTML=`<input class="abcd" id="new-calendar-entry" type="text">`
+    this.innerHTML=`<input id="new-calendar-entry" style="text-align:left" type="text" value="${this.innerHTML}">`
     byId("new-calendar-entry").focus()
 
     // Add listeners to text box
@@ -68,32 +48,60 @@ function year_onclickday() {
     input.addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
             event.preventDefault(); // prevent default action
-            byId("new-calendar-entry").blur()
+            byId("new-calendar-entry").blur() // to trigget focus out
         }
     })
 
     input.addEventListener("focusout", function(){
         this.outerHTML = this.value;
-        year_onclickday_save(this.value, target_date);
+
+        fetch('/create_entry', {
+            method: 'POST',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            mode:"same-origin",
+            body: JSON.stringify({
+                subject: this.value,
+                body:"",
+                complete_by: target_date,
+                year_highlight: true,
+                write_type:write_type
+            })
+        })
+        console.log("saved")
     }); 
 };
 
 
 function generateYearPlaceholder(){
     const months = {
-        january:"31",
-        february:"29",
-        march:"31",
-        april:"30",
-        may:"31",
-        june:"30",
-        july:"31",
-        august:"31",
-        september:"30",
-        october:"31",
-        november:"30",
-        december:"31"
+        1:"31",
+        2:"29",
+        3:"31",
+        4:"30",
+        5:"31",
+        6:"30",
+        7:"31",
+        8:"31",
+        9:"30",
+        10:"31",
+        11:"30",
+        12:"31"
     };
+
+    const monthNames = {
+        1:"january",
+        2:"february",
+        3:"march",
+        4:"april",
+        5:"may",
+        6:"june",
+        7:"july",
+        8:"august",
+        9:"september",
+        10:"october",
+        11:"november",
+        12:"december"
+    }
 
     // Generate calendar placeholders
     for (var key in months){
@@ -108,17 +116,18 @@ function generateYearPlaceholder(){
         // Generate month label and placeholder days
         var targetId = "container-" + key;
         var target = byId(targetId);
-        target.innerHTML = `<div class="yv-m-label">${key}</div>`;
+        target.innerHTML = `<div class="yv-m-label">${monthNames[key]}</div>`;
         
         target_days = Number(months[key])+1
         for (let i = 1; i<target_days; i++) {
 
             var dd = i.toLocaleString('en-US', {minimumIntegerDigits: 2,useGrouping: false}) // trailing 0
-            
+            var mm = Number(key).toLocaleString('en-US', {minimumIntegerDigits: 2,useGrouping: false})
+
             target.innerHTML+=`
             <div class="yv-d-container d-flex">
             <div class="yv-d">${i}</div>
-            <div class="yv-todo flex-grow-1" id="${key} ${dd} 2023"></div>
+            <div class="yv-todo flex-grow-1" id="2023-${mm}-${dd}"></div>
             </div>`
         }
     }
@@ -138,8 +147,8 @@ function getCalendarYear() {
     .then(response => response.json())
     .then(calendar => {
         calendar.forEach(function(item) {
-            console.log(item.complete_by.toLowerCase());
-            byId(item.complete_by.toLowerCase()).innerHTML = item.todo
+            console.log(`item.complete_by: ${item.complete_by}`);
+            byId(item.complete_by).innerHTML = item.todo
 
         })
     })
