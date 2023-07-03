@@ -39,25 +39,33 @@ function generateYearPlaceholder(){
         
         target_days = Number(months[key])+1
         for (let i = 1; i<target_days; i++) {
+
+            var dd = i.toLocaleString('en-US', {minimumIntegerDigits: 2,useGrouping: false}) // trailing 0
+            
             target.innerHTML+=`
             <div class="yv-d-container d-flex">
             <div class="yv-d">${i}</div>
-            <div class="yv-todo flex-grow-1" id="todo-${i}"></div>
+            <div class="yv-todo flex-grow-1" id="${key} ${dd} 2023"></div>
             </div>`
         }
     }
 }
 
 
-function getCalendarYear() {
-    console.log("fetching calendar year todo")
+
+
+// fetch year todo and insert received json file to corresponding html id
+function getCalendarYear() { 
+
     fetch('./get_calendar_year')
-    // .then(response => response.json())
-    // .then(calendar => {
-    //     calendar.forEach(function(item, id) {
-    //         console.log(item.todo);
-    //     })
-    // })
+    .then(response => response.json())
+    .then(calendar => {
+        calendar.forEach(function(item) {
+            console.log(item.complete_by.toLowerCase());
+            byId(item.complete_by.toLowerCase()).innerHTML = "test"
+
+        })
+    })
 }
 
 // Main listener/caller

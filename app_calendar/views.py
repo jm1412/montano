@@ -122,9 +122,11 @@ def create_entry(request):
 def get_calendar_year(request):
     logger = logging.getLogger('app_api')
     logger.info(f"Getting calendar for user: {request.user}")
+
+    query_year = 2023 # for testing purposes, final code should accept year as entry
     
     # get all todolist
     user = User.objects.get(email=request.user) # get user.id
-    entries = Calendar.objects.filter(user=user.id) # get all calendar entries of user
+    entries = Calendar.objects.filter(user=user.id, complete_by__year=query_year) # get all calendar entries of user
 
     return JsonResponse([entry.yearview() for entry in entries], safe=False)
