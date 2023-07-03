@@ -124,6 +124,7 @@ def get_calendar_year(request):
     logger.info(f"Getting calendar for user: {request.user}")
 
     query_year = 2023 # for testing purposes, final code should accept year as entry
+    # TODO: add to filter if it is a year highlight or not
     
     # get all todolist
     user = User.objects.get(email=request.user) # get user.id

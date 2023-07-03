@@ -23,15 +23,14 @@ function generateYearPlaceholder(){
         december:"31"
     };
 
+    // Generate calendar placeholders
     for (var key in months){
-
-        // Generate monthly containers
+        // Generate container
         monthContainer = byId("months-container")
         monthContainer.innerHTML += `
         <div id="container-${key}" class="p-1 yv-m flex-shrink-0">
         </div>
         `
-
         // Generate month label and placeholder days
         var targetId = "container-" + key;
         var target = byId(targetId);
@@ -49,6 +48,19 @@ function generateYearPlaceholder(){
             </div>`
         }
     }
+
+    // After generating placeholder
+    // add listener to edit/add calendar entries on click
+    var elements = document.getElementsByClassName("yv-d-container");
+
+    var onclickday = function() {
+        var attribute = this.getAttribute("data-myattribute");
+        console.log(this.innerHTML);
+    };
+
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].addEventListener('click', onclickday, false);
+    }
 }
 
 
@@ -62,7 +74,7 @@ function getCalendarYear() {
     .then(calendar => {
         calendar.forEach(function(item) {
             console.log(item.complete_by.toLowerCase());
-            byId(item.complete_by.toLowerCase()).innerHTML = "test"
+            byId(item.complete_by.toLowerCase()).innerHTML = item.todo
 
         })
     })

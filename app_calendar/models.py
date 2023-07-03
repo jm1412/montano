@@ -12,6 +12,7 @@ class Calendar(models.Model):
     detail = models.CharField(max_length=255, blank=True)
     complete_by = models.DateTimeField(blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
+    year_highlight = models.BooleanField(default=False)
 
     def yearview(self):
         return {
