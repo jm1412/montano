@@ -48,6 +48,18 @@ function generateYearPlaceholder(){
     }
 }
 
+
+function getCalendarYear() {
+    console.log("fetching calendar year todo")
+    fetch('./get_calendar_year')
+    // .then(response => response.json())
+    // .then(calendar => {
+    //     calendar.forEach(function(item, id) {
+    //         console.log(item.todo);
+    //     })
+    // })
+}
+
 // Main listener/caller
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -60,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (currentView=="/year"){
         currentLabel.innerHTML = "Year";
         generateYearPlaceholder()
+        getCalendarYear()
     } else if (currentView=="/month"){
         currentLabel.innerHTML = "Month";
     }

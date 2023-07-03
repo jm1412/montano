@@ -8,6 +8,8 @@ from .models import *
 import json
 from django.http import JsonResponse
 
+import logging # to allow console.log
+
 # Create your views here.
 def index(request):
 
@@ -116,3 +118,13 @@ def create_entry(request):
     )
 
     todo.save()
+
+def get_calendar_year(request):
+    logger = logging.getLogger('app_api')
+    logger.info(f"Getting calendar for user: {request.user}")
+    
+    # get all todolist
+    user = User.objects.get(email=request.user) # get user.id
+    entries = Calendar.objects.filter(user=user.id) # get all calendar entries of user
+
+    return JsonResponse([entry.yearview() for entry in entries], safe=False)
