@@ -6,6 +6,45 @@ const byClass = document.getElementsByClassName.bind(document);
 const byTag = document.getElementsByTagName.bind(document);
 
 
+function year_onclickday_save(obj, id){
+    // This is a helper function
+    // that saves the value on textbox
+    // I separated this to a smaller function because
+    // I am adding various listeners to the main function
+    console.log(obj)
+    console.log(id)
+    
+}
+
+function year_onclickday() {
+    // When year view day entry is clicked, this function gets called
+    // This function creates a textbox where user can enter new todo
+    // Adds various listeners to text box:
+        // on Enter
+        // on out of focus
+            //then calls save function
+    console.log(this);
+    
+    // Show text box
+    this.innerHTML=`<input id="new-calendar-entry" type="text">`
+    byId("new-calendar-entry").focus()
+
+    // Add listeners to text box
+    var input = document.getElementById("new-calendar-entry");
+
+    input.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); // prevent default action
+            byId("new-calendar-entry").blur()
+        }
+    })
+
+    input.addEventListener("focusout", function(){
+        this.outerHTML = this.value;
+        year_onclickday_save(this.value, this);
+    }); 
+};
+
 
 function generateYearPlaceholder(){
     const months = {
@@ -25,12 +64,14 @@ function generateYearPlaceholder(){
 
     // Generate calendar placeholders
     for (var key in months){
+
         // Generate container
         monthContainer = byId("months-container")
         monthContainer.innerHTML += `
         <div id="container-${key}" class="p-1 yv-m flex-shrink-0">
         </div>
         `
+
         // Generate month label and placeholder days
         var targetId = "container-" + key;
         var target = byId(targetId);
@@ -49,22 +90,13 @@ function generateYearPlaceholder(){
         }
     }
 
-    // After generating placeholder
-    // add listener to edit/add calendar entries on click
-    var elements = document.getElementsByClassName("yv-d-container");
-
-    var onclickday = function() {
-        var attribute = this.getAttribute("data-myattribute");
-        console.log(this.innerHTML);
-    };
+    // listener to edit/add calendar entries on click
+    var elements = document.getElementsByClassName("yv-todo");
 
     for (var i = 0; i < elements.length; i++) {
-        elements[i].addEventListener('click', onclickday, false);
+        elements[i].addEventListener('click', year_onclickday, false);
     }
 }
-
-
-
 
 // fetch year todo and insert received json file to corresponding html id
 function getCalendarYear() { 
