@@ -5,6 +5,7 @@ const byId = document.getElementById.bind(document);
 const byClass = document.getElementsByClassName.bind(document);
 const byTag = document.getElementsByTagName.bind(document);
 
+var currentYear = "";
 
 function getCookie(name) {
     // For csrf_token
@@ -66,7 +67,7 @@ function year_onclickday() {
             body: JSON.stringify({
                 subject: this.value,
                 body:"",
-                complete_by: target_date,
+                complete_by: currentYear +"-"+target_date,
                 year_highlight: true,
                 write_type:write_type
             })
@@ -146,7 +147,7 @@ function generateYearPlaceholder(currentYear){
             target.innerHTML+=`
             <div class="yv-d-container d-flex">
             <div class="yv-d">${i}</div>
-            <div class="yv-todo flex-grow-1 todo-container" id="2023-${mm}-${dd}"></div>
+            <div class="yv-todo flex-grow-1 todo-container" id="${mm}-${dd}"></div>
             </div>`
         }
     }
@@ -173,8 +174,8 @@ function getCalendarYear(currentYear) {
     .then(response => response.json())
     .then(calendar => {
         calendar.forEach(function(item) {
-            console.log(`item.complete_by: ${item.complete_by}`);
-            byId(item.complete_by).innerHTML = item.todo
+            console.log(`item.complete_by: ${item.complete_by.slice(5,)}`);
+            byId(item.complete_by.slice(5,)).innerHTML = item.todo
         })
     })
 }
@@ -182,8 +183,14 @@ function getCalendarYear(currentYear) {
 function highlight_today(){
     // Highlight today's color
     var today = new Date();
-    today = today.toISOString().slice(0, -14);
-    byId(today).parentNode.style.backgroundColor = "#A491D3";
+    today_y = today.toISOString().slice(0,4)
+    today = today.toISOString().slice(5, -14);
+
+    byId(today).parentNode.style.backgroundColor = ""; // Remove colors first, in case of year change
+
+    if (currentYear == today_y){
+        byId(today).parentNode.style.backgroundColor = "#A491D3";
+    }
 }
 
 function yearChanger() {
@@ -193,14 +200,16 @@ function yearChanger() {
 
     byId("prev-year").addEventListener("click", function(){
         byId("current-year").innerHTML = Number(byId("current-year").innerHTML)-1
-        var currentYear = byId("current-year").innerHTML
+        currentYear = byId("current-year").innerHTML
         getCalendarYear(currentYear)
+        highlight_today()
     })
 
     byId("next-year").addEventListener("click", function(){
         byId("current-year").innerHTML = Number(byId("current-year").innerHTML)+1
-        var currentYear = byId("current-year").innerHTML
+        currentYear = byId("current-year").innerHTML
         getCalendarYear(currentYear)
+        highlight_today()
     })
 }
 
@@ -215,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Run necessary scripts per view type
     if (currentView=="/year"){
         // currentLabel.innerHTML = "Year";
-        var currentYear = byId("current-year").innerHTML
+        currentYear = byId("current-year").innerHTML
         generateYearPlaceholder()
         getCalendarYear(currentYear)
         yearChanger()
