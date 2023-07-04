@@ -107,13 +107,28 @@ function generateYearPlaceholder(){
         12:"december"
     }
 
+    const monthColors = {
+        1: "#F8D7DA",    // Pale Rose
+        2: "#FCE4EC",    // Lavender Blush
+        3: "#F1EEF6",    // Lilac
+        4: "#DDEBF7",    // Baby Blue
+        5: "#E9F7EF",    // Mint Cream
+        6: "#F8F8E7",    // Vanilla
+        7: "#FCE8D5",    // Peachy Beige
+        8: "#F3F3F3",    // Pale Gray
+        9: "#F7ECE1",    // Ivory
+        10: "#F3F8F2",   // Pale Green
+        11: "#EAE7F2",   // Lilac Gray
+        12: "#F2E9E4"    // Soft Peach
+      }
+
     // Generate calendar placeholders
     for (var key in months){
 
         // Generate container
         monthContainer = byId("months-container")
         monthContainer.innerHTML += `
-        <div id="container-${key}" class="p-1 yv-m flex-shrink-0">
+        <div id="container-${key}" class="p-1 yv-m flex-shrink-0" style="background-color:${monthColors[key]}">
         </div>
         `
 
@@ -163,7 +178,7 @@ function highlight_today(){
     // Highlight today's color
     var today = new Date();
     today = today.toISOString().slice(0, -14);
-    byId(today).parentNode.style.backgroundColor = "lightskyblue";
+    byId(today).parentNode.style.backgroundColor = "#A491D3";
 }
 
 // Main listener/caller
