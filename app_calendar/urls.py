@@ -10,7 +10,7 @@ urlpatterns = [
     path("month", views.month_view, name="month"),
     path("test", views.test, name="test"),
     path(r"", views.calendarhome, name="calendarhome"),
-    path("get_calendar_year", views.get_calendar_year, name="get_calendar_year"),
+    path("get_calendar_year/<int:current_year>", views.get_calendar_year, name="get_calendar_year"),
     path("create_entry", views.create_entry, name="create_entry")
 
 ]

@@ -132,15 +132,12 @@ def create_entry(request):
 
     return JsonResponse({"message": "Email sent successfully."}, status=201)
 
-def get_calendar_year(request):
+def get_calendar_year(request, current_year):
     logger = logging.getLogger('app_api')
     logger.info(f"Getting calendar for user: {request.user}")
-
-    query_year = 2023 # for testing purposes, final code should accept year as entry
-    # TODO: add to filter if it is a year highlight or not
     
     # get all todolist
     user = User.objects.get(email=request.user) # get user.id
-    entries = Calendar.objects.filter(user=user.id, complete_by__year=query_year) # get all calendar entries of user
+    entries = Calendar.objects.filter(user=user.id, complete_by__year=current_year, year_highlight=True) # get all calendar entries of user
 
     return JsonResponse([entry.yearview() for entry in entries], safe=False)

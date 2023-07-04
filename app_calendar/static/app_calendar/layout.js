@@ -76,7 +76,7 @@ function year_onclickday() {
 };
 
 
-function generateYearPlaceholder(){
+function generateYearPlaceholder(currentYear){
     const months = {
         1:"31",
         2:"29",
@@ -146,7 +146,7 @@ function generateYearPlaceholder(){
             target.innerHTML+=`
             <div class="yv-d-container d-flex">
             <div class="yv-d">${i}</div>
-            <div class="yv-todo flex-grow-1" id="2023-${mm}-${dd}"></div>
+            <div class="yv-todo flex-grow-1 todo-container" id="2023-${mm}-${dd}"></div>
             </div>`
         }
     }
@@ -160,11 +160,16 @@ function generateYearPlaceholder(){
 }
 
 
-function getCalendarYear() { 
-    // Populate todo list
+function getCalendarYear(currentYear) { 
+    // Clear todo list
+    var elements = byClass("todo-container")
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].innerHTML = "";
+    }
 
+    // Populate todo list
     console.log("getCalendarYear is running")
-    fetch('./get_calendar_year')
+    fetch('./get_calendar_year/'+currentYear)
     .then(response => response.json())
     .then(calendar => {
         calendar.forEach(function(item) {
@@ -181,6 +186,24 @@ function highlight_today(){
     byId(today).parentNode.style.backgroundColor = "#A491D3";
 }
 
+function yearChanger() {
+    // When year changer button is clicked,
+    // update new year
+    // query new year
+
+    byId("prev-year").addEventListener("click", function(){
+        byId("current-year").innerHTML = Number(byId("current-year").innerHTML)-1
+        var currentYear = byId("current-year").innerHTML
+        getCalendarYear(currentYear)
+    })
+
+    byId("next-year").addEventListener("click", function(){
+        byId("current-year").innerHTML = Number(byId("current-year").innerHTML)+1
+        var currentYear = byId("current-year").innerHTML
+        getCalendarYear(currentYear)
+    })
+}
+
 // Main listener/caller
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -192,12 +215,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Run necessary scripts per view type
     if (currentView=="/year"){
         // currentLabel.innerHTML = "Year";
+        var currentYear = byId("current-year").innerHTML
         generateYearPlaceholder()
-        getCalendarYear()
+        getCalendarYear(currentYear)
+        yearChanger()
+        // Set today's color
+        highlight_today()
     } else if (currentView=="/month"){
         currentLabel.innerHTML = "Month";
     }
 
-    // Set today's color
-    highlight_today()
 })
