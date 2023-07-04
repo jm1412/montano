@@ -39,7 +39,7 @@ function year_onclickday() {
     }
     
     // Show text box
-    this.innerHTML=`<input id="new-calendar-entry" style="text-align:left" type="text" value="${this.innerHTML}">`
+    this.innerHTML=`<input id="new-calendar-entry" style="text-align:left" type="text" onclick="event.stopPropagation()" value="${this.innerHTML}">`
     byId("new-calendar-entry").focus()
 
     // Add listeners to text box
@@ -149,7 +149,6 @@ function getCalendarYear() {
         calendar.forEach(function(item) {
             console.log(`item.complete_by: ${item.complete_by}`);
             byId(item.complete_by).innerHTML = item.todo
-
         })
     })
 }
