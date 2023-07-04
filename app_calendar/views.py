@@ -123,8 +123,12 @@ def create_entry(request):
         todo.save()
     elif write_type == "edit":
         target = Calendar.objects.get(user=user, complete_by=complete_by, year_highlight=True)
-        target.todo = todo
-        target.save()
+        if len(todo) > 0:
+            target.todo = todo
+            target.save()
+        elif len(todo) == 0:
+            target.delete()
+
 
     return JsonResponse({"message": "Email sent successfully."}, status=201)
 

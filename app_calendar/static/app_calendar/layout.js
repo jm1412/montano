@@ -5,8 +5,10 @@ const byId = document.getElementById.bind(document);
 const byClass = document.getElementsByClassName.bind(document);
 const byTag = document.getElementsByTagName.bind(document);
 
-// For csrf_token
+
 function getCookie(name) {
+    // For csrf_token
+    
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
@@ -37,6 +39,8 @@ function year_onclickday() {
     } else {
         var write_type = "new";
     }
+
+    console.log(`write_tye = ${write_type}`)
     
     // Show text box
     this.innerHTML=`<input id="new-calendar-entry" style="text-align:left" type="text" onclick="event.stopPropagation()" value="${this.innerHTML}">`
@@ -140,8 +144,10 @@ function generateYearPlaceholder(){
     }
 }
 
-// fetch year todo and insert received json file to corresponding html id
+
 function getCalendarYear() { 
+    // Populate todo list
+
     console.log("getCalendarYear is running")
     fetch('./get_calendar_year')
     .then(response => response.json())
@@ -153,20 +159,30 @@ function getCalendarYear() {
     })
 }
 
+function highlight_today(){
+    // Highlight today's color
+    var today = new Date();
+    today = today.toISOString().slice(0, -14);
+    byId(today).parentNode.style.backgroundColor = "lightskyblue";
+}
+
 // Main listener/caller
 document.addEventListener('DOMContentLoaded', function() {
 
     // Update dropdown label
     console.log("Updating dropdown label")
     var currentView = window.location.pathname;
-    var currentLabel = byId("navbardropdown-views")
+    // var currentLabel = byId("navbardropdown-views")
 
     // Run necessary scripts per view type
     if (currentView=="/year"){
-        currentLabel.innerHTML = "Year";
+        // currentLabel.innerHTML = "Year";
         generateYearPlaceholder()
         getCalendarYear()
     } else if (currentView=="/month"){
         currentLabel.innerHTML = "Month";
     }
+
+    // Set today's color
+    highlight_today()
 })
