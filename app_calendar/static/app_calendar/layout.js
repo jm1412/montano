@@ -44,6 +44,8 @@ function year_onclickday() {
     console.log(`write_tye = ${write_type}`)
     
     // Show text box
+    previous_val = this.innerHTML
+
     this.innerHTML=`<input id="new-calendar-entry" style="text-align:left" type="text" onclick="event.stopPropagation()" value="${this.innerHTML}">`
     byId("new-calendar-entry").focus()
 
@@ -54,6 +56,8 @@ function year_onclickday() {
         if (event.key === "Enter") {
             event.preventDefault(); // prevent default action
             byId("new-calendar-entry").blur() // to trigget focus out
+        } else if (event.key === "Ecape"){
+            console.log("escape is pressed")
         }
     })
 
