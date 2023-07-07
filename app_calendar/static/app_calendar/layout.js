@@ -241,7 +241,10 @@ function monthChanger_m() {
 }
 
 function getCalendarMonth(currentYear, currentMonth) {
+    // Generate day labels
     // Generate monthly todo
+    
+
 
     // Clear todo list
     var elements = byClass("todo-container")
@@ -252,9 +255,17 @@ function getCalendarMonth(currentYear, currentMonth) {
     var mm = currentMonth.toLocaleString('en-US', {minimumIntegerDigits: 2,useGrouping: false})
     yearMonth = currentYear + mm
     
-    var firstDay = new Date(Number(currentYear), Number(currentMonth)-1, 1);
+    var firstDay = new Date(Number(currentYear), Number(currentMonth)-1, 1); // for offsetting
 
-    console.log(firstDay.getDay())
+    // Generate labels
+    target_days = Number(months[currentMonth])+1
+    
+    for (let i = 1; i<target_days; i++) {
+        targetElement = byId(`label-${Number(i) + Number(firstDay.getDay())}`).innerHTML = i
+    }
+
+
+
 
     fetch('./get_calendar_month/'+yearMonth)
     .then(response => response.json())
@@ -283,7 +294,7 @@ function generateMonthPlaceholder() {
 
     var targetRow = "";
 
-    for (let i=0; i<5; i++) { // rows
+    for (let i=0; i<6; i++) { // rows
         monthContainer.innerHTML += `
             <div class="row calendar-month-days-row" id="month-row-${i}">
             </div>
@@ -293,7 +304,7 @@ function generateMonthPlaceholder() {
         for (let j=1; j<8; j++) { // days per row
             targetRow.innerHTML+=`
                 <div class="col calendar-month-days">
-                    <div class=month-day-label id="label-${j+(7*i)}">${j+(7*i)}</div>
+                    <div class=month-day-label id="label-${j+(7*i)}"></div>
                     
                     <div class="todo-container" id="day-${j+(7*i)}">
 
