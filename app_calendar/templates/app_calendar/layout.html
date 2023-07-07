@@ -61,8 +61,8 @@
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Views</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Year</a></li>
-                                <li><a class="dropdown-item" href="#">Month</a></li>
+                                <li><a class="dropdown-item" href="/year">Year</a></li>
+                                <li><a class="dropdown-item" href="month">Month</a></li>
                                 <li><a class="dropdown-item" href="#">Day</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item disabled" href="#">Settings</a></li>
@@ -81,13 +81,21 @@
 
         <div class="container-flex">
             <div class="row">
+                
                 <div class="col col-1">
+                    
                     <button class="btn btn-sm year-change-button" id="prev-year"><i class="fa-solid fa-chevron-left"></i></button>
                     <div id="current-year" style="display:inline; padding:0px;">2023</div>
                     <button class="btn btn-sm year-change-button" id="next-year"><i class="fa-solid fa-chevron-right"></i></button>
-
-
+                    
+                    {% if request.path == "/month" %}
+                    <br>
+                    <button class="btn btn-sm month-change-button" id="prev-month"><i class="fa-solid fa-chevron-left"></i></button>
+                    <div id="current-year" style="display:inline; padding:0px;">2023</div>
+                    <button class="btn btn-sm month-change-button" id="next-month"><i class="fa-solid fa-chevron-right"></i></button>
+                    {% endif %}
                 </div>
+                
                 <div class="col">
                     {% block body %}
                     {% endblock %}
