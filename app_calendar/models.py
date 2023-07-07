@@ -18,6 +18,7 @@ class Calendar(models.Model):
         return {
                 "complete_by": self.complete_by.strftime("%Y-%m-%d"),
                 "todo": self.todo,
-                "detail": self.detail
+                "detail": self.detail,
+                "year_highlight": self.year_highlight
                 # "user": self.user.email
             }

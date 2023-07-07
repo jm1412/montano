@@ -141,3 +141,23 @@ def get_calendar_year(request, current_year):
     entries = Calendar.objects.filter(user=user.id, complete_by__year=current_year, year_highlight=True) # get all calendar entries of user
 
     return JsonResponse([entry.yearview() for entry in entries], safe=False)
+
+def get_calendar_month(request, target):
+    # target is yyyymm
+    logger = logging.getLogger('app_api')
+    target = str(target.strip())
+
+    user = User.objects.get(email=request.user)
+    current_year = int(target[0:4])
+    current_month = int(target[4:])
+
+    logger.info(f"target: {target}")
+    logger.info(f"current_year: {current_year}")
+    logger.info(f"current_month: {current_month}")
+
+    entries = Calendar.objects.filter(
+        user=user.id,
+        complete_by__year=current_year,
+        complete_by__month=current_month)
+    
+    return JsonResponse([entry.yearview() for entry in entries], safe=False)

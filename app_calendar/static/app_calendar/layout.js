@@ -213,25 +213,57 @@ function yearChanger_m() {
     byId("prev-year").addEventListener("click", function(){
         byId("current-year").innerHTML = Number(byId("current-year").innerHTML)-1
         currentYear = byId("current-year").innerHTML
-        getCalendarMonth(currentYear)
+        getCalendarMonth(currentYear, currentMonth)
 
     })
 
     byId("next-year").addEventListener("click", function(){
         byId("current-year").innerHTML = Number(byId("current-year").innerHTML)+1
         currentYear = byId("current-year").innerHTML
-        getCalendarMonth(currentYear)
-
+        getCalendarMonth(currentYear, currentMonth)
     })
 }
 
-function monthCnager_m() {
+function monthChanger_m() {
     // Similar to year changer but changes month instead
+    byId("prev-month").addEventListener("click", function(){
+        byId("current-month").innerHTML = Number(byId("current-month").innerHTML)-1
+        currentMonth = byId("current-month").innerHTML
+        getCalendarMonth(currentYear, currentMonth)
+
+    })
+
+    byId("next-month").addEventListener("click", function(){
+        byId("current-month").innerHTML = Number(byId("current-month").innerHTML)+1
+        currentMonth = byId("current-month").innerHTML
+        getCalendarMonth(currentYear, currentMonth)
+    })
 }
 
-function getCalendarMonth() {
+function getCalendarMonth(currentYear, currentMonth) {
     // Generate monthly todo
 
+    // Clear todo list
+    var elements = byClass("todo-container")
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].innerHTML = "";
+    }
+
+    var mm = currentMonth.toLocaleString('en-US', {minimumIntegerDigits: 2,useGrouping: false})
+    yearMonth = currentYear + mm
+    
+    var firstDay = new Date(Number(currentYear), Number(currentMonth)-1, 1);
+
+    console.log(firstDay.getDay())
+
+    fetch('./get_calendar_month/'+yearMonth)
+    .then(response => response.json())
+    .then(calendar => {
+        calendar.forEach(function(item) {
+            byId(`day-${Number(item.complete_by.slice(8,11))+firstDay.getDay()}`).innerHTML = item.todo
+        })
+    })
+    
 }
 
 function generateMonthPlaceholder() {
@@ -260,12 +292,16 @@ function generateMonthPlaceholder() {
         targetRow = byId(`month-row-${i}`);
         for (let j=1; j<8; j++) { // days per row
             targetRow.innerHTML+=`
-                <div class="col calendar-month-days" id="day-${j+(7*i)}"></div>
+                <div class="col calendar-month-days">
+                    <div class=month-day-label id="label-${j+(7*i)}">${j+(7*i)}</div>
+                    
+                    <div class="todo-container" id="day-${j+(7*i)}">
+
+                    </div>
+                </div>
             `;
         }
-
     }
-
 }
 
 
@@ -288,10 +324,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Set today's color
         highlight_today()
     } else if (currentView=="/month"){
-        // currentLabel.innerHTML = "Month";
+        currentYear = byId("current-year").innerHTML
+        currentMonth = byId("current-month").innerHTML
+
         generateMonthPlaceholder()
-        //yearChanger_m()
-        //monthChanger_m()
+        yearChanger_m()
+        monthChanger_m()
+        getCalendarMonth(currentYear, currentMonth)
+        
     }
 
 })
