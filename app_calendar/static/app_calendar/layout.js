@@ -46,6 +46,7 @@ const monthColors = {
 
 function getCookie(name) {
     // For csrf_token
+    console.log("getCookie")
     
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -70,6 +71,7 @@ function year_onclickday() {
         // on out of focus
             //then PUTS
     console.log(`year_onclickday : ${this.innerHTML}`)
+
     target_date = this.id
 
     if (this.innerHTML.length > 0) {
@@ -120,6 +122,8 @@ function year_onclickday() {
 
 function generateYearPlaceholder(currentYear){
     // Generate calendar placeholders
+    console.log("generateYearPlaceholder")
+
     for (var key in months){
 
         // Generate container
@@ -159,6 +163,8 @@ function generateYearPlaceholder(currentYear){
 
 function getCalendarYear(currentYear) { 
     // Clear todo list
+    console.log("getCalendarYear")
+
     var elements = byClass("todo-container")
     for (var i = 0; i < elements.length; i++) {
         elements[i].innerHTML = "";
@@ -178,6 +184,8 @@ function getCalendarYear(currentYear) {
 
 function highlight_today(){
     // Highlight today's color
+    console.log("highlight_today")
+
     var today = new Date();
     today_y = today.toISOString().slice(0,4)
     today = today.toISOString().slice(5, -14);
@@ -193,6 +201,7 @@ function yearChanger_y() {
     // When year changer button is clicked,
     // update new year
     // query new year
+    console.log("yearChanger_y")
 
     byId("prev-year").addEventListener("click", function(){
         byId("current-year").innerHTML = Number(byId("current-year").innerHTML)-1
@@ -210,6 +219,8 @@ function yearChanger_y() {
 }
 
 function yearChanger_m() {
+    console.log("yearChanger_m")
+
     byId("prev-year").addEventListener("click", function(){
         byId("current-year").innerHTML = Number(byId("current-year").innerHTML)-1
         currentYear = byId("current-year").innerHTML
@@ -226,15 +237,28 @@ function yearChanger_m() {
 
 function monthChanger_m() {
     // Similar to year changer but changes month instead
+    console.log("monthChanger_m")
+
     byId("prev-month").addEventListener("click", function(){
-        byId("current-month").innerHTML = Number(byId("current-month").innerHTML)-1
+        if (currentMonth > 1) {
+            byId("current-month").innerHTML = Number(byId("current-month").innerHTML)-1
+        } else {
+            byId("current-month").innerHTML = 12;
+            byId("current-year").innerHTML = Number(byId("current-year").innerHTML)-1
+            currentYear = byId("current-year").innerHTML
+        }
         currentMonth = byId("current-month").innerHTML
         getCalendarMonth(currentYear, currentMonth)
-
     })
 
     byId("next-month").addEventListener("click", function(){
-        byId("current-month").innerHTML = Number(byId("current-month").innerHTML)+1
+        if (currentMonth <12) {
+            byId("current-month").innerHTML = Number(byId("current-month").innerHTML)+1
+        } else {
+            byId("current-month").innerHTML = 1;
+            byId("current-year").innerHTML = Number(byId("current-year").innerHTML)+1
+            currentYear = byId("current-year").innerHTML    
+        }
         currentMonth = byId("current-month").innerHTML
         getCalendarMonth(currentYear, currentMonth)
     })
@@ -243,6 +267,8 @@ function monthChanger_m() {
 function getCalendarMonth(currentYear, currentMonth) {
     // Generate day labels
     // Generate monthly todo
+
+    console.log("getCalendarMonth")
     
 
 
@@ -251,6 +277,10 @@ function getCalendarMonth(currentYear, currentMonth) {
     for (var i = 0; i < elements.length; i++) {
         elements[i].innerHTML = "";
     }
+
+    // Set color
+    var monthContainer = byId("calendar-month-container");
+    monthContainer.style.backgroundColor = monthColors[currentMonth];
 
     var mm = currentMonth.toLocaleString('en-US', {minimumIntegerDigits: 2,useGrouping: false})
     yearMonth = currentYear + mm
@@ -319,6 +349,7 @@ function generateMonthPlaceholder() {
 
 // Main listener/caller
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM Content Loaded")
 
     // Update dropdown label
     console.log("Updating dropdown label")
@@ -340,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         generateMonthPlaceholder()
         yearChanger_m()
-        monthChanger_m()
+        monthChanger_m(currentMonth)
         getCalendarMonth(currentYear, currentMonth)
         
     }
