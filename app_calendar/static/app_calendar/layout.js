@@ -266,53 +266,81 @@ function monthChanger_m() {
 
 function getCalendarMonth(currentYear, currentMonth) {
     // Generate day labels
-    // Generate monthly todo
-
-    console.log("getCalendarMonth")
+    // Populate monthly todo
     
-
-
     // Clear todo list
-    var elements = byClass("todo-container")
+    var elements = byClass("month-todo-container")
     for (var i = 0; i < elements.length; i++) {
         elements[i].innerHTML = "";
     }
 
-    // Set color
-    var monthContainer = byId("calendar-month-container");
-    monthContainer.style.backgroundColor = monthColors[currentMonth];
+    // Calendar color
+    byId("calendar-month-container").style.backgroundColor = monthColors[currentMonth];
 
-    var mm = currentMonth.toLocaleString('en-US', {minimumIntegerDigits: 2,useGrouping: false})
-    yearMonth = currentYear + mm
-    
-    var firstDay = new Date(Number(currentYear), Number(currentMonth)-1, 1); // for offsetting
+    // Month name
+    byId("current-month-name").innerHTML = monthNames[currentMonth];
+
+    // For day of the week offset
+    var firstDay = new Date(Number(currentYear), Number(currentMonth)-1, 1);
 
     // Generate labels
-    target_days = Number(months[currentMonth])+1
-    
+    // Day label
+    target_days = Number(months[currentMonth])+1    
     for (let i = 1; i<target_days; i++) {
         targetElement = byId(`label-${Number(i) + Number(firstDay.getDay())}`).innerHTML = i
     }
 
-
-
-
+    // Get data and add to calendar
+    var mm = currentMonth.toLocaleString('en-US', {minimumIntegerDigits: 2,useGrouping: false})
+    yearMonth = currentYear + mm
     fetch('./get_calendar_month/'+yearMonth)
     .then(response => response.json())
     .then(calendar => {
         calendar.forEach(function(item) {
-            byId(`day-${Number(item.complete_by.slice(8,11))+firstDay.getDay()}`).innerHTML = item.todo
+            let element = document.createElement('div');
+            element.className = 'todo-entry';
+            element.id = item.id;
+            element.innerHTML = item.todo;
+
+
+            element.addEventListener('click', function() {
+                console.log(`${item.todo} is clicked`);
+                modalHandler(item);
+            })
+
+            byId(`day-${Number(item.complete_by.slice(8,11))+firstDay.getDay()}`).append(element);
+
         })
     })
-    
 }
 
+function modalHandler(item) {    
+
+    var modal = document.getElementById("myModal");
+    
+    modal.style.display = "block";
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+        modal.style.display = "none";
+        }
+    }
+  }
+
 function generateMonthPlaceholder() {
-    //  Generate calendar placeholders for month view
+    // Generate calendar placeholders for month view
     // currentYear -> int
     // currentMonth -> int
-
-    console.log("generateMonthPlaceholder");
+    //  currently getting currentYear and currentMonth from global var of their innerhtml
 
     // Generate placeholder divs
     var monthContainer = byId("calendar-month-container");
@@ -333,10 +361,10 @@ function generateMonthPlaceholder() {
         targetRow = byId(`month-row-${i}`);
         for (let j=1; j<8; j++) { // days per row
             targetRow.innerHTML+=`
-                <div class="col calendar-month-days">
+                <div class="col calendar-month-days-box">
                     <div class=month-day-label id="label-${j+(7*i)}"></div>
                     
-                    <div class="todo-container" id="day-${j+(7*i)}">
+                    <div class="month-todo-container" id="day-${j+(7*i)}">
 
                     </div>
                 </div>
@@ -344,8 +372,6 @@ function generateMonthPlaceholder() {
         }
     }
 }
-
-
 
 // Main listener/caller
 document.addEventListener('DOMContentLoaded', function() {
@@ -373,7 +399,7 @@ document.addEventListener('DOMContentLoaded', function() {
         yearChanger_m()
         monthChanger_m(currentMonth)
         getCalendarMonth(currentYear, currentMonth)
-        
     }
+
 
 })

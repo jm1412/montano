@@ -2,27 +2,62 @@
 
 {% block body %}
 
-<body>
-  <div style="display:inline">
-    <button class="btn btn-sm year-change-button" id="prev-year"><i class="fa-solid fa-chevron-left"></i></button>
-    <div id="current-year" style="display:inline; padding:0px;">2023</div>
-    <button class="btn btn-sm year-change-button" id="next-year"><i class="fa-solid fa-chevron-right"></i></button>
-  </div>
-  
-  <div id="month-name-container" style="display:inline">
-    <button class="btn btn-sm month-change-button" id="prev-month"><i class="fa-solid fa-chevron-left"></i></button>
-    <span id="current-month">7</span>
-    <button class="btn btn-sm month-change-button" id="next-month"><i class="fa-solid fa-chevron-right"></i></button>
-  </div>
 
 
-  <div class="container-flex">
+<div class="container-flex">
 
-    <div class="row">
-      <div class="container-fluid text-center" id="calendar-month-container"></div>
+  <div>
+    <div style="display:inline">
+      <button class="btn btn-sm year-change-button" id="prev-year"><i class="fa-solid fa-chevron-left"></i></button>
+      <div id="current-year" style="display:inline; padding:0px;">2023</div>
+      <button class="btn btn-sm year-change-button" id="next-year"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    
+
+    <div id="month-name-container" style="display:inline">
+      <button class="btn btn-sm month-change-button" id="prev-month"><i class="fa-solid fa-chevron-left"></i></button>
+      <span id="current-month">7</span>
+      <button class="btn btn-sm month-change-button" id="next-month"><i class="fa-solid fa-chevron-right"></i></button>
+      <div style="display:inline; text-align:center;" id="current-month-name"></div>
     </div>
   </div>
 
 
-</body>
+  <div class="row">
+      <div class="col">
+          <body>
+              <div class="container-fluid text-center" id="calendar-month-container"> <!-- body container -->
+                  <!-- populated by javascript -->
+              </div>
+            
+            </body>
+      </div>
+  </div>
+
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="compose-form" onsubmit="return false">
+          
+            <div class="form-group">
+                From: <input disabled class="form-control" value="{{ request.user.email }}">
+            </div>
+            <div class="form-group">
+                To: <input id="compose-recipients" class="form-control">
+            </div>
+            <div class="form-group">
+                <input class="form-control" id="compose-subject" placeholder="Subject">
+            </div>
+            <textarea class="form-control" id="compose-body" placeholder="Body"></textarea>
+            <input id="send-email" type="submit" class="btn btn-primary"/>
+        </form>
+
+
+    </div>
+  </div>
+
+</div>
+
+
+
 {% endblock %}

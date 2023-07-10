@@ -32,7 +32,7 @@ ALLOWED_HOSTS = [
     'montano.ph',
     '127.0.0.1',
     'localhost',
-    'calendar.localhost'
+    'calendarhome.localhost'
 ]
 
 

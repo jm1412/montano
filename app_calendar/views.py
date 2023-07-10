@@ -145,7 +145,7 @@ def get_calendar_year(request, current_year):
 def get_calendar_month(request, target):
     # target is yyyymm
     logger = logging.getLogger('app_api')
-    target = str(target.strip())
+    target = str(target)
 
     user = User.objects.get(email=request.user)
     current_year = int(target[0:4])
