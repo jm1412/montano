@@ -101,24 +101,33 @@ def calendarhome(request):
 
 # API for creating new calendar entries 
 def create_entry(request):
+    logger = logging.getLogger('app_api')
+
     if request.method != "POST":
         return JsonResponse({"error": "POST request requried."}, status=400)
     
     data = json.loads(request.body)
     user = request.user
-    todo = data.get("subject", "")
-    detail = data.get("body", "")
+    todo = data.get("todo", "")
+    detail = data.get("detail", "")
     complete_by = data.get("complete_by", "")
     year_highlight = data.get("year_highlight", "")
     write_type = data.get("write_type", "")
                           
+    # year view writes
     if write_type == "new":
+        logger.info("--------------------------")
+        logger.info("a new entry is about to be created")
+        logger.info(f"user: {user}")
+        logger.info(f"todo: {todo}")
+        logger.info(f"complete_by: {complete_by}")
+        
         todo = Calendar(
             user=user,
             todo=todo,
             detail=detail,
             complete_by=complete_by,
-            year_highlight=True
+            year_highlight=year_highlight
         )
         todo.save()
     elif write_type == "edit":
@@ -128,8 +137,20 @@ def create_entry(request):
             target.save()
         elif len(todo) == 0:
             target.delete()
+        
+    elif write_type == "update": # used by month view
+        # debug
 
+        target = Calendar.objects.get(user=user, complete_by=complete_by) # TODO: year highlight is missin for now
+        target.todo = todo
+        target.detail = detail
+        target.complete_by = complete_by
+        target.save()
 
+    elif write_type == "delete":
+        target = Calendar.objects.get(user=user, complete_by=complete_by) # TODO: needs more filters
+        target.delete()
+        
     return JsonResponse({"message": "Email sent successfully."}, status=201)
 
 def get_calendar_year(request, current_year):
@@ -143,17 +164,12 @@ def get_calendar_year(request, current_year):
     return JsonResponse([entry.yearview() for entry in entries], safe=False)
 
 def get_calendar_month(request, target):
-    # target is yyyymm
-    logger = logging.getLogger('app_api')
+    # target is yyyym
     target = str(target)
 
     user = User.objects.get(email=request.user)
     current_year = int(target[0:4])
     current_month = int(target[4:])
-
-    logger.info(f"target: {target}")
-    logger.info(f"current_year: {current_year}")
-    logger.info(f"current_month: {current_month}")
 
     entries = Calendar.objects.filter(
         user=user.id,

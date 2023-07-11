@@ -108,8 +108,8 @@ function year_onclickday() {
             headers: {'X-CSRFToken': getCookie('csrftoken')},
             mode:"same-origin",
             body: JSON.stringify({
-                subject: this.value,
-                body:"",
+                todo: this.value,
+                detail:"",
                 complete_by: currentYear +"-"+target_date,
                 year_highlight: true,
                 write_type:write_type
@@ -162,6 +162,8 @@ function generateYearPlaceholder(currentYear){
 
 
 function getCalendarYear(currentYear) { 
+    // Populates to do list
+
     // Clear todo list
     console.log("getCalendarYear")
 
@@ -303,9 +305,10 @@ function getCalendarMonth(currentYear, currentMonth) {
             element.innerHTML = item.todo;
 
 
-            element.addEventListener('click', function() {
+            element.addEventListener('click', function(e) {
+                e.stopPropagation()
                 console.log(`${item.todo} is clicked`);
-                modalHandler(item);
+                modalHandler(item,"update");
             })
 
             byId(`day-${Number(item.complete_by.slice(8,11))+firstDay.getDay()}`).append(element);
@@ -314,7 +317,12 @@ function getCalendarMonth(currentYear, currentMonth) {
     })
 }
 
-function modalHandler(item) {    
+function modalHandler(item, wt) {    
+    // Populate modal
+    byId("modal-complete-by").value = item.complete_by || "";
+    byId("modal-todo").value = item.todo || "";
+    byId("modal-detail").value = item.detail || "";
+    write_type = wt;
 
     var modal = document.getElementById("myModal");
     
@@ -334,7 +342,41 @@ function modalHandler(item) {
         modal.style.display = "none";
         }
     }
-  }
+
+    // When modal is submitted
+    document.querySelector('#compose-form').addEventListener('submit', function() {
+        fetch('/create_entry', {
+            method: 'POST',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            mode:"same-origin",
+            body: JSON.stringify({
+                todo: byId("modal-todo").value,
+                detail:byId("modal-detail").value,
+                complete_by: byId("modal-complete-by").value,
+                year_highlight: false,
+                write_type:write_type
+            })
+        })
+        getCalendarMonth(currentYear, currentMonth)
+    });
+
+    // Delete entry
+    document.querySelector('#month-delete-todo').addEventListener('click', function() {
+        fetch('/create_entry', {
+            method: 'POST',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            mode:"same-origin",
+            body: JSON.stringify({
+                todo: byId("modal-todo").value,
+                detail:byId("modal-detail").value,
+                complete_by: byId("modal-complete-by").value,
+                year_highlight: false,
+                write_type:"delete"
+            })
+        })
+        getCalendarMonth(currentYear, currentMonth)
+    })
+}
 
 function generateMonthPlaceholder() {
     // Generate calendar placeholders for month view
@@ -361,7 +403,7 @@ function generateMonthPlaceholder() {
         targetRow = byId(`month-row-${i}`);
         for (let j=1; j<8; j++) { // days per row
             targetRow.innerHTML+=`
-                <div class="col calendar-month-days-box">
+                <div class="col calendar-month-days-box flex-shrink-0">
                     <div class=month-day-label id="label-${j+(7*i)}"></div>
                     
                     <div class="month-todo-container" id="day-${j+(7*i)}">
@@ -371,7 +413,17 @@ function generateMonthPlaceholder() {
             `;
         }
     }
+
+    // Create new entry
+    var boxes = byClass("calendar-month-days-box");
+    for (var i = 0; i < boxes.length; i++) {
+        boxes[i].addEventListener('click', function(e){
+            e.stopPropagation();
+            modalHandler("","new");
+        })
+    }
 }
+
 
 // Main listener/caller
 document.addEventListener('DOMContentLoaded', function() {

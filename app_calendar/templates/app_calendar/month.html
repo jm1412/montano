@@ -26,7 +26,7 @@
   <div class="row">
       <div class="col">
           <body>
-              <div class="container-fluid text-center" id="calendar-month-container"> <!-- body container -->
+              <div class="container-fluid text-center flex-shrink-0" id="calendar-month-container"> <!-- body container -->
                   <!-- populated by javascript -->
               </div>
             
@@ -40,19 +40,16 @@
         <form id="compose-form" onsubmit="return false">
           
             <div class="form-group">
-                From: <input disabled class="form-control" value="{{ request.user.email }}">
+                Date: <input class="form-control" id="modal-complete-by">
             </div>
             <div class="form-group">
-                To: <input id="compose-recipients" class="form-control">
+                Todo: <input class="form-control" id="modal-todo">
             </div>
-            <div class="form-group">
-                <input class="form-control" id="compose-subject" placeholder="Subject">
-            </div>
-            <textarea class="form-control" id="compose-body" placeholder="Body"></textarea>
-            <input id="send-email" type="submit" class="btn btn-primary"/>
+            <textarea class="form-control" id="modal-detail"></textarea>
+            <input value="Save" id="save-calendar" type="submit" class="btn btn-primary"/>
+            <button type="button" class="btn btn-outline-danger" id="month-delete-todo">Delete</button>
+
         </form>
-
-
     </div>
   </div>
 

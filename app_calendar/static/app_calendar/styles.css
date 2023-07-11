@@ -129,27 +129,50 @@ d : day
   }
   
   /* Modal Content */
-  .modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 60%;
-    border-radius: 10px;
-    box-shadow: 10px 10px 10px #888888
-  }
+.modal-content {
+background-color: #fefefe;
+margin: auto;
+padding: 20px;
+border: 1px solid #888;
+width: 60%;
+border-radius: 10px;
+box-shadow: 10px 10px 10px #888888
+}
   
   /* The Close Button */
-  .close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
+.close {
+color: #aaaaaa;
+float: right;
+font-size: 28px;
+font-weight: bold;
+}
   
-  .close:hover,
-  .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-  }
+.close:hover,
+.close:focus {
+color: #000;
+text-decoration: none;
+cursor: pointer;
+}
+
+.form-control {
+margin:5px;
+padding: 5px;
+}
+
+.todo-entry,
+.month-todo-container,
+.calendar-month-days-box{
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* 
+
+
+.calendar-month-days-row,
+.calendar-month-container
+
+*/
