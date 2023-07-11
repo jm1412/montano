@@ -107,6 +107,7 @@ def create_entry(request):
         return JsonResponse({"error": "POST request requried."}, status=400)
     
     data = json.loads(request.body)
+    id = data.get("id","")
     user = request.user
     todo = data.get("todo", "")
     detail = data.get("detail", "")
@@ -116,12 +117,6 @@ def create_entry(request):
                           
     # year view writes
     if write_type == "new":
-        logger.info("--------------------------")
-        logger.info("a new entry is about to be created")
-        logger.info(f"user: {user}")
-        logger.info(f"todo: {todo}")
-        logger.info(f"complete_by: {complete_by}")
-        
         todo = Calendar(
             user=user,
             todo=todo,
@@ -131,7 +126,7 @@ def create_entry(request):
         )
         todo.save()
     elif write_type == "edit":
-        target = Calendar.objects.get(user=user, complete_by=complete_by, year_highlight=True)
+        target = Calendar.objects.get(id=id)
         if len(todo) > 0:
             target.todo = todo
             target.save()
@@ -141,14 +136,14 @@ def create_entry(request):
     elif write_type == "update": # used by month view
         # debug
 
-        target = Calendar.objects.get(user=user, complete_by=complete_by) # TODO: year highlight is missin for now
+        target = Calendar.objects.get(id=id) # TODO: year highlight is missin for now
         target.todo = todo
         target.detail = detail
         target.complete_by = complete_by
         target.save()
 
     elif write_type == "delete":
-        target = Calendar.objects.get(user=user, complete_by=complete_by) # TODO: needs more filters
+        target = Calendar.objects.get(id=id) # TODO: needs more filters
         target.delete()
         
     return JsonResponse({"message": "Email sent successfully."}, status=201)

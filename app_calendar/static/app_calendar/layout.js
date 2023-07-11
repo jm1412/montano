@@ -317,7 +317,8 @@ function getCalendarMonth(currentYear, currentMonth) {
     })
 }
 
-function modalHandler(item, wt) {    
+function modalHandler(item, wt) {   
+    console.log(`modal handler opened, id: ${item.id}`) 
     // Populate modal
     byId("modal-complete-by").value = item.complete_by || "";
     byId("modal-todo").value = item.todo || "";
@@ -345,6 +346,10 @@ function modalHandler(item, wt) {
 
     // When modal is submitted
     document.querySelector('#compose-form').addEventListener('submit', function() {
+        
+        this.disabled=true;
+        this.value='Submitting...';
+
         fetch('/create_entry', {
             method: 'POST',
             headers: {'X-CSRFToken': getCookie('csrftoken')},
@@ -358,15 +363,18 @@ function modalHandler(item, wt) {
             })
         })
         getCalendarMonth(currentYear, currentMonth)
+        modal.style.display = "none";
     });
 
     // Delete entry
     document.querySelector('#month-delete-todo').addEventListener('click', function() {
+        console.log(`deleting entry: ${item.id}`)
         fetch('/create_entry', {
             method: 'POST',
             headers: {'X-CSRFToken': getCookie('csrftoken')},
             mode:"same-origin",
             body: JSON.stringify({
+                id:item.id,
                 todo: byId("modal-todo").value,
                 detail:byId("modal-detail").value,
                 complete_by: byId("modal-complete-by").value,
@@ -375,6 +383,7 @@ function modalHandler(item, wt) {
             })
         })
         getCalendarMonth(currentYear, currentMonth)
+        modal.style.display = "none";
     })
 }
 

@@ -16,6 +16,7 @@ class Calendar(models.Model):
 
     def yearview(self):
         return {
+                "id": self.id,
                 "complete_by": self.complete_by.strftime("%Y-%m-%d"),
                 "todo": self.todo,
                 "detail": self.detail,
