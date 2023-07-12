@@ -469,8 +469,7 @@ function highlight_month(currentYear, currentMonth) {
     today_m = today.toISOString().slice(5,7);
     today_d = today.toISOString().slice(8,-14); // could cause potential issue on single digit days, needs to be observed
     today = today.toISOString().slice(0,-14);
-    console.log(today);
-    
+    console.log(today);   
 }
 
 // Main listener/caller
@@ -501,6 +500,9 @@ document.addEventListener('DOMContentLoaded', function() {
         getCalendarMonth(currentYear, currentMonth)
         highlight_month(currentYear, currentMonth)
     }
+
+
+    
 
 
 })
