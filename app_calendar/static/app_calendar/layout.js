@@ -348,7 +348,7 @@ function getCalendarMonth(currentYear, currentMonth) {
 function modalHandler(item, wt, newDate) {   
     console.log(`modal handler opened, id: ${item.id}`) 
     // Populate modal
-    byId("modal-complete-by").value = item.complete_by || newDate;
+    byId("modal-complete-by").value = item.complete_by || newDate || "";
     byId("modal-todo").value = item.todo || "";
     byId("modal-detail").value = item.detail || "";
     write_type = wt;
@@ -383,6 +383,7 @@ function modalHandler(item, wt, newDate) {
             headers: {'X-CSRFToken': getCookie('csrftoken')},
             mode:"same-origin",
             body: JSON.stringify({
+                id: item.id,
                 todo: byId("modal-todo").value,
                 detail:byId("modal-detail").value,
                 complete_by: byId("modal-complete-by").value,
@@ -403,10 +404,6 @@ function modalHandler(item, wt, newDate) {
             mode:"same-origin",
             body: JSON.stringify({
                 id:item.id,
-                todo: byId("modal-todo").value,
-                detail:byId("modal-detail").value,
-                complete_by: byId("modal-complete-by").value,
-                year_highlight: false,
                 write_type:"delete"
             })
         })
@@ -464,6 +461,17 @@ function generateMonthPlaceholder() {
     }
 }
 
+function highlight_month(currentYear, currentMonth) {
+    // Highlight current day of the month on month view
+
+    var today = new Date();
+    today_y = today.toISOString().slice(0,4);
+    today_m = today.toISOString().slice(5,7);
+    today_d = today.toISOString().slice(8,-14); // could cause potential issue on single digit days, needs to be observed
+    today = today.toISOString().slice(0,-14);
+    console.log(today);
+    
+}
 
 // Main listener/caller
 document.addEventListener('DOMContentLoaded', function() {
@@ -491,6 +499,7 @@ document.addEventListener('DOMContentLoaded', function() {
         yearChanger_m()
         monthChanger_m(currentMonth)
         getCalendarMonth(currentYear, currentMonth)
+        highlight_month(currentYear, currentMonth)
     }
 
 
