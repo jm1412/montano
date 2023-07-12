@@ -335,20 +335,23 @@ function getCalendarMonth(currentYear, currentMonth) {
 
             element.addEventListener('click', function(e) {
                 e.stopPropagation()
-                console.log(`${item.todo} is clicked`);
+                console.log(`${item.todo} is clicked with completeby: ${item.complete_by} and time: ${item.complete_time}`);
                 modalHandler(item,"update");
             })
 
             byId(`day-${Number(item.complete_by.slice(8,11))+firstDay.getDay()}`).append(element);
-
+            
         })
     })
 }
 
 function modalHandler(item, wt, newDate) {   
     console.log(`modal handler opened, id: ${item.id}`) 
+    console.log(`item.complete_by ${item.complete_by}`)
+    console.log(`item.complete_time ${item.complete_time}`)
     // Populate modal
     byId("modal-complete-by").value = item.complete_by || newDate || "";
+    byId("modal-complete-time").value = item.complete_time || "";
     byId("modal-todo").value = item.todo || "";
     byId("modal-detail").value = item.detail || "";
     write_type = wt;
@@ -387,6 +390,7 @@ function modalHandler(item, wt, newDate) {
                 todo: byId("modal-todo").value,
                 detail:byId("modal-detail").value,
                 complete_by: byId("modal-complete-by").value,
+                complete_time: byId("modal-complete-time").value,
                 year_highlight: false,
                 write_type:write_type
             })

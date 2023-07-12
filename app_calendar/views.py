@@ -3,6 +3,7 @@ from django.shortcuts import HttpResponse, HttpResponseRedirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from datetime import datetime
 from .models import *
 
 import json
@@ -112,9 +113,15 @@ def create_entry(request):
     todo = data.get("todo", "")
     detail = data.get("detail", "")
     complete_by = data.get("complete_by", "")
+    complete_time = data.get("complete_time", "")
     year_highlight = data.get("year_highlight", "")
     write_type = data.get("write_type", "")
-                          
+
+    # convert 12h to 24h
+    complete_time = datetime.strptime(complete_time, "%I:%M %p")
+    complete_time = datetime.strftime(complete_time, "%H:%M")
+    complete_by = complete_by + " " + complete_time
+    logger.info(f"complete_by: {complete_time}")
     # year view writes
     if write_type == "new":
         todo = Calendar(
