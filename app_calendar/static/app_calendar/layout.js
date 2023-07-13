@@ -383,7 +383,7 @@ function modalHandler(item, wt, newDate) {
     }
 
     // When modal is submitted
-    document.querySelector('#compose-form').addEventListener('submit', function() {
+    document.querySelector('#save-calendar').addEventListener('click', function() {
         console.log("MODAL creating new item")
         modal.style.display = "none";
         
@@ -517,6 +517,7 @@ function highlight_month(currentYear, currentMonth) {
 
 }
 
+
 // Main listener/caller
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM Content Loaded")
@@ -545,9 +546,4 @@ document.addEventListener('DOMContentLoaded', function() {
         getCalendarMonth(currentYear, currentMonth)
         highlight_month(currentYear, currentMonth)
     }
-
-
-    
-
-
 })

@@ -34,23 +34,45 @@
       </div>
   </div>
 
-  <div id="myModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <form id="compose-form" onsubmit="return false">
-          
-            <div class="form-group">
-                Date: <input class="form-control" id="modal-complete-by">
-                Time: <input class="timepicker" id="modal-complete-time">
-            </div>
-            <div class="form-group">
-                Todo: <input class="form-control" id="modal-todo">
-            </div>
-            <textarea class="form-control" id="modal-detail"></textarea>
-            <input value="Save" id="save-calendar" type="submit" class="btn btn-primary"/>
-            <button type="button" class="btn btn-outline-danger" id="month-delete-todo">Delete</button>
+  <div id="myModal" class="modal modal-lg" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        
+        <div class="modal-header">
+          <h3 class="modal-title">Add/Create Entry</h5>
+          <span class="close">&times;</span>
+        </div>
 
-        </form>
+        <div class="modal-body">
+          <form id="compose-form" onsubmit="return false">
+
+            <div class="row">
+              <div class="col">
+                <label for="modal-complete-by" class="col-form-label">Date:</label>
+                <input type="text" class="form-control" id="modal-complete-by">
+              </div>
+              <div class="col">
+                <label for="modal-complete-time" class="col-form-label">Time:</label>
+                <input type="text" class="form-control timepicker" id="modal-complete-time">
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="modal-todo" class="col-form-label">Date:</label>
+              <input type="text" class="form-control" id="modal-todo">
+            </div>
+            <div class="row">
+              <label for="modal-detail" class="col-form-label">Date:</label>
+              <textarea class="form-control" rows="3" id="modal-detail"></textarea>
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-danger" id="month-delete-todo">Delete</button>
+          <input type="submit" class="btn btn-primary" value="Save" id="save-calendar">
+        </div>
+      </div>
     </div>
   </div>
 
