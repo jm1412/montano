@@ -113,7 +113,7 @@ def create_entry(request):
     todo = data.get("todo", "")
     detail = data.get("detail", "")
     complete_by = data.get("complete_by", "")
-    complete_time = data.get("complete_time", "")
+    complete_time = data.get("complete_time", "12:00 AM")
     year_highlight = data.get("year_highlight", "")
     write_type = data.get("write_type", "")
 
@@ -121,7 +121,9 @@ def create_entry(request):
     complete_time = datetime.strptime(complete_time, "%I:%M %p")
     complete_time = datetime.strftime(complete_time, "%H:%M")
     complete_by = complete_by + " " + complete_time
-    logger.info(f"complete_by: {complete_time}")
+
+
+
     # year view writes
     if write_type == "new":
         todo = Calendar(
@@ -141,8 +143,6 @@ def create_entry(request):
             target.delete()
         
     elif write_type == "update": # used by month view
-        # debug
-
         target = Calendar.objects.get(id=id) # TODO: year highlight is missin for now
         target.todo = todo
         target.detail = detail
@@ -176,6 +176,6 @@ def get_calendar_month(request, target):
     entries = Calendar.objects.filter(
         user=user.id,
         complete_by__year=current_year,
-        complete_by__month=current_month)
+        complete_by__month=current_month).order_by('complete_by')
     
     return JsonResponse([entry.yearview() for entry in entries], safe=False)

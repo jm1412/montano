@@ -292,17 +292,23 @@ function getCalendarMonth(currentYear, currentMonth) {
     // Generate day labels
     // Populate monthly todo
     
-    // Clear day label
-    var clean = byClass("month-day-label")
-    for (var i=0; i < clean.length; i++) {
-        clean[i].innerHTML = "";
-    }
+    // // Clear day label
+    // var clean = byClass("month-day-label")
+    // for (var i=0; i < clean.length; i++) {
+    //     clean[i].innerHTML = "";
+    // }
+    
+    // for some reason this isn't needed anymore wtf?
 
     // Clear todo list
     var elements = byClass("month-todo-container")
     for (var i = 0; i < elements.length; i++) {
         elements[i].innerHTML = "";
     }
+
+
+
+    
 
     // Calendar color
     byId("calendar-month-container").style.backgroundColor = monthColors[currentMonth];
@@ -343,12 +349,13 @@ function getCalendarMonth(currentYear, currentMonth) {
             
         })
     })
+
+    // highlight today
+    highlight_month(currentYear, currentMonth)
+
 }
 
 function modalHandler(item, wt, newDate) {   
-    console.log(`modal handler opened, id: ${item.id}`) 
-    console.log(`item.complete_by ${item.complete_by}`)
-    console.log(`item.complete_time ${item.complete_time}`)
     // Populate modal
     byId("modal-complete-by").value = item.complete_by || newDate || "";
     byId("modal-complete-time").value = item.complete_time || "";
@@ -377,42 +384,67 @@ function modalHandler(item, wt, newDate) {
 
     // When modal is submitted
     document.querySelector('#compose-form').addEventListener('submit', function() {
-        
-        this.disabled=true;
-        this.value='Submitting...';
-
-        fetch('/create_entry', {
-            method: 'POST',
-            headers: {'X-CSRFToken': getCookie('csrftoken')},
-            mode:"same-origin",
-            body: JSON.stringify({
-                id: item.id,
-                todo: byId("modal-todo").value,
-                detail:byId("modal-detail").value,
-                complete_by: byId("modal-complete-by").value,
-                complete_time: byId("modal-complete-time").value,
-                year_highlight: false,
-                write_type:write_type
-            })
-        })
-        getCalendarMonth(currentYear, currentMonth)
+        console.log("MODAL creating new item")
         modal.style.display = "none";
+        
+        var loading = true;
+
+        if (loading){
+            fetch('/create_entry', {
+                method: 'POST',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                mode:"same-origin",
+                body: JSON.stringify({
+                    id: item.id,
+                    todo: byId("modal-todo").value,
+                    detail:byId("modal-detail").value,
+                    complete_by: byId("modal-complete-by").value,
+                    complete_time: byId("modal-complete-time").value,
+                    year_highlight: false,
+                    write_type:write_type
+                })
+            })
+        }
+
+        byId("modal-complete-by").value = "";
+        byId("modal-complete-time").value = "";
+        byId("modal-todo").value = "";
+        byId("modal-detail").value = "";
+
+        getCalendarMonth(currentYear, currentMonth)
+
+        loading = false;
     });
 
     // Delete entry
     document.querySelector('#month-delete-todo').addEventListener('click', function() {
-        console.log(`deleting entry: ${item.id}`)
-        fetch('/create_entry', {
-            method: 'POST',
-            headers: {'X-CSRFToken': getCookie('csrftoken')},
-            mode:"same-origin",
-            body: JSON.stringify({
-                id:item.id,
-                write_type:"delete"
-            })
-        })
-        getCalendarMonth(currentYear, currentMonth)
+        console.log("MODAL deleting item")
         modal.style.display = "none";
+
+        console.log(`deleting entry: ${item.id}`)
+
+        var loading = true;
+
+        if (loading) {
+            fetch('/create_entry', {
+                method: 'POST',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                mode:"same-origin",
+                body: JSON.stringify({
+                    id:item.id,
+                    write_type:"delete"
+                })
+            })
+        }
+
+        byId("modal-complete-by").value = "";
+        byId("modal-complete-time").value = "";
+        byId("modal-todo").value = "";
+        byId("modal-detail").value = "";
+
+        getCalendarMonth(currentYear, currentMonth)
+
+        loading = false;
     })
 }
 
@@ -470,10 +502,19 @@ function highlight_month(currentYear, currentMonth) {
 
     var today = new Date();
     today_y = today.toISOString().slice(0,4);
-    today_m = today.toISOString().slice(5,7);
+    today_m = Number(today.toISOString().slice(5,7));
     today_d = today.toISOString().slice(8,-14); // could cause potential issue on single digit days, needs to be observed
-    today = today.toISOString().slice(0,-14);
-    console.log(today);   
+    today = `${today_y}-${today_m}-${today_d}`
+    console.log(`coloring today: ${today}`)
+
+    try {
+        byId(today).querySelector(".month-day-label").style.backgroundColor = "lightskyblue";
+    }
+    catch(err) {
+        console.log("nothing to color");
+    }
+
+
 }
 
 // Main listener/caller
