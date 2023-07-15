@@ -547,3 +547,166 @@ document.addEventListener('DOMContentLoaded', function() {
         highlight_month(currentYear, currentMonth)
     }
 })
+
+
+
+// FOR FUNSIES
+function parseDateToISOString(userInput) {
+    // Remove any leading/trailing white spaces
+    userInput = userInput.trim();
+  
+    // Define the months in different formats
+    const months = [
+      { name: 'January', short: 'jan', number: '01' },
+      { name: 'February', short: 'feb', number: '02' },
+      { name: 'March', short: 'mar', number: '03' },
+      { name: 'April', short: 'apr', number: '04' },
+      { name: 'May', short: 'may', number: '05' },
+      { name: 'June', short: 'jun', number: '06' },
+      { name: 'July', short: 'jul', number: '07' },
+      { name: 'August', short: 'aug', number: '08' },
+      { name: 'September', short: 'sep', number: '09' },
+      { name: 'October', short: 'oct', number: '10' },
+      { name: 'November', short: 'nov', number: '11' },
+      { name: 'December', short: 'dec', number: '12' }
+    ];
+  
+    // Check if the input matches any known format
+    const matchISOFormat = /^(\d{4})-(\d{2})-(\d{2})$/;
+    const matchMonthFormat = /^(\d{1,2})\s(\w{3})\s(\d{4})$/;
+    const matchYMDFormat = /^(\d{4})(\d{2})(\d{2})$/;
+    const matchSlashFormat = /^(\d{4})\/(\d{2})\/(\d{2})$/;
+    const matchMMMDDYYYYFormat = /^(\w{3})\s(\d{1,2})[,]\s(\d{4})$/;
+    const matchDDMMMYYYYFormat = /^(\d{1,2})\s(\w{3})\s(\d{4})$/;
+    const matchDDMMYYYYFormat = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+    const matchYYYYMMDDFormat = /^(\d{4})\/(\d{1,2})\/(\d{1,2})$/;
+    const matchYYYYMMMFormat = /^(\d{4})\s(\w{3})$/;
+    const matchYYYYFormat = /^(\d{4})$/;
+  
+    // Try to match ISO format (YYYY-MM-DD)
+    let match = userInput.match(matchISOFormat);
+    if (match) {
+      const year = match[1];
+      const month = match[2];4
+      const day = match[3];
+      return new Date(year, month - 1, day).toISOString();
+    }
+  
+    // Try to match Month format (DD MMM YYYY)
+    match = userInput.match(matchMonthFormat);
+    if (match) {
+      const day = match[1];
+      const monthStr = match[2].toLowerCase();
+      const year = match[3];
+  
+      // Find the corresponding month based on the short or long name
+      const month = months.find(
+        m => m.name.toLowerCase().startsWith(monthStr) || m.short === monthStr
+      );
+  
+      if (month) {
+        return new Date(year, month.number - 1, day).toISOString();
+      }
+    }
+  
+    // Try to match YYYYMMDD format
+    match = userInput.match(matchYMDFormat);
+    if (match) {
+      const year = match[1];
+      const month = match[2];
+      const day = match[3];
+      return new Date(year, month - 1, day).toISOString();
+    }
+  
+    // Try to match YYYY/MM/DD format
+    match = userInput.match(matchSlashFormat);
+    if (match) {
+      const year = match[1];
+      const month = match[2];
+      const day = match[3];
+      return new Date(year, month - 1, day).toISOString();
+    }
+  
+  // Try to match MMM DD, YYYY format
+  match = userInput.match(matchMMMDDYYYYFormat);
+  if (match) {
+    const monthStr = match[1].toLowerCase();
+    const day = match[2];
+    const year = match[3];
+
+    // Find the corresponding month based on the short or long name
+    const month = months.find(
+      m => m.name.toLowerCase().startsWith(monthStr) || m.short === monthStr
+    );
+
+    if (month) {
+      return new Date(year, month.number - 1, day).toISOString();
+    }
+  }
+
+  // Try to match DD MMM YYYY format
+  match = userInput.match(matchDDMMMYYYYFormat);
+  if (match) {
+    const day = match[1];
+    const monthStr = match[2].toLowerCase();
+    const year = match[3];
+
+    // Find the corresponding month based on the short or long name
+    const month = months.find(
+      m => m.name.toLowerCase().startsWith(monthStr) || m.short === monthStr
+    );
+
+    if (month) {
+      return new Date(year, month.number - 1, day).toISOString();
+    }
+  }
+
+  // Try to match DD/MM/YYYY format
+  match = userInput.match(matchDDMMYYYYFormat);
+  if (match) {
+    const day = match[1];
+    const month = match[2];
+    const year = match[3];
+    return new Date(year, month - 1, day).toISOString();
+  }
+
+  // Try to match YYYY/MM/DD format
+  match = userInput.match(matchYYYYMMDDFormat);
+  if (match) {
+    const year = match[1];
+    const month = match[2];
+    const day = match[3];
+    return new Date(year, month - 1, day).toISOString();
+  }
+
+  // Try to match YYYY MMM format
+  match = userInput.match(matchYYYYMMMFormat);
+  if (match) {
+    const year = match[1];
+    const monthStr = match[2].toLowerCase();
+
+    // Find the corresponding month based on the short or long name
+    const month = months.find(
+      m => m.name.toLowerCase().startsWith(monthStr) || m.short === monthStr
+    );
+
+    if (month) {
+      return new Date(year, month.number - 1).toISOString();
+    }
+  }
+
+  // Try to match YYYY format
+  match = userInput.match(matchYYYYFormat);
+  if (match) {
+    const year = match[1];
+    return new Date(year, 0).toISOString();
+  }
+
+  // If no match is found, return null or throw an error, depending on your use case
+  return null;
+}
+
+// Usage example:
+const userInput = 'jan 5, 2023';
+const isoString = parseDateToISOString(userInput);
+console.log(isoString);
