@@ -11,6 +11,19 @@ from django.http import JsonResponse
 
 import logging # to allow console.log
 
+import pyrebase
+
+config = {
+  "apiKey": "AIzaSyAbU1s1A5DOaePZQqGmErjsekQ9kX2tHqo",
+  "authDomain": "kalendaryo-6a451.firebaseapp.com",
+  "databaseURL": "https://kalendaryo-6a451-default-rtdb.firebaseio.com",
+  "storageBucket": "kalendaryo-6a451.appspot.com"
+}
+firebase = pyrebase.initialize_app(config)
+auth = firebase.auth()
+#db = firebase.database()
+#storage=firebase.storage()
+
 # Create your views here.
 def index(request):
 
