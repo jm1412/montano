@@ -46,6 +46,7 @@ const monthColors = {
 
 function getCookie(name) {
     // For csrf_token
+
     console.log("getCookie")
     
     let cookieValue = null;
@@ -66,10 +67,8 @@ function getCookie(name) {
 function year_onclickday() {
     // When year view day entry is clicked, this function gets called
     // This function creates a textbox where user can enter new todo
-    // Adds various listeners to text box:
-        // on Enter
-        // on out of focus
-            //then PUTS
+    // Adds various listeners to text box
+
     console.log(`year_onclickday : ${this.innerHTML}`)
 
     target_date = this.id
@@ -121,7 +120,8 @@ function year_onclickday() {
 
 
 function generateYearPlaceholder(currentYear){
-    // Generate calendar placeholders
+    // Generate calendar placeholders, containers
+
     console.log("generateYearPlaceholder")
 
     for (var key in months){
@@ -132,7 +132,6 @@ function generateYearPlaceholder(currentYear){
         <div id="container-${key}" class="p-1 yv-m flex-shrink-0" style="background-color:${monthColors[key]}">
         </div>
         `
-
         // Generate month label and placeholder days
         var targetId = "container-" + key;
         var target = byId(targetId);
@@ -160,7 +159,6 @@ function generateYearPlaceholder(currentYear){
     }
 }
 
-
 function getCalendarYear(currentYear) { 
     // Populates to do list
 
@@ -186,6 +184,7 @@ function getCalendarYear(currentYear) {
 
 function highlight_today(){
     // Highlight today's color
+
     console.log("highlight_today")
 
     var today = new Date();
@@ -200,9 +199,8 @@ function highlight_today(){
 }
 
 function yearChanger_y() {
-    // When year changer button is clicked,
-    // update new year
-    // query new year
+    // Year picker
+
     console.log("yearChanger_y")
 
     byId("prev-year").addEventListener("click", function(){
@@ -228,6 +226,7 @@ function yearChanger_y() {
 }
 
 function yearChanger_m() {
+    // Month picker
 
     byId("prev-year").addEventListener("click", function(){
         this.disabled=true;
@@ -306,10 +305,6 @@ function getCalendarMonth(currentYear, currentMonth) {
         elements[i].innerHTML = "";
     }
 
-
-
-    
-
     // Calendar color
     byId("calendar-month-container").style.backgroundColor = monthColors[currentMonth];
 
@@ -356,6 +351,8 @@ function getCalendarMonth(currentYear, currentMonth) {
 }
 
 async function postChanges(){
+    // Posts changes or new items created in modal
+
     console.log("posting entries")
 
     fetch('/create_entry', {
@@ -375,6 +372,7 @@ async function postChanges(){
 }
 
 async function deleteEntry(){
+    // Deletes entry based on what the modal is opening
     fetch('/create_entry', {
         method: 'POST',
         headers: {'X-CSRFToken': getCookie('csrftoken')},
@@ -387,6 +385,7 @@ async function deleteEntry(){
 }
 
 function cleanModal(){
+    // Hides and cleans the modal
     byId("myModal").style.display = "none";
     byId("modal-complete-by").value = "";
     byId("modal-complete-time").value = "";
@@ -397,7 +396,7 @@ function cleanModal(){
 }
 
 function listenModal() {
-    // Contains button listeners
+    // Listeners for the modal
     
     // When modal is submitted
     document.querySelector('#save-calendar').addEventListener('click', function() {
@@ -437,17 +436,15 @@ function modalHandler(item, wt, newDate) {
     
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
-        modal.style.display = "none";
+        cleanModal()
     }
   
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == modal) {
-        modal.style.display = "none";
+        cleanModal()
         }
     }
-
-
 }
 
 function generateMonthPlaceholder() {
@@ -515,10 +512,7 @@ function highlight_month(currentYear, currentMonth) {
     catch(err) {
         console.log("nothing to color");
     }
-
-
 }
-
 
 // Main listener/caller
 document.addEventListener('DOMContentLoaded', function() {
@@ -554,6 +548,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // FOR FUNSIES
 function parseDateToISOString(userInput) {
+    // Trying to parse all possible human input of dates and converts it to isoformat of yyyy-mm-dd
+    // Current probable errors are mm-dd vs dd-mm inputs
+
     // Remove any leading/trailing white spaces
     userInput = userInput.trim();
   
