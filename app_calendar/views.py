@@ -26,6 +26,11 @@ auth = firebase.auth()
 
 # Create your views here.
 def index(request):
+    # logger = logging.getLogger('app_api')
+    # logger.info("---------------------- START -----------------------")
+    # logger.info(request.META)
+    # logger.info("--------------------- SESSION ---------------------")
+    # logger.info(request.session)
 
     # Authenticated users view their inbox
     if request.user.is_authenticated:
@@ -36,16 +41,19 @@ def index(request):
         return HttpResponseRedirect(reverse("login"))
     
 def login_view(request):
-    if request.method == "POST":
+    logger = logging.getLogger('app_api')
 
+    if request.method == "POST":
+    
         # Attempt to sign user in
         email = request.POST["email"]
         password = request.POST["password"]
-        user = authenticate(request, username=email, password=password)
+        user = auth.sign_in_with_email_and_password(email, password)
 
         # Check if authentication successful
         if user is not None:
-            login(request, user)
+            logger.info(user)
+            #login(request, user)
             return HttpResponseRedirect(reverse("index"))
         else:
             return render(request, "app_calendar/login.html", {

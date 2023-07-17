@@ -355,13 +355,80 @@ function getCalendarMonth(currentYear, currentMonth) {
 
 }
 
-function modalHandler(item, wt, newDate) {   
+async
+
+function listenModal() {
+    // When modal is submitted
+    document.querySelector('#save-calendar').addEventListener('click', function() {
+        console.log("saving...")
+
+
+        fetch('/create_entry', {
+            method: 'POST',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            mode:"same-origin",
+            body: JSON.stringify({
+                id: byId("item-id").value,
+                todo: byId("modal-todo").value,
+                detail:byId("modal-detail").value,
+                complete_by: byId("modal-complete-by").value,
+                complete_time: byId("modal-complete-time").value,
+                year_highlight: false,
+                write_type:byId("write-type").value
+            })
+        })
+
+        byId("myModal").style.display = "none";
+    
+        byId("modal-complete-by").value = "";
+        byId("modal-complete-time").value = "";
+        byId("modal-todo").value = "";
+        byId("modal-detail").value = "";
+        byId("item-id").value = "";
+        byId("write-type").value = "";
+
+        getCalendarMonth(currentYear, currentMonth)
+    });
+
+    // Delete entry
+    document.querySelector('#month-delete-todo').addEventListener('click', function() {
+        console.log("MODAL deleting item")
+        byId("myModal").style.display = "none";
+
+        console.log(`deleting entry: ${item.id}`)
+
+
+        fetch('/create_entry', {
+            method: 'POST',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            mode:"same-origin",
+            body: JSON.stringify({
+                id:byId("item-id").value,
+                write_type:"delete"
+            })
+        })
+        
+
+        byId("modal-complete-by").value = "";
+        byId("modal-complete-time").value = "";
+        byId("modal-todo").value = "";
+        byId("modal-detail").value = "";
+        byId("item-id").value = "";
+        byId("write-type").value = "";
+
+        getCalendarMonth(currentYear, currentMonth)
+    })
+}
+
+function modalHandler(item, wt, newDate) {
     // Populate modal
+
+    byId("item-id").value = item.id || "";
     byId("modal-complete-by").value = item.complete_by || newDate || "";
     byId("modal-complete-time").value = item.complete_time || "";
     byId("modal-todo").value = item.todo || "";
     byId("modal-detail").value = item.detail || "";
-    write_type = wt;
+    byId("write-type").value = wt || "";
 
     var modal = document.getElementById("myModal");
     
@@ -382,70 +449,7 @@ function modalHandler(item, wt, newDate) {
         }
     }
 
-    // When modal is submitted
-    document.querySelector('#save-calendar').addEventListener('click', function() {
-        console.log("MODAL creating new item")
-        modal.style.display = "none";
-        
-        var loading = true;
 
-        if (loading){
-            fetch('/create_entry', {
-                method: 'POST',
-                headers: {'X-CSRFToken': getCookie('csrftoken')},
-                mode:"same-origin",
-                body: JSON.stringify({
-                    id: item.id,
-                    todo: byId("modal-todo").value,
-                    detail:byId("modal-detail").value,
-                    complete_by: byId("modal-complete-by").value,
-                    complete_time: byId("modal-complete-time").value,
-                    year_highlight: false,
-                    write_type:write_type
-                })
-            })
-        }
-
-        byId("modal-complete-by").value = "";
-        byId("modal-complete-time").value = "";
-        byId("modal-todo").value = "";
-        byId("modal-detail").value = "";
-
-        getCalendarMonth(currentYear, currentMonth)
-
-        loading = false;
-    });
-
-    // Delete entry
-    document.querySelector('#month-delete-todo').addEventListener('click', function() {
-        console.log("MODAL deleting item")
-        modal.style.display = "none";
-
-        console.log(`deleting entry: ${item.id}`)
-
-        var loading = true;
-
-        if (loading) {
-            fetch('/create_entry', {
-                method: 'POST',
-                headers: {'X-CSRFToken': getCookie('csrftoken')},
-                mode:"same-origin",
-                body: JSON.stringify({
-                    id:item.id,
-                    write_type:"delete"
-                })
-            })
-        }
-
-        byId("modal-complete-by").value = "";
-        byId("modal-complete-time").value = "";
-        byId("modal-todo").value = "";
-        byId("modal-detail").value = "";
-
-        getCalendarMonth(currentYear, currentMonth)
-
-        loading = false;
-    })
 }
 
 function generateMonthPlaceholder() {
@@ -539,7 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else if (currentView=="/month"){
         currentYear = byId("current-year").innerHTML
         currentMonth = byId("current-month").innerHTML
-
+        listenModal()
         generateMonthPlaceholder()
         yearChanger_m()
         monthChanger_m(currentMonth)
