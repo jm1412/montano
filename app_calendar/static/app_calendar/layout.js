@@ -423,7 +423,7 @@ function modalHandler(item, wt, newDate) {
 
     byId("item-id").value = item.id || "";
     byId("modal-complete-by").value = item.complete_by || newDate || "";
-    byId("modal-complete-time").value = item.complete_time || "";
+    byId("modal-complete-time").value = item.complete_time || "12:00 AM";
     byId("modal-todo").value = item.todo || "";
     byId("modal-detail").value = item.detail || "";
     byId("write-type").value = wt || "";
