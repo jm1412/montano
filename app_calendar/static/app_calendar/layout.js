@@ -355,68 +355,66 @@ function getCalendarMonth(currentYear, currentMonth) {
 
 }
 
-async
+async function postChanges(){
+    console.log("posting entries")
+
+    fetch('/create_entry', {
+        method: 'POST',
+        headers: {'X-CSRFToken': getCookie('csrftoken')},
+        mode:"same-origin",
+        body: JSON.stringify({
+            id: byId("item-id").value,
+            todo: byId("modal-todo").value,
+            detail:byId("modal-detail").value,
+            complete_by: byId("modal-complete-by").value,
+            complete_time: byId("modal-complete-time").value,
+            year_highlight: false,
+            write_type:byId("write-type").value
+        })
+    })
+}
+
+async function deleteEntry(){
+    fetch('/create_entry', {
+        method: 'POST',
+        headers: {'X-CSRFToken': getCookie('csrftoken')},
+        mode:"same-origin",
+        body: JSON.stringify({
+            id:byId("item-id").value,
+            write_type:"delete"
+        })
+    })
+}
+
+function cleanModal(){
+    byId("myModal").style.display = "none";
+    byId("modal-complete-by").value = "";
+    byId("modal-complete-time").value = "";
+    byId("modal-todo").value = "";
+    byId("modal-detail").value = "";
+    byId("item-id").value = "";
+    byId("write-type").value = "";
+}
 
 function listenModal() {
+    // Contains button listeners
+    
     // When modal is submitted
     document.querySelector('#save-calendar').addEventListener('click', function() {
         console.log("saving...")
-
-
-        fetch('/create_entry', {
-            method: 'POST',
-            headers: {'X-CSRFToken': getCookie('csrftoken')},
-            mode:"same-origin",
-            body: JSON.stringify({
-                id: byId("item-id").value,
-                todo: byId("modal-todo").value,
-                detail:byId("modal-detail").value,
-                complete_by: byId("modal-complete-by").value,
-                complete_time: byId("modal-complete-time").value,
-                year_highlight: false,
-                write_type:byId("write-type").value
-            })
-        })
-
-        byId("myModal").style.display = "none";
-    
-        byId("modal-complete-by").value = "";
-        byId("modal-complete-time").value = "";
-        byId("modal-todo").value = "";
-        byId("modal-detail").value = "";
-        byId("item-id").value = "";
-        byId("write-type").value = "";
-
-        getCalendarMonth(currentYear, currentMonth)
+        postChanges().then(
+            setTimeout(() => {getCalendarMonth(currentYear, currentMonth)}, 1000)
+        )
+        cleanModal()
     });
 
     // Delete entry
     document.querySelector('#month-delete-todo').addEventListener('click', function() {
-        console.log("MODAL deleting item")
-        byId("myModal").style.display = "none";
-
-        console.log(`deleting entry: ${item.id}`)
-
-
-        fetch('/create_entry', {
-            method: 'POST',
-            headers: {'X-CSRFToken': getCookie('csrftoken')},
-            mode:"same-origin",
-            body: JSON.stringify({
-                id:byId("item-id").value,
-                write_type:"delete"
-            })
-        })
-        
-
-        byId("modal-complete-by").value = "";
-        byId("modal-complete-time").value = "";
-        byId("modal-todo").value = "";
-        byId("modal-detail").value = "";
-        byId("item-id").value = "";
-        byId("write-type").value = "";
-
-        getCalendarMonth(currentYear, currentMonth)
+        console.log("deleting...")
+        deleteEntry().then(
+            setTimeout(() => {getCalendarMonth(currentYear, currentMonth)}, 1000)
+        )
+        cleanModal()
     })
 }
 
