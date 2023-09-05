@@ -102,7 +102,7 @@ function year_onclickday() {
     input.addEventListener("focusout", function(){
         this.outerHTML = this.value;
 
-        fetch('/create_entry', {
+        fetch('./create_entry', {
             method: 'POST',
             headers: {'X-CSRFToken': getCookie('csrftoken')},
             mode:"same-origin",
@@ -355,7 +355,7 @@ async function postChanges(){
 
     console.log("posting entries")
 
-    fetch('/create_entry', {
+    fetch('./create_entry', {
         method: 'POST',
         headers: {'X-CSRFToken': getCookie('csrftoken')},
         mode:"same-origin",
@@ -524,7 +524,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // var currentLabel = byId("navbardropdown-views")
 
     // Run necessary scripts per view type
-    if (currentView=="/year"){
+    if (currentView=="/calendar/year"){
         // currentLabel.innerHTML = "Year";
         currentYear = byId("current-year").innerHTML
         generateYearPlaceholder()
@@ -532,7 +532,7 @@ document.addEventListener('DOMContentLoaded', function() {
         yearChanger_y()
         // Set today's color
         highlight_today()
-    } else if (currentView=="/month"){
+    } else if (currentView=="/calendar/month"){
         currentYear = byId("current-year").innerHTML
         currentMonth = byId("current-month").innerHTML
         listenModal()
@@ -546,7 +546,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-// FOR FUNSIES
+// parser
 function parseDateToISOString(userInput) {
     // Trying to parse all possible human input of dates and converts it to isoformat of yyyy-mm-dd
     // Current probable errors are mm-dd vs dd-mm inputs
@@ -705,7 +705,3 @@ function parseDateToISOString(userInput) {
   return null;
 }
 
-// Usage example:
-const userInput = 'jan 5, 2023';
-const isoString = parseDateToISOString(userInput);
-console.log(isoString);

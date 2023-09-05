@@ -26,11 +26,6 @@ auth = firebase.auth()
 
 # Create your views here.
 def index(request):
-    # logger = logging.getLogger('app_api')
-    # logger.info("---------------------- START -----------------------")
-    # logger.info(request.META)
-    # logger.info("--------------------- SESSION ---------------------")
-    # logger.info(request.session)
 
     # Authenticated users view their inbox
     if request.user.is_authenticated:
@@ -48,15 +43,15 @@ def login_view(request):
         # Attempt to sign user in
         email = request.POST["email"]
         password = request.POST["password"]
-        user = auth.sign_in_with_email_and_password(email, password)
+        user = authenticate(request, username=email, password=password)
+        # user = auth.sign_in_with_email_and_password(email, password)
 
         # Check if authentication successful
         if user is not None:
-            logger.info(user)
-            #login(request, user)
+            login(request, user)
             return HttpResponseRedirect(reverse("index"))
         else:
-            return render(request, "app_calendar/login.html", {
+            return render(request, "login.html", {
                 "message": "Invalid email and/or password."
             })
     else:
@@ -105,7 +100,7 @@ def register(request):
 @login_required
 def year_view(request):
     if request.user.is_authenticated == False:
-        return render(request, "app_calendar/index.html")
+        return render(request, "index.html") # this should be main
     return render(request, "app_calendar/year.html")
 
 
@@ -158,13 +153,13 @@ def create_entry(request):
     elif write_type == "edit":
         target = Calendar.objects.get(id=id)
         if len(todo) > 0:
-            target.todo = todo
+            target.todo = todo;
             target.save()
         elif len(todo) == 0:
             target.delete()
         
     elif write_type == "update": # used by month view
-        target = Calendar.objects.get(id=id) # TODO: year highlight is missin for now
+        target = Calendar.objects.get(id=id) # TODO: year highlight is missing for now
         target.todo = todo
         target.detail = detail
         target.complete_by = complete_by
@@ -187,8 +182,7 @@ def get_calendar_year(request, current_year):
     return JsonResponse([entry.yearview() for entry in entries], safe=False)
 
 def get_calendar_month(request, target):
-    # target is yyyym
-    target = str(target)
+    target = str(target) # target is yyyym
 
     user = User.objects.get(email=request.user)
     current_year = int(target[0:4])
