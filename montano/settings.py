@@ -42,6 +42,7 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     'app_calendar',
     'todolist',
+    'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -139,7 +140,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # User
-AUTH_USER_MODEL = 'app_calendar.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 # To output console.log via views.py
 LOGGING = {

@@ -1,13 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 # Create your models here.
 
-class User(AbstractUser):
-    pass
-
 class Calendar(models.Model):
-    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="todo")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="todo")
     todo = models.CharField(max_length=255)
     detail = models.CharField(max_length=255, blank=True)
     complete_by = models.DateTimeField(blank=True)

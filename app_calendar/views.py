@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from datetime import datetime
 from .models import *
+from accounts.models import *
 
 import json
 from django.http import JsonResponse
