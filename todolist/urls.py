@@ -2,5 +2,5 @@ from django.urls import path
 from todolist import views
 
 urlpatterns = [
-    path("", views.index, name="todo_index")
+    path("", views.todo_index, name="todo_index")
 ]

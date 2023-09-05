@@ -16,9 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from montano import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('apps/', views.apps_index, name="apps_index"),
     path('calendar/', include('app_calendar.urls')),
-    path('todo/', include('todolist.urls'))
+    path('todo/', include('todolist.urls')),
+    path('blog/', include('blog.urls'))
 ]
