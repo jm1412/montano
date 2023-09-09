@@ -1,10 +1,9 @@
 from django.urls import reverse
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, json
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
-
+from .models import *
 
 # Create your views here.
 def todo_index(request):
@@ -23,7 +22,7 @@ def new_entry(request):
     user = request.user
     post = data.get("post", "")
     
-    woof = Woof(
+    woof = Todo(
         user=user,
         post=post
     )
