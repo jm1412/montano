@@ -18,8 +18,8 @@ config = {
   "databaseURL": "https://kalendaryo-6a451-default-rtdb.firebaseio.com",
   "storageBucket": "kalendaryo-6a451.appspot.com"
 }
-firebase = pyrebase.initialize_app(config)
-auth = firebase.auth()
+#firebase = pyrebase.initialize_app(config)
+#auth = firebase.auth()
 #db = firebase.database()
 #storage=firebase.storage()
 
