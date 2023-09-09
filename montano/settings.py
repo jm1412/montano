@@ -29,6 +29,7 @@ DEBUG = True
 PREPEND_WWW = False
 
 ALLOWED_HOSTS = [
+    '172.104.51.193',
     'www.montano.ph',
     'montano.ph',
     '127.0.0.1',
