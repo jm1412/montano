@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html class="sitewide" lang="en">
+    <head>
+        <title>Montano.ph</title>
+        
+        <!-- meta -->
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Simple Calendar App" />
+        <meta name="author" content="Juan Montano" />
+
+        <!-- bootstrap -->
+        <link rel="stylesheet" href="{% static 'shared/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'shared/sitewide.css' %}">
+        <script src="{% static 'shared/bootstrap.bundle.min.js' %}"></script>
+        
+    </head>
+
+    <body>
+        <!-- navigation bar -->
+        <div class="d-flex justify-content-center bg-light">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Montano</a>
+                    
+                    <!-- hamburger button -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <!-- navbar links -->
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Apps</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Calendar</a></li>
+                                    <li><a class="dropdown-item disabled" href="#">Todo List</a></li>
+                                    <li><a class="dropdown-item disabled" href="#">Notes</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">Tools</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link disabled" href="#">About Me</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        {% block body %}
+        {% endblock %}
+
+        <!-- scripts -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    </body>
+</html>

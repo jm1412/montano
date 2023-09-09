@@ -1,1 +1,23 @@
-todo.html
+{% extends 'shared/layout.html' %}
+{% block body %}
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <!-- Your horizontally centered content goes here -->
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                        <div class="grid">
+                            <input type="text" id="new-todo" required> <button id="new-todo-button" style="width: 100px;" type="submit" onClick="createNew(); return false;">Add</button>
+                        </div>
+                    </form> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

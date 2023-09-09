@@ -5,3 +5,6 @@ from django.contrib.auth.decorators import login_required
 
 def apps_index(request):
     return render(request, "shared/apps.html")
+
+def index(request):
+    return render(request, "shared/index.html")

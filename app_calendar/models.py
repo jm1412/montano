@@ -6,7 +6,7 @@ User = get_user_model()
 # Create your models here.
 
 class Calendar(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="todo")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="calendar_entries")
     todo = models.CharField(max_length=255)
     detail = models.CharField(max_length=255, blank=True)
     complete_by = models.DateTimeField(blank=True)

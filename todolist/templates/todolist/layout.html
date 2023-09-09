@@ -6,19 +6,23 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Montano.ph - Home</title>
-
-        <!-- picocss -->
+        <meta name="description" content="Simple To-do list app" />
+        <meta name="author" content="Juan Montano" />
+        <title>Montano - App: Todo</title>
+    
+        <!-- Pico CSS -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
 
-     {% endcomment %}
+        <!-- Custom Scripts -->
+        <link rel="stylesheet" href="todolist.css">
+        <script src="{% static 'todolist/layout.js' %}"></script>
     </head>
     <body>
-
+        <nav class="navigation">
+        </nav>
+        
         {% block body %}
         {% endblock %}
-
     </body>
+
 </html>
