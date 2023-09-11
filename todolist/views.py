@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 import json
 
+ 
 # Create your views here.
 def todo_index(request):
     return render(request, "todolist/todo.html")
