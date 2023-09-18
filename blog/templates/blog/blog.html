@@ -1,15 +1,45 @@
 {% extends 'shared/layout.html' %}
 {% block body %}
 
+{% load static %}
+<script src="{% static 'blog/blog.js' %}"></script>
+
+
+<!-- modal -->
+<div class="modal" id="blog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="blog-title">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p id=blog-body></p>
+      </div>
+      <!--
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="container col-md-5 mx-auto">
     <h1 class="text-center">Blog Posts</h1>
-    <!-- Example Blog Post 1 -->
-    <div class="card mb-2">
-        <div class="card-body">
-            <h5 class="card-title">Blog Post 1</h5>
-            <p class="card-text">This is the body of Blog Post 1. It can contain a lot of content and details about the topic.</p>
-        </div>
+    <div id="blogs">
+        
+        <!-- populated by javascript -->
+
     </div>
+
+    <!-- pagination -->
+    <div id="pagination-buttons">
+        <!-- populated by javascript -->
+    </div>
+
 </div>
 
 {% endblock %}
