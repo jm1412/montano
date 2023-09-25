@@ -38,7 +38,7 @@ async function getBlogs(page){
         html = `
         <div class="card mb-3 p-2">
             <div id="card-body">
-            <a class="page-link" href="#" onClick="showBlogs(${blog.id}); return false;"><h5 class="card-title">${blog.title}</h5></a>
+            <a class="page-link" href="${blog.id}"><h5 class="card-title">${blog.title}</h5></a>
                 <p class="card-text">${blog.body}</p>
             </div>
         </div>
@@ -49,32 +49,6 @@ async function getBlogs(page){
         document.getElementById("blogs").append(element);
 
     }) // blog.forEach
-}
-
-async function showBlogs(blogId){
-    // On click, show blog on a card.
-    // Called directly from generated HTML from getBlogs function
-
-    // Get requested blog
-    let response = await fetch(`show_blog/${blogId}`, {
-        method:'GET',
-        headers:{'X-CSRFToken': getCookie('csrftoken')},
-        mode: 'same-origin'
-    })
-
-    let blog = await response.json(); // serialization is: title, body, posted_on
-    
-    // Show blog in card
-    var blogTitle = document.getElementById("blog-title");
-    var blogBody = document.getElementById("blog-body");
-
-    blogTitle.innerHTML = blog.title;
-    blogBody.innerHTML = blog.body
-
-
-    document.getElementById("blog").style.display = "block";
-    
-
 }
 
 async function placePaginatorButtons(current_page = 1){
@@ -92,6 +66,7 @@ async function placePaginatorButtons(current_page = 1){
             }
 
         } else { // current_page is not 1
+
             var page_numbers = [current_page-1, current_page];
 
             if (max_pages > current_page){
@@ -114,19 +89,19 @@ async function placePaginatorButtons(current_page = 1){
 
         page_numbers.forEach(function(page_number){
             pagination_elements.push(`
-                    <li class="page-item"><a class="page-link" href="#" onClick="getBlogs(${page_number}); return false;">${page_number}</a></li>
-                    `)
+                <li class="page-item"><a class="page-link" href="#" onClick="getBlogs(${page_number}); return false;">${page_number}</a></li>
+                `)
         });
 
         pagination_elements.push(`
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-                </nav>
-            `)
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+            </nav>
+        `)
 
         // Render html
         var pagination_elements_html = pagination_elements.join('');

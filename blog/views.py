@@ -44,8 +44,13 @@ def number_of_pages(request):
     
     return JsonResponse(paginator.num_pages, safe=False)
 
-def show_blog(request, blog_id):
-    """Returns contents of requested blog."""
+def open_blog(request, blog_id):
+    """ Opens specific blog. """
 
     blog = BlogEntry.objects.get(id=blog_id)
-    return JsonResponse(blog.serialize())
+    
+    return render(request, "blog/blog_page.html", {
+        "blog_title": blog.blog_title,
+        "blog_body": blog.blog_body,
+        "blog_posted_on": blog.created_on
+    })

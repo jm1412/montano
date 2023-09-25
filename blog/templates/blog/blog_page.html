@@ -1,0 +1,11 @@
+{% extends 'shared/layout.html' %}
+{% block body %}
+
+{% load static %}
+<script src="{% static 'blog/blog.js' %}"></script>
+
+{{blog_title }}
+{{blog_body}}
+
+
+{% endblock %}

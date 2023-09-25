@@ -1,5 +1,5 @@
 from django.db import models
-
+from ckeditor.fields import RichTextField
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -8,7 +8,7 @@ User = get_user_model()
 class BlogEntry(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="blog_entries")
     blog_title = models.CharField(max_length=32, blank=False)
-    blog_body = models.CharField(max_length=3200, blank=False)
+    blog_body = RichTextField(max_length=3200, blank=False)
     created_on = models.DateTimeField(auto_now_add=True)
 
     def serialize(self):
