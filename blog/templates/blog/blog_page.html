@@ -4,8 +4,15 @@
 {% load static %}
 <script src="{% static 'blog/blog.js' %}"></script>
 
-{{blog_title }}
-{{blog_body}}
+<div class="container col-md-8 mt-5 mx-auto">
 
+    <h1>{{blog_title | safe}}</h1>
+    {{ blog_posted_on }}
+
+    <br><br>
+
+    <p>{{blog_body | safe}}</p>
+
+</div>
 
 {% endblock %}

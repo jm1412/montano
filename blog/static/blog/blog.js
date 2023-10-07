@@ -129,7 +129,7 @@ async function updatePaginatorButtons(){
     // todo
 }
 
-function modalHandler(){
+function modalHandler(){ // DEPRACATED
     // Handles modal functions.
 
     // MODAL COMPOSE

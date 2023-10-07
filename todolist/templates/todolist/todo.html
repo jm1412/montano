@@ -1,23 +1,30 @@
 {% extends 'shared/layout.html' %}
 {% block body %}
 
+{% load static %}
+<script src="{% static 'todolist/todo.js' %}"></script>
 
+<!-- load javascript here -->
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 mx-auto">
-            <!-- Your horizontally centered content goes here -->
-            <div class="card">
-                <div class="card-body">
-                    <form>
-                        <div class="grid">
-                            <input type="text" id="new-todo" required> <button id="new-todo-button" style="width: 100px;" type="submit" onClick="createNew(); return false;">Add</button>
-                        </div>
-                    </form> 
-                </div>
+<div class="container col-md-4 mx-auto text-center pt-5">
+    <!-- Add new task button -->
+    <div class="row justify-content-md-center">
+        <div class="input-group mb-3 mw-50">
+            <input id="new-todo" type="text" class="form-control" placeholder="Add to-do" aria-label="Add to-do" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" onClick="newTodo()">Add</button>
             </div>
         </div>
     </div>
+
+    <!-- To do items, to be populated by js -->
+    <div id="todo-items" class="justify-content-md-center">
+        <!-- items will be added here -->
+    </div>
+
+
+
 </div>
+
 
 {% endblock %}

@@ -18,11 +18,11 @@
         <script src="{% static 'todolist/layout.js' %}"></script>
     </head>
     <body>
-        <nav class="navigation">
-        </nav>
-        
-        {% block body %}
-        {% endblock %}
+        <div class="container col-md-8 mx-auto">
+            {% block body %}
+            {% endblock %}
+        </div>
+
     </body>
 
 </html>
