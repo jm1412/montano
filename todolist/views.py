@@ -72,3 +72,23 @@ def get_todo(request):
     
     except Exception as e:
         return JsonResponse({'error':str(e)}, status=500)
+    
+
+def update_status(request):
+    """ Updates status of todolist items. """
+
+    data = json.loads(request.body)
+    todo_id = data.get("todo_id", "")
+    status = data.get("status", "")
+    user = request.user
+
+    print(f"status: {status}, id: {todo_id}")
+    
+    todo = Todo.objects.get(
+            user=user,
+            id=todo_id
+            )
+    todo.status = status
+    todo.save()
+
+    return JsonResponse({'message': "status updated"})

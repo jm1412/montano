@@ -8,11 +8,13 @@ class Todo(models.Model):
     todo = models.CharField(max_length=255)
     created_on = models.DateTimeField(auto_now_add=True)
     position = models.IntegerField(default=0)
+    status = models.BooleanField(default=False)
 
     def serialize(self):
         return {
             "id": self.id,
-            "title": self.todo
+            "title": self.todo,
+            "status":self.status
         }
 
 class TodoRank(models.Model):
