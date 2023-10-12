@@ -21,24 +21,42 @@ async function newTodo(){
     var todo = document.getElementById("new-todo").value
     if (todo.length==0) {return false};
 
-    await fetch('new_entry/', {
+    let r = await fetch('new_entry/', {
         method:'POST',
         headers:{'X-CSRFToken': getCookie('csrftoken')},
         mode:'same-origin',
         body: JSON.stringify({
-            todo:todo,
+            todo:todo
         })
     })
+    const response = await r.json();
 
     document.getElementById("new-todo").value = "";
 
     // insert new todo item at index 0 and update everything
+    let new_todo = createTodoElement(todo, response.todo_id)
+    let todo_list = document.getElementById("todo-items");
+    todo_list.insertBefore(new_todo, todo_list.children[0]);
 
-    
+    updateTaskOrder(todo_list);
 }
 
-function createTodoElement() {
+function createTodoElement(text, todo_id) {
+    // Helper function
+    // Creates new todo element
+
     let todo_item = document.createElement('li');
+    todo_item.id = todo_id
+    todo_item.classList.add("item-entry");
+    todo_item.classList.add("list-unstyled");
+    todo_item.innerHTML = `
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+        ${text}
+        </label>
+    `
+    todo_item.draggable = true;
+    return todo_item
 }
 
 async function showTodo(){
@@ -114,18 +132,8 @@ function makeDraggable() {
         e.preventDefault();
 
         // create the new element
-        let todo_item = document.createElement('li');
-        todo_item.id = draggedItem.id;
-        todo_item.classList.add("item-entry");
-        todo_item.classList.add("list-unstyled");
         text = e.dataTransfer.getData('text/plain');
-        todo_item.innerHTML = `
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-            ${text}
-            </label>
-        `
-        todo_item.draggable = true;
+        let todo_item = createTodoElement(text, draggedItem.id)
         
         // Determine the drop position based on the mouse cursor position
         let mouseY = e.clientY;
@@ -175,7 +183,12 @@ function updateTaskOrder(todo_list) {
 
 }
 
-
+function checkboxHandler() {
+    let todo_list = document.getElementById("todo-items");
+    todo_list.addEventListener('change', (e) => {
+        
+    });
+}
 
 // Main listener / caller
 document.addEventListener('DOMContentLoaded', async function() {
@@ -183,5 +196,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     //showTodo()
     await showTodoAsList()
     makeDraggable()
+    checkboxHandler()
 
 })

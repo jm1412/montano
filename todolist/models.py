@@ -7,7 +7,7 @@ class Todo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="todo_entries")
     todo = models.CharField(max_length=255)
     created_on = models.DateTimeField(auto_now_add=True)
-    position = models.PositiveIntegerField(default=0)
+    position = models.IntegerField(default=0)
 
     def serialize(self):
         return {

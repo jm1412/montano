@@ -32,11 +32,14 @@ def new_entry(request):
     
     todo = Todo(
         user=user, 
-        todo=todo
+        todo=todo,
+        position=-1
     )
     todo.save()
 
-    return HttpResponseRedirect(reverse('todo_index'))
+    return JsonResponse({
+        "todo_id":todo.id
+    })
 
 @login_required
 @require_POST
