@@ -23,9 +23,8 @@ def todo_index(request):
 @login_required
 @requires_csrf_token
 def new_entry(request):
-    print("creating new entry")
-
     """ Create post. """
+
     data = json.loads(request.body)
     todo = data.get("todo", "")
     user = request.user
@@ -45,6 +44,10 @@ def new_entry(request):
 @require_POST
 @requires_csrf_token
 def reorder_todo(request):
+    """ Reorder position of todolist entries on drag and drop. """
+
+    user = request.user
+
     try:
         data = json.loads(request.body)
         task_ids = data.get('taskIds', [])
@@ -52,6 +55,11 @@ def reorder_todo(request):
         # Loop through the task IDs and update their positions
         for index, task_id in enumerate(task_ids):
             task = Todo.objects.get(pk=task_id)
+
+            # Check if user is only editing tasks they own.
+            if task.user != user:
+                return JsonResponse({'message': 'You can only edit tasks that you own.'}, status=200)
+
             task.position = index
             task.save()
 
@@ -64,16 +72,17 @@ def reorder_todo(request):
 @requires_csrf_token
 def get_todo(request):
     """ Returns all todo entries. """
+    
     user = request.user
     try:
         todo_items = Todo.objects.order_by("position").filter(user=user)
-        todo_list = [{'id': todo.id, 'item': todo.todo} for todo in todo_items] # not used   
         return JsonResponse([todo.serialize() for todo in todo_items], safe=False)
     
     except Exception as e:
         return JsonResponse({'error':str(e)}, status=500)
     
-
+@login_required
+@requires_csrf_token
 def update_status(request):
     """ Updates status of todolist items. """
 
@@ -81,8 +90,6 @@ def update_status(request):
     todo_id = data.get("todo_id", "")
     status = data.get("status", "")
     user = request.user
-
-    print(f"status: {status}, id: {todo_id}")
     
     todo = Todo.objects.get(
             user=user,

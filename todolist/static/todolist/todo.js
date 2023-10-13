@@ -144,8 +144,6 @@ function updateTaskOrder(todo_list) {
         .catch((error) => {
             console.error(error);
         });
-
-
 }
 
 function checkboxHandler() {
