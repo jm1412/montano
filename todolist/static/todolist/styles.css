@@ -1,33 +1,31 @@
 /* I should move this font to the shared css. */
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-html, body {
-    font-family: "Open Sans", sans-serif;
-    font-size:12px;
-}
+
 
 #todo-items {
     align-items: center;
 }
 
 .item-entry {
-    max-width: 300px;
+    list-style-type: none;
 
     text-align: left;
     vertical-align:bottom;
     vertical-align:middle;
 
     margin: auto;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
     padding-top: 5px;
     padding-bottom: 5px;
-
-    border-color: lightgray;
+    
+    
+    border-color: rgba(119,136,153,0.3);
     border-style: solid;
-    border-width: 0.5px;
+    border-width: 1px;
     border-radius: 5px;
 }
