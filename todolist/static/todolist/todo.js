@@ -34,78 +34,81 @@ async function newTodo(){
     document.getElementById("new-todo").value = "";
 
     // insert new todo item at index 0 and update everything
-    let new_todo = createTodoElement(todo, response.todo_id)
-    let todo_list = document.getElementById("todo-items");
-    todo_list.insertBefore(new_todo, todo_list.children[0]);
+    let newTodo = createTodoElement(todo, response.todoId)
+    let todoList = document.getElementById("todo-items");
+    todoList.insertBefore(newTodo, todoList.children[0]);
 
-    updateTaskOrder(todo_list);
+    updateTaskOrder(todoList);
 }
 
-function createTodoElement(text, todo_id, status=false) {
+function createTodoElement(text, todoId, status=false) {
     // Helper function
-    // Creates new todo element
+    // Creates new todo element, returns created element.
 
-    let todo_item = document.createElement('li');
-    todo_item.id = todo_id
-    todo_item.classList.add("item-entry");
-    todo_item.classList.add("list-unstyled");
-    todo_item.innerHTML = `
-        <input class="form-check-input" type="checkbox" value="" id="${todo_id}" ${status ? 'checked' : ''}>
-        <label class="form-check-label" for="${todo_id}">
+    let todoItem = document.createElement('li');
+    todoItem.id = todoId
+    todoItem.classList.add("item-entry");
+    todoItem.classList.add("list-unstyled");
+    todoItem.innerHTML = `
+        <input class="form-check-input" type="checkbox" value="" id="${todoId}" ${status ? 'checked' : ''}>
+        <label class="form-check-label" for="${todoId}">
         ${text}
         </label>
     `
-    todo_item.draggable = true;
-    return todo_item
+    todoItem.draggable = true;
+    return todoItem
 }
 
 async function showTodoAsList(){
+    // Displays todo as list in html.
+    // List is ordered by position.
+
     let response = await fetch('get_todo', {
         method:'GET',
         headers:{'X-CSRFToken': getCookie('csrftoken')},
         mode:'same-origin'
     }) // fetch
 
-    let todo_items = await response.json();
-    todo_items.forEach(function(todo_item){
-        let element = createTodoElement(todo_item.title, todo_item.id, todo_item.status)
+    let todoItems = await response.json();
+    todoItems.forEach(function(todoItem){
+        let element = createTodoElement(todoItem.title, todoItem.id, todoItem.status)
         document.getElementById("todo-items").append(element)
     })
 }
 
 function makeDraggable() {
     // Add drag functionality
-    let todo_list = document.getElementById("todo-items");
+    // Handles drag and drop events
+
+    let todoList = document.getElementById("todo-items");
     var draggedItem = null
     var draggedItemStatus = false
 
-    todo_list.addEventListener('dragstart', (e) => {
+    todoList.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', e.target.innerText);
         draggedItem = e.target;
 
         const status = e.target.querySelector('input[type="checkbox"]');
         draggedItemStatus = status.checked
-        
-        
     });
 
-    todo_list.addEventListener('dragover', (e) => {
+    todoList.addEventListener('dragover', (e) => {
         e.preventDefault();
     });
 
-    todo_list.addEventListener('drop', (e) => {
+    todoList.addEventListener('drop', (e) => {
         e.preventDefault();
 
         // create the new element
         text = e.dataTransfer.getData('text/plain');
-        let todo_item = createTodoElement(text, draggedItem.id, draggedItemStatus)
+        let todoItem = createTodoElement(text, draggedItem.id, draggedItemStatus)
         
         // Determine the drop position based on the mouse cursor position
         let mouseY = e.clientY;
         let dropIndex = -1;
-        let todo_items = todo_list.querySelectorAll('li');
+        let todoItems = todoList.querySelectorAll('li');
 
-        todo_items.forEach((item, index) => {
+        todoItems.forEach((item, index) => {
             const rect = item.getBoundingClientRect();
             const itemY = (rect.top + rect.bottom) / 2;
 
@@ -115,24 +118,27 @@ function makeDraggable() {
         });
 
         dropIndex = Math.max(0,dropIndex)
-        todo_list.insertBefore(todo_item, todo_list.children[dropIndex]);
+        todoList.insertBefore(todoItem, todoList.children[dropIndex]);
 
         draggedItem.remove();
 
-        updateTaskOrder(todo_list);
+        updateTaskOrder(todoList);
     });
 }
 
-function updateTaskOrder(todo_list) {
-    const taskItems = todo_list.querySelectorAll('li');
+function updateTaskOrder(todoList) {
+    // Helper function.
+    // Updates task order upon drop.
+    // Converts index in array as displayed to position in django models.
+
+    const taskItems = todoList.querySelectorAll('li');
     const taskIds = Array.from(taskItems).map((taskItem) => taskItem.id);
     
-    // Make an AJAX POST request to update the task order on the server
     fetch('reorder_todo/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'), // Make sure to include CSRF token
+            'X-CSRFToken': getCookie('csrftoken'),
         },
         body: JSON.stringify({ taskIds }),
     })
@@ -147,16 +153,18 @@ function updateTaskOrder(todo_list) {
 }
 
 function checkboxHandler() {
-    let todo_list = document.getElementById("todo-items");
-    todo_list.addEventListener('change', (e) => {
+    // Helper function.
+    // Listens POSTs when checkbox is clicked or unclicked.
 
-        console.log(`id: ${e.target.id}, status = ${e.target.checked}`)
+    let todoList = document.getElementById("todo-items");
+    todoList.addEventListener('change', (e) => {
         updateStatus(e.target.id, e.target.checked)
     });
 }
 
-function updateStatus(todo_id, status) {
+function updateStatus(todoId, status) {
     // Helper function for checkboxHandler, sends check/unchecked status to python for handling
+    
     fetch('update_status/', {
         method: 'POST',
         headers: {
@@ -164,7 +172,7 @@ function updateStatus(todo_id, status) {
             'X-CSRFToken': getCookie('csrftoken'), // Make sure to include CSRF token
         },
         body: JSON.stringify({
-            todo_id: todo_id,
+            todoId: todoId,
             status: status,
         })
     })

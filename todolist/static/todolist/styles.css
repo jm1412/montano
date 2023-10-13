@@ -1,0 +1,33 @@
+/* I should move this font to the shared css. */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+html, body {
+    font-family: "Open Sans", sans-serif;
+    font-size:12px;
+}
+
+#todo-items {
+    align-items: center;
+}
+
+.item-entry {
+    max-width: 300px;
+
+    text-align: left;
+    vertical-align:bottom;
+    vertical-align:middle;
+
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    border-color: lightgray;
+    border-style: solid;
+    border-width: 0.5px;
+    border-radius: 5px;
+}

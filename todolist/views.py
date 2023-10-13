@@ -37,7 +37,7 @@ def new_entry(request):
     todo.save()
 
     return JsonResponse({
-        "todo_id":todo.id
+        "todoId":todo.id
     })
 
 @login_required
@@ -72,7 +72,7 @@ def reorder_todo(request):
 @requires_csrf_token
 def get_todo(request):
     """ Returns all todo entries. """
-    
+
     user = request.user
     try:
         todo_items = Todo.objects.order_by("position").filter(user=user)
@@ -87,7 +87,7 @@ def update_status(request):
     """ Updates status of todolist items. """
 
     data = json.loads(request.body)
-    todo_id = data.get("todo_id", "")
+    todo_id = data.get("todoId", "")
     status = data.get("status", "")
     user = request.user
     
@@ -98,4 +98,4 @@ def update_status(request):
     todo.status = status
     todo.save()
 
-    return JsonResponse({'message': "status updated"})
+    return JsonResponse({'message': 'status updated'})
