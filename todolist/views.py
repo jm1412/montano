@@ -73,9 +73,12 @@ def reorder_todo(request):
 def get_todo(request):
     """ Returns all todo entries. """
 
+    data = json.loads(request.body)
+    status = data.get("status","")
     user = request.user
+
     try:
-        todo_items = Todo.objects.order_by("position").filter(user=user)
+        todo_items = Todo.objects.order_by("position").filter(user=user, status=status)
         return JsonResponse([todo.serialize() for todo in todo_items], safe=False)
     
     except Exception as e:

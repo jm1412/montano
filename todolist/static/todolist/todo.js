@@ -59,21 +59,36 @@ function createTodoElement(text, todoId, status=false) {
     return todoItem
 }
 
-async function showTodoAsList(){
+async function showTodoAsList(status=false, reset=false){
     // Displays todo as list in html.
     // List is ordered by position.
+    console.log(`reset: ${reset}`)
+    if (reset == true){
+        document.getElementById("todo-items").innerHTML=""
+    }
 
-    let response = await fetch('get_todo', {
-        method:'GET',
-        headers:{'X-CSRFToken': getCookie('csrftoken')},
-        mode:'same-origin'
-    }) // fetch
-
-    let todoItems = await response.json();
+    let todoItems = await getTodo(status);
     todoItems.forEach(function(todoItem){
         let element = createTodoElement(todoItem.title, todoItem.id, todoItem.status)
         document.getElementById("todo-items").append(element)
     })
+
+    if (reset == true){
+        hideThis(false,"show-finished-tasks")
+    }
+}
+
+async function getTodo(status = false){
+    let response = await fetch('get_todo/', {
+        method:'POST',
+        headers:{'X-CSRFToken': getCookie('csrftoken')},
+        mode:'same-origin',
+        body: JSON.stringify({
+            status:status,
+        }),
+    }) // fetch
+
+    return response.json()
 }
 
 function makeDraggable() {
@@ -124,6 +139,18 @@ function makeDraggable() {
 
         updateTaskOrder(todoList);
     });
+}
+
+function hideThis(toHide = false, toShow = false){
+    // Helper function called directly from element, hides show finished tasks button
+    
+    if (toHide != false) {
+        document.getElementById(toHide).style.display = "none";
+    }
+
+    if (toShow != false){
+        document.getElementById(toShow).style.display = "block";
+    }
 }
 
 function updateTaskOrder(todoList) {
@@ -184,5 +211,4 @@ document.addEventListener('DOMContentLoaded', async function() {
     await showTodoAsList()
     makeDraggable()
     checkboxHandler()
-
 })

@@ -21,6 +21,11 @@
     <div id="todo-items" class="justify-content-md-center">
         <!-- items will be added here -->
     </div>
+    <div id="finished-tasks-button-div" style="text-align:center;">
+        <p id="show-finished-tasks" onClick="showTodoAsList(true); hideThis('show-finished-tasks', 'hide-finished-tasks'); ">show finished tasks</p>
+        <p id="hide-finished-tasks" onClick="showTodoAsList(false, true); hideThis(toHide = 'hide-finished-tasks');" style="display:none;">hide finished tasks</p>
+    </div>
+
 
 
 
