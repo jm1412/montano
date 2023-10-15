@@ -1,6 +1,6 @@
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import requires_csrf_token
 from django.views.decorators.http import require_POST, require_GET
@@ -12,13 +12,14 @@ import json
 
  
 # Create your views here.
-def todo_index(request):
+def todo(request):
+    print("rendering todo index")
     if request.user.is_authenticated:
+        print("user is authenticated, rendering")
         return render(request, "todolist/todo.html")
     else:
-        return render(request, "shared/login.html", {
-            "from_app":"todo_index"
-        })
+        print("sending to login")
+        return redirect("/login/todo")
 
 @login_required
 @requires_csrf_token

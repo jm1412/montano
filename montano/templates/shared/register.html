@@ -4,20 +4,27 @@
     
     <div class="container col-md-4 pt-5">
         <article>
-            <form action="{% url 'login' %}" method="post">
+            <form action="{% url 'register' %}" method="post">
                 {% csrf_token %}
-                <input id="from_app" name="from_app" type="hidden" value="{{ from_app }}">
+                <input name="from_app" type="hidden" value="{{ from_app }}">
 
                 <label for="email">Email</label>
                 <input type="text" id="email" name="email" placeholder="email@domain.com" required>
 
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="" required>
+                <div class="grid">
+                    <label for="password">Password
+                    <input type="password" id="password" name="password" placeholder="" required>
+                    </label>
+
+                    <label for="password-again">Retype Password
+                    <input type="password-again" id="password" name="password" placeholder="" required>
+                    </label>
+                </div>
             
-                <button type="submit">Login</button>
+                <button type="submit">Create Account</button>
             </form>
 
-            <p style="text-align:center; font-size: 14px;">Don't have an account? <a href="/register/{{from_app}}">Let's make one.</a></p>
+            <p style="text-align:center; font-size: 14px;">Already have an account? <a href="/login/{{from_app}}">Login.</a></p>
             
             <footer>
                 <div class="container d-flex justify-content-center py-2" style="text-align:center;">

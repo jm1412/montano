@@ -20,7 +20,11 @@ from montano import views
 
 urlpatterns = [
     path('', views.index, name="index"),
-    path('shared_login/', views.shared_login, name="shared_login"),
+    path('login/', views.login_view, name="login"),
+    path('login/<str:from_app>', views.login_view, name="login"),
+    path('logout', views.logout_view, name="logout_view"),
+    path('register/', views.register_view, name="register"),
+    path('register/<str:from_app>', views.register_view, name="register"),
     path('admin/', admin.site.urls),
     path('apps/', views.apps_index, name="apps_index"),
     path('calendar/', include('app_calendar.urls')),

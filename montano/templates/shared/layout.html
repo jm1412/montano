@@ -23,26 +23,30 @@
     <body>
         <!-- navigation bar -->
         <div class="container ">
-            <nav id="sitewide-navbar">
-                <ul>
-                  <li><strong>Montano</strong></li>
-                </ul>
-                <ul>
-                  <li><a href="/">Home</a></li>
-                  <li>
-                  <details class="apps-popup" role="list">
-                    <summary aria-haspopup="listbox">Apps</summary>
-                    <ul role="listbox">
-                        <li><a href="/calendar">Calendar</a></li>
-                        <li><a href="/todo">Todo List</a></li>
-                        <li><a href="#">Notes</a></li>
-                        <li><a href="#">Tools</a></li>
-                    </ul>
-                  </details>
-                </li>
-                  <li><a href="/blog">Blog</a></li>
-                </ul>
-            </nav>
+          <nav id="sitewide-navbar">
+            <ul>
+              <li><strong>Montano</strong></li>
+            </ul>
+
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li>
+                <details class="apps-popup" role="list">
+                  <summary aria-haspopup="listbox">Apps</summary>
+                  <ul role="listbox">
+                      <li><a href="/calendar">Calendar</a></li>
+                      <li><a href="/todo">Todo List</a></li>
+                      <li><a href="#">Notes</a></li>
+                      <li><a href="#">Tools</a></li>
+                  </ul>
+                </details>
+              </li>
+              <li><a href="/blog">Blog</a></li>
+              {% if user.is_authenticated %}
+              <li><a href="/logout">Logout</a></li>
+              {% endif %}
+            </ul>
+          </nav>
 
         </div>
 
