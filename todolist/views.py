@@ -13,12 +13,9 @@ import json
  
 # Create your views here.
 def todo(request):
-    print("rendering todo index")
     if request.user.is_authenticated:
-        print("user is authenticated, rendering")
         return render(request, "todolist/todo.html")
     else:
-        print("sending to login")
         return redirect("/login/todo")
 
 @login_required

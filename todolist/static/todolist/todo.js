@@ -73,7 +73,6 @@ async function showTodoAsList(status=false, reset=false){
 
     // I created a container div so I can insert all items together,
     // thus preventing screen flickering
-    
     if (reset == true){
         document.getElementById("todo-items").innerHTML = todoContainer.outerHTML
         hideThis(false,"show-finished-tasks")
@@ -200,7 +199,7 @@ function updateStatus(todoId, status) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'), // Make sure to include CSRF token
+            'X-CSRFToken': getCookie('csrftoken'),
         },
         body: JSON.stringify({
             todoId: todoId,
