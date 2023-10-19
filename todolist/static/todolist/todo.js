@@ -54,6 +54,7 @@ function createTodoElement(text, todoId, status=false) {
         <label class="form-check-label" for="${todoId}">
         ${text}
         </label>
+        <i id="edit-button" class="fa-solid fa-ellipsis"></i>
     `
     todoItem.draggable = true;
     return todoItem
@@ -207,6 +208,8 @@ function updateStatus(todoId, status) {
         })
     })
 }
+
+
 
 // Main listener / caller
 document.addEventListener('DOMContentLoaded', async function() {
