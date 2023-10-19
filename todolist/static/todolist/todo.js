@@ -63,21 +63,21 @@ async function showTodoAsList(status=false, reset=false){
     // Displays todo as list in html.
     // List is ordered by position.
     
-    let todoContainer = document.createElement('div');
+    let todoContainer = "";
 
     let todoItems = await getTodo(status);
     todoItems.forEach(function(todoItem){
         let element = createTodoElement(todoItem.title, todoItem.id, todoItem.status)
-        todoContainer.innerHTML += element.outerHTML
+        todoContainer += element.outerHTML
     })
 
     // I created a container div so I can insert all items together,
     // thus preventing screen flickering
     if (reset == true){
-        document.getElementById("todo-items").innerHTML = todoContainer.outerHTML
+        document.getElementById("todo-items").innerHTML = todoContainer
         hideThis(false,"show-finished-tasks")
     } else {
-        document.getElementById("todo-items").append(todoContainer)
+        document.getElementById("todo-items").innerHTML += todoContainer
     }
 }
 
