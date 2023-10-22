@@ -45,6 +45,9 @@ function createTodoElement(text, todoId, status=false) {
     // Helper function
     // Creates new todo element, returns created element.
 
+    // todoId returns int id from models.py
+    // onclick is added to span and ellipsis, but ellipsis has stop propagation
+
     let todoItem = document.createElement('li');
     todoItem.id = todoId
     todoItem.classList.add("item-entry");
@@ -54,7 +57,12 @@ function createTodoElement(text, todoId, status=false) {
         <label class="form-check-label" for="${todoId}">
         ${text}
         </label>
-        <i id="edit-button" class="fa-solid fa-ellipsis"></i>
+        <span onClick="editButton('${todoId}');" id="edit-button" class="popup"><i onClick="editButton('${todoId}'); event.stopPropagation();"class="fa-solid fa-ellipsis"></i>
+        <span class="popuptext" id="popup-${todoId}">
+            <ul>Edit</ul>
+            <ul>Delete</ul>
+        </span>
+    </span> 
     `
     todoItem.draggable = true;
     return todoItem
@@ -209,7 +217,39 @@ function updateStatus(todoId, status) {
     })
 }
 
+function editButton(todoId) {
+    // Shows popup edit button when ellipsis in todo list item is clicked
 
+    // Hide all existing popups.
+    let popups = document.querySelectorAll(".popuptext");
+    popups.forEach((item) => {
+        if (item.classList.contains("show") && item.id != "popup-"+todoId) {
+            item.classList.toggle("show");
+        }
+    });
+
+
+    // Show target
+    var popup = document.getElementById(`popup-${todoId}`);
+    popup.classList.toggle("show");
+}
+
+function globalClickCatcher(){
+    window.addEventListener('click', ({ target }) => {
+        if (!target.classList.contains("fa-ellipsis")) {
+            let popups = document.querySelectorAll(".popuptext");
+
+            popups.forEach((item) => {
+                if (item.classList.contains("show")) {
+                    item.classList.toggle("show");
+                }
+            });
+        }
+    });
+
+    // ISSUE: when clicking just outside of the ellipsis but still inside the span
+    //        the span becomes the target, editButton still runs
+}
 
 // Main listener / caller
 document.addEventListener('DOMContentLoaded', async function() {
@@ -217,4 +257,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     await showTodoAsList()
     makeDraggable()
     checkboxHandler()
+    globalClickCatcher()
 })
+
+
