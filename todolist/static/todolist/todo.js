@@ -57,12 +57,16 @@ function createTodoElement(text, todoId, status=false) {
         <label class="form-check-label" for="${todoId}">
         ${text}
         </label>
-        <span onClick="editButton('${todoId}');" id="edit-button" class="popup"><i onClick="editButton('${todoId}'); event.stopPropagation();"class="fa-solid fa-ellipsis"></i>
-        <span class="popuptext" id="popup-${todoId}">
-            <ul>Edit</ul>
-            <ul>Delete</ul>
-        </span>
-    </span> 
+        
+        <span onClick="editButton('${todoId}');" id="edit-button" class="popup">
+            
+            <span class="popuptext" id="popup-${todoId}">
+                <ul class="edit-button-options">Edit</ul>
+                <ul class="edit-button-options" onClick="deleteThis(${todoId});">Delete</ul>    
+            </span>
+
+            <i onClick="editButton('${todoId}'); event.stopPropagation();"class="fa-solid fa-ellipsis"></i>
+        </span> 
     `
     todoItem.draggable = true;
     return todoItem
@@ -84,7 +88,6 @@ async function showTodoAsList(status=false, reset=false){
     // thus preventing screen flickering
     if (reset == true){
         document.getElementById("todo-items").innerHTML = todoContainer
-        hideThis(false,"show-finished-tasks")
     } else {
         document.getElementById("todo-items").innerHTML += todoContainer
     }
@@ -228,10 +231,31 @@ function editButton(todoId) {
         }
     });
 
-
     // Show target
     var popup = document.getElementById(`popup-${todoId}`);
     popup.classList.toggle("show");
+}
+
+async function deleteThis(todoId) {
+    
+    // Delete entry
+    let r = await fetch('delete_entry/', {
+        method:'POST',
+        headers:{'X-CSRFToken': getCookie('csrftoken')},
+        mode:'same-origin',
+        body: JSON.stringify({
+            todoId:todoId
+        })
+    })
+    const response = await r.json();
+
+    // Refresh todo views
+    if (document.getElementById("hide-finished-tasks").offsetParent === null){
+        await showTodoAsList(false, true)
+    } else {
+        await showTodoAsList(null, true)
+    }
+
 }
 
 function globalClickCatcher(){

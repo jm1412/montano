@@ -76,7 +76,10 @@ def get_todo(request):
     user = request.user
 
     try:
-        todo_items = Todo.objects.order_by("position").filter(user=user, status=status)
+        if status == None:
+            todo_items = Todo.objects.order_by("status", "position").filter(user=user)
+        else:
+            todo_items = Todo.objects.order_by("status", "position").filter(user=user, status=status)
         return JsonResponse([todo.serialize() for todo in todo_items], safe=False)
     
     except Exception as e:
@@ -100,3 +103,19 @@ def update_status(request):
     todo.save()
 
     return JsonResponse({'message': 'status updated'})
+
+@login_required
+@requires_csrf_token
+@require_POST
+def delete_entry(request):
+    data = json.loads(request.body)
+    todo_id = data.get("todoId","")
+    user = request.user
+
+    todo = Todo.objects.get(
+        user=user,
+        id=todo_id
+    )
+    todo.delete()
+
+    return JsonResponse({'message': 'entry deleted'})
