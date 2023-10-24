@@ -53,20 +53,23 @@ function createTodoElement(text, todoId, status=false) {
     todoItem.classList.add("item-entry");
     todoItem.classList.add("list-unstyled");
     todoItem.innerHTML = `
-        <input class="form-check-input" type="checkbox" value="" id="${todoId}" ${status ? 'checked' : ''}>
-        <label class="form-check-label" for="${todoId}">
-        ${text}
-        </label>
-        
         <span onClick="editButton('${todoId}');" id="edit-button" class="popup">
-            
             <span class="popuptext" id="popup-${todoId}">
                 <ul class="edit-button-options" onClick="editThis(${todoId});">Edit</ul>
                 <ul class="edit-button-options" onClick="deleteThis(${todoId});">Delete</ul>    
             </span>
-
             <i onClick="editButton('${todoId}'); event.stopPropagation();"class="fa-solid fa-ellipsis"></i>
-        </span> 
+        </span>
+
+        <span id="checkbox-span">   
+            <input class="form-check-input" type="checkbox" value="" id="${todoId}" ${status ? 'checked' : ''}>
+        </span>
+
+        <span id="label-span">
+            <label class="form-check-label" for="${todoId}">
+            ${text}
+            </label>
+        </span>
     `
     todoItem.draggable = true;
     return todoItem
@@ -281,11 +284,19 @@ function globalClickCatcher(){
 
 // Main listener / caller
 document.addEventListener('DOMContentLoaded', async function() {
-
+    
     await showTodoAsList()
     makeDraggable()
     checkboxHandler()
     globalClickCatcher()
+
+    // Listen for enter key on new todo
+    document.getElementById("new-todo").addEventListener('keypress', function(event){
+        if (event.key === "Enter") {
+            event.preventDefault();
+            newTodo()
+        }
+    })
 })
 
 

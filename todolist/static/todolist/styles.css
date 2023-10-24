@@ -1,12 +1,6 @@
 /* I should move this font to the shared css. */
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-
-
-#todo-items {
-    align-items: center;
-}
-
 .item-entry {
     list-style-type: none;
 
@@ -33,11 +27,6 @@
 #show-finished-tasks, #hide-finished-tasks{
     color: lightslategray;
     font-size: 14px;
-}
-
-#edit-button{
-    float:right;
-    /* transform: translate(0,25%); */
 }
 
 /* Popup container */
@@ -103,4 +92,35 @@
 @keyframes fadeIn {
   from {opacity: 0;}
   to {opacity:1 ;}
+}
+
+/* Todo item entry spans */
+#todo-items {
+  align-items: center;
+}
+
+.item-entry {
+  display: flex;
+  align-items: center;
+}
+
+#edit-button, #checkbox-span, #label-span{
+  display: inline-block;
+  /* border-style: solid; */
+}
+
+#checkbox-span{
+  order:1;
+  transform: translate(0,0);
+}
+
+#label-span{
+  order:2;
+  flex-grow:4;
+  transform: translate(0,3px);
+}
+
+#edit-button{
+  order:3;
+  float:right;
 }
