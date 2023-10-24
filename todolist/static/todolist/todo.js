@@ -61,7 +61,7 @@ function createTodoElement(text, todoId, status=false) {
         <span onClick="editButton('${todoId}');" id="edit-button" class="popup">
             
             <span class="popuptext" id="popup-${todoId}">
-                <ul class="edit-button-options">Edit</ul>
+                <ul class="edit-button-options" onClick="editThis(${todoId});">Edit</ul>
                 <ul class="edit-button-options" onClick="deleteThis(${todoId});">Delete</ul>    
             </span>
 
@@ -70,6 +70,10 @@ function createTodoElement(text, todoId, status=false) {
     `
     todoItem.draggable = true;
     return todoItem
+}
+
+async function editThis(todoId){
+    console.log("edit this")
 }
 
 async function showTodoAsList(status=false, reset=false){
