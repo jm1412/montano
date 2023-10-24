@@ -23,6 +23,21 @@
         <!-- fontawesome -->
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
+
+        <!-- service worker -->
+        <script>
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('{% static 'shared/sw.js' %}')
+              .then(registration => {
+                console.log('Service Worker registered with scope:', registration.scope);
+              })
+              .catch(error => {
+                console.error('Service Worker registration failed:', error);
+              });
+          }
+        </script>
+        
+        
     </head>
 
     <body>
