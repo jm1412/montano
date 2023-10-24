@@ -42,6 +42,7 @@
   margin: 0;
   padding: 5px;
   text-align: center;
+  color:whitesmoke;
 }
   
 /* The actual popup (appears on top) */
@@ -49,8 +50,7 @@
   transform: translate(-40%,0);
   visibility: hidden;
   width: 80px;
-  background-color: #555;
-  color: #fff;
+  background-color: hsl(195, 85%, 41%);
   text-align: right;
   border-radius: 5px;
   position: absolute;
@@ -69,7 +69,7 @@
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: #555 transparent transparent transparent;
+  border-color: #1e88e5 transparent transparent transparent;
 }
 
 /* Toggle this class when clicking on the popup container (hide and show the popup) */
