@@ -29,7 +29,6 @@ DEBUG = False
 PREPEND_WWW = False
 
 ALLOWED_HOSTS = [
-    '172.104.51.193',
     '143.198.218.34',
     'www.montano.ph',
     'montano.ph',
@@ -136,8 +135,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT= 'staticfiles' # os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATIC_ROOT= os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'montano/static'),
