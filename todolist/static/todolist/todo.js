@@ -367,4 +367,12 @@ document.addEventListener('DOMContentLoaded', async function() {
             newTodo()
         }
     })
+
+    // Listen for enter key on edit todo
+    document.getElementById("edit-todo-text").addEventListener('keypress', function(event){
+        if (event.key === "Enter") {
+            event.preventDefault();
+            postChanges();
+        }
+    })
 })
