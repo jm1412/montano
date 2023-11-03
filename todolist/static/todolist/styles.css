@@ -124,3 +124,14 @@
   order:3;
   float:right;
 }
+
+/* Modal */
+#modal-content{
+  width:100%;
+  max-width:400px;
+}
+
+#container-todo{
+  width:100%;
+  max-width:400px;
+}

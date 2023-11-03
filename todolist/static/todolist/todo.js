@@ -66,17 +66,13 @@ function createTodoElement(text, todoId, status=false) {
         </span>
 
         <span id="label-span">
-            <label class="form-check-label" for="${todoId}">
+            <label class="form-check-label" for="${todoId}" id=text-entry-${todoId}>
             ${text}
             </label>
         </span>
     `
     todoItem.draggable = true;
     return todoItem
-}
-
-async function editThis(todoId){
-    console.log("edit this")
 }
 
 async function showTodoAsList(status=false, reset=false){
@@ -91,7 +87,7 @@ async function showTodoAsList(status=false, reset=false){
         todoContainer += element.outerHTML
     })
 
-    // I created a container div so I can insert all items together,
+    // I created a container div so I can insert all items in one go overwriting the previous entries,
     // thus preventing screen flickering
     if (reset == true){
         document.getElementById("todo-items").innerHTML = todoContainer
@@ -282,6 +278,80 @@ function globalClickCatcher(){
     //        the span becomes the target, editButton still runs
 }
 
+// Edit button functionalities
+function closeModalByEscape(event){
+    if (event.key === "Escape") {
+        closeEditModal();
+    }
+}
+
+function closeEditModal(){
+    console.log("closing")
+    // Close modal
+    modal = document.getElementById("modal-container");
+    modal.removeAttribute("open");
+
+    // Remove event listener
+    document.removeEventListener("keydown", closeModalByEscape)
+}
+
+function autoGrow(element) {
+    // Grows/shrinks textarea in edit modal.
+
+    element.style.height = "5px";
+    element.style.height = (element.scrollHeight) + "px";
+  }
+
+async function editThis(todoId){
+    // Called when edit from popup menu is clicked.
+
+    // Open modal
+    modal = document.getElementById("modal-container");
+    modal.setAttribute("open", true);
+
+    // Set text
+    textToEdit = document.getElementById(`text-entry-${todoId}`).innerText;
+    editTextBox = document.getElementById("edit-todo-text");
+    editTextBox.value = textToEdit;
+    editTextBox.dispatchEvent(new Event('input', { bubbles: true })); // Simulates textarea input, to trigger oninput="autoGrow(this)"`
+    document.getElementById("edited-todo-id").value = todoId;
+    // Listen to escape key
+    document.addEventListener("keydown", closeModalByEscape);
+}
+
+async function refreshView(){
+    // Helper function
+
+    // Refresh todo views
+    if (document.getElementById("hide-finished-tasks").offsetParent === null){
+        await showTodoAsList(false, true)
+    } else {
+        await showTodoAsList(null, true)
+    }
+}
+
+async function postChanges(){
+    // Called when save edit is initiated in the edit modal.
+    // POSTs changes to django and closes the modal.
+
+    editedTodo = document.getElementById("edit-todo-text").value;
+    editedTodoId = document.getElementById("edited-todo-id").value;
+
+    let r = await fetch('post_changes/', {
+        method:'POST',
+        headers:{'X-CSRFToken': getCookie('csrftoken')},
+        mode:'same-origin',
+        body: JSON.stringify({
+            todoId:editedTodoId,
+            editedTodo:editedTodo
+        })
+    })
+    const response = await r.json();
+
+    refreshView();
+    closeEditModal();
+}
+
 // Main listener / caller
 document.addEventListener('DOMContentLoaded', async function() {
     
@@ -298,5 +368,3 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     })
 })
-
-

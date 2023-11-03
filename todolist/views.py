@@ -119,3 +119,20 @@ def delete_entry(request):
     todo.delete()
 
     return JsonResponse({'message': 'entry deleted'})
+
+@login_required
+def post_changes(request):
+    data = json.loads(request.body)
+    todo_id = data.get("todoId", "")
+    edited_todo = data.get("editedTodo", "")
+    user = request.user
+    
+
+    todo = Todo.objects.get(
+        user=user,
+        id=todo_id
+    )
+    todo.todo = edited_todo
+    todo.save()
+
+    return JsonResponse({'message': 'changes saved'})

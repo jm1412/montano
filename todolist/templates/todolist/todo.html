@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="{% static 'todolist/styles.css' %}">
 
 
-<div class="container col-md-3 pt-5">
+<div class="container" id="container-todo">
     <!-- Add new task button -->
     <div class="row justify-content-md-center">
         <div class="input-group mb-3 mw-50">
@@ -34,8 +34,28 @@
     </div>
 
 
+    <!-- Modal -->
+    <dialog id="modal-container" class="container col-md-3 pt-5">
+      <article id="modal-content">
+        <a href="#close"
+          aria-label="Close"
+          class="close"
+          data-target="modal-container"
+          onClick="closeEditModal()">
+        </a>
+        <form>
+          <input id="edited-todo-id" name="edited-todo-id" type="hidden">
+          <label for="edit-todo">Todo</label>
+          <textarea oninput="autoGrow(this)" name="text" rows="1" cols="10" id="edit-todo-text" style="resize:none; overflow:hidden;"> </textarea>  
+          <!-- Button -->
+          <button type="button" onClick="postChanges()">Submit</button>
+        </form>
 
+      </article>
+    </dialog>
 </div>
+
+
 
 
 {% endblock %}
