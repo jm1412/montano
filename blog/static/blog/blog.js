@@ -36,12 +36,12 @@ async function getBlogs(page){
         element.id = blog.id;
     
         html = `
-        <div class="card mb-3 p-2">
-            <div id="card-body">
-            <a class="page-link" href="${blog.id}"><h5 class="card-title">${blog.title}</h5></a>
-                <p class="card-text">${blog.body}</p>
-            </div>
-        </div>
+        <article>
+            <a href="${blog.id}">
+                <p class="blog-title">${blog.title}</p>
+            </a>
+            <p class="blog-body">${blog.body.slice(0,100).trim()}</p>
+        </article>
         `
 
         element.innerHTML = html;

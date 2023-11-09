@@ -197,20 +197,62 @@ function updateTaskOrder(todoList) {
         });
 }
 
-function checkboxHandler() {
+var editTimeout
+function showEditButton(targetId){
+    floatingBox = document.getElementById("undo-floating-button")
+
+    // Assign to floatingbox value the last checked todo ID
+    floatingBox.value = targetId
+
+    // Move the floating box up by 20 pixels and set opacity to 0
+    floatingBox.style.transform = 'translateY(-10px)';
+    floatingBox.style.opacity = '0';
+
+    // Reset the position and opacity after the animation is complete
+    setTimeout(function() {
+        floatingBox.style.transform = 'translateY(0)';
+        floatingBox.style.opacity = '1';
+    }, 100); // Adjust the duration (in milliseconds) based on your transition duration
+    
+    clearTimeout(editTimeout)
+
+    editTimeout = setTimeout(function(){
+        floatingBox.style.opacity ='0';
+    }, 5000);
+}
+
+async function checkboxHandler() {
     // Helper function.
     // Listens POSTs when checkbox is clicked or unclicked.
+    
 
     let todoList = document.getElementById("todo-items");
     todoList.addEventListener('change', (e) => {
-        updateStatus(e.target.id, e.target.checked)
+        updateStatus(e.target.id, e.target.checked).then(async function(){
+            await refreshTodoViews()
+
+            // Show undo popup
+            if (e.target.checked) {
+                showEditButton(e.target.id)
+            }
+        })
     });
 }
 
-function updateStatus(todoId, status) {
+
+
+async function undoChanges(){
+    floatingBox = document.getElementById("undo-floating-button")
+    todoId = floatingBox.value
+    await updateStatus(todoId, false)
+    refreshTodoViews()
+    floatingBox.style.opacity='0';
+}
+
+async function updateStatus(todoId, status) {
     // Helper function for checkboxHandler, sends check/unchecked status to python for handling
     
-    fetch('update_status/', {
+    let r = await fetch('update_status/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -221,6 +263,8 @@ function updateStatus(todoId, status) {
             status: status,
         })
     })
+
+    return r
 }
 
 function editButton(todoId) {
@@ -252,13 +296,15 @@ async function deleteThis(todoId) {
     })
     const response = await r.json();
 
-    // Refresh todo views
+    refreshTodoViews()
+}
+
+async function refreshTodoViews(){
     if (document.getElementById("hide-finished-tasks").offsetParent === null){
         await showTodoAsList(false, true)
     } else {
         await showTodoAsList(null, true)
     }
-
 }
 
 function globalClickCatcher(){
