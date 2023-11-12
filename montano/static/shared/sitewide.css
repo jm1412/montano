@@ -52,3 +52,17 @@ html, body {
     text-decoration: none;
     cursor: pointer;
   }
+
+#under-construction-header{
+  margin-bottom:15px;
+}
+
+.under-construction-body{
+  padding:auto;
+  margin:auto;
+}
+
+#under-construction-container{
+  text-align: center;
+  padding-top:25vh;
+}
