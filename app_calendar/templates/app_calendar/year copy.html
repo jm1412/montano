@@ -1,0 +1,41 @@
+{% extends 'app_calendar/layout.html' %}
+{% load static %}
+
+{% block body %}
+{% comment %} 
+<script>
+  var $el = $("html");
+  $el.css({width: $el.width(), height: $el.height()});
+</script>
+{% endcomment %}
+
+<div class="container-flex">
+
+  <div>
+      <button class="btn btn-sm year-change-button" id="prev-year"><i class="fa-solid fa-chevron-left"></i>
+      <span id="current-year" style="display:inline; padding:0px;">2023</span>
+      <button class="btn btn-sm year-change-button" id="next-year"><i class="fa-solid fa-chevron-right"></i></button>
+  </div>
+
+
+  <div class="row">
+    <div class="col">
+      <body>
+        <div class="container-fluid text-center calendar-year-container"> <!-- body container -->
+          <div id="months-container" class="d-flex flex-row mb-3"> <!-- flex container -->
+            <!-- propagated by javascript -->
+          </div>
+        </div>
+        
+      </body>
+    </div>
+  </div>
+
+</div>
+
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'app_calendar/layout.js' %}"></script>
+{% endblock %}

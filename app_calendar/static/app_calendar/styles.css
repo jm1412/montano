@@ -1,29 +1,7 @@
 /* give entire document a height so height% work for div */
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-html, body {
-    min-width:1500px;
-    min-height:100vh;
-    font-family: "Open Sans", sans-serif;
-    font-size:12px;
-}
 
-/* for finding the problem purposes only
-body {
-    border-style:solid;
-    border-width:5px;
-    border-color:blue;
-}
- */
-
-#login-card{
-    margin: 0;
-    top: 50%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(50%);
-    border-radius: 15px;
-    box-shadow: 10px 10px 10px 10px
-}
 
 /* MONTH */
 
@@ -35,7 +13,10 @@ body {
     text-align: center;
 }
 
-
+#year-change-button {
+    width: 25px;
+    color: yellow;
+}
 
 /* entire calendar div */
 #calendar-month-container {
@@ -68,14 +49,17 @@ body {
 
 /* YEAR */
 .calendar-year-container {
-    width: 100%;
-    flex-shrink:0;
-    font-size: 14px;
+    font-size: 12px;
+}
+
+#months-container{
+    display:flex;
 }
 
 .yv-m {
-    width: 8.33%;
+    min-width:8.32%;
     flex-shrink:0;
+    flex-basis:100px;
 }
 
 .footer {

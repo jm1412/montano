@@ -126,10 +126,12 @@ function generateYearPlaceholder(currentYear){
 
     for (var key in months){
 
+        // style="background-color:${monthColors[key]}"
+
         // Generate container
         monthContainer = byId("months-container")
         monthContainer.innerHTML += `
-        <div id="container-${key}" class="p-1 yv-m flex-shrink-0" style="background-color:${monthColors[key]}">
+        <div id="container-${key}" class="p-1 yv-m">
         </div>
         `
         // Generate month label and placeholder days
