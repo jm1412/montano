@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-s%7+dyghl9pcq8fwuwt3zi$6d-6((91jyr_r9lv8bcm$ew*w$$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 PREPEND_WWW = False
 
@@ -35,7 +35,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     '192.168.1.19',
-    'calendarhome.localhost'
+    'skc.localhost'
 ]
 
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'todolist',
     'accounts',
     'blog',
+    'skc',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

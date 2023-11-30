@@ -1,0 +1,27 @@
+{% extends 'skc/layout.html' %}
+{% block body %}
+{% load static %}
+
+<div class="container col-md-8">
+    <div class="row">
+        <div class="col">
+            <img src="{% static 'skc/images/slide-1.jpg' %}">
+        </div>
+    </div>
+
+
+    <div class="main-page-container">
+        <div class="main-page-image">
+            <img src="{% static 'skc/images/regular-cakes.jpg' %}">
+        </div>
+        <div class="main-page-image">
+            <img src="{% static 'skc/images/customized-cakes.jpg' %}">
+        </div>
+        <div class="main-page-image">
+            <img src="{% static 'skc/images/breads-and-pastries.jpg' %}">
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

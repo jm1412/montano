@@ -4,5 +4,5 @@ from django.conf import settings
 host_patterns = patterns('',
     host(r'www', settings.ROOT_URLCONF, name='www'),
     host(r'api', 'api.urls', name='api'),
-    host(r'calendar', 'montano.urls', name='calendar')
+    host(r'skc', 'skc.urls', name='skc')
 )

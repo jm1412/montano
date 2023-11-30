@@ -1,0 +1,24 @@
+.home-nav-gallery {
+    border-style: solid;
+    margin: auto !important;
+    padding:auto !important;
+    width:auto;
+}
+
+.home-gallery-button-row{
+    border-style: solid;
+}
+
+.main-page-container{
+    display:flex;
+    margin:5px;
+}
+
+.main-page-image{
+    order:1;
+    padding:5px;
+}
+
+#skc-logo{
+    width: 352px ;
+}

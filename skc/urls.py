@@ -1,6 +1,6 @@
 from django.urls import path
-from blog import views
+from skc import views
 
 urlpatterns = [
-    path("", views.blog_index, name="skc_index"),
+    path("", views.skc_index, name="skc_index"),
 ]

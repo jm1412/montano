@@ -48,6 +48,14 @@
 }
 
 /* YEAR */
+#new-calendar-entry{
+    height:3px;
+    font-size:12px;
+}
+.yv-d-container{
+    display: flex;
+    height:3%;
+}
 .calendar-year-container {
     font-size: 12px;
 }
@@ -79,6 +87,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    flex-grow: 1;
 }
 
 /* month names on year view */

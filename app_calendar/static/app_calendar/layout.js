@@ -146,9 +146,9 @@ function generateYearPlaceholder(currentYear){
             var mm = Number(key).toLocaleString('en-US', {minimumIntegerDigits: 2,useGrouping: false})
 
             target.innerHTML+=`
-            <div class="yv-d-container d-flex">
+            <div class="yv-d-container">
             <div class="yv-d">${i}</div>
-            <div class="yv-todo flex-grow-1 todo-container" id="${mm}-${dd}"></div>
+            <div class="yv-todo todo-container" id="${mm}-${dd}"></div>
             </div>`
         }
     }
