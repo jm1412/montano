@@ -5,9 +5,72 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import requires_csrf_token
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from skc.models import Product
+
+from PIL import Image, ImageFilter, ImageOps
 
 import json
+
 # Create your views here.
+POSTS_PER_PAGE = 9
+
+
 
 def skc_index(request):
-    return render(request,"skc/index.html")
+    return render(request, "skc/index.html")
+
+def regular_cakes(request):
+    return render(request, "skc/regular-cakes.html")
+
+def customized_cakes(request):
+    return render(request, "skc/customized-cakes.html")
+
+def get_customized_cakes(request, page_number):
+    """ Gets customized cakes and returns them. """
+
+    products = Product.objects.order_by("-date_added").all()
+    paginator = Paginator(products, POSTS_PER_PAGE)
+    page = paginator.page(page_number).object_list
+
+    return JsonResponse([product.serialize() for product in page], safe=False)
+
+def number_of_pages(request):
+    """Returns number of pages for paginator."""
+    products = Product.objects.all()
+    paginator = Paginator(products, POSTS_PER_PAGE)
+    return JsonResponse(paginator.num_pages, safe=False)
+
+# Image handler
+def convert_to_square_with_centered_blurred_background(input_path, output_path):
+    """
+    Converts all uploaded image to square and adds a blurred background.
+    Marks image as edited in models.
+    """
+
+    # Open the image using Pillow
+    original_image = Image.open(input_path)
+
+    # Blur the image
+    blur_image = original_image.filter(ImageFilter.GaussianBlur(radius=25))
+
+    # Crop the blurred image to square
+    width, height = blur_image.size   # Get dimensions
+
+    left = round((width - 1080)/2)
+    top = round((height - 1080)/2)
+    x_right = round(width - 1080) - left
+    x_bottom = round(height - 1080) - top
+    right = width - x_right
+    bottom = height - x_bottom
+    blur_image = blur_image.crop((left, top, right, bottom))
+
+    # Resize original image to 1080 longest side
+    original_image = ImageOps.contain(original_image,(1080,1080))
+
+    # Paste original image on top of blurred image
+    width, height = original_image.size
+    blur_image.paste(original_image,((1080-width)//2, (1080-height)//2))
+
+    # Save
+    blur_image.save(output_path)

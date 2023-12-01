@@ -1,13 +1,9 @@
 .home-nav-gallery {
-    border-style: solid;
     margin: auto !important;
     padding:auto !important;
     width:auto;
 }
 
-.home-gallery-button-row{
-    border-style: solid;
-}
 
 .main-page-container{
     display:flex;
@@ -16,9 +12,17 @@
 
 .main-page-image{
     order:1;
+    flex-grow:1;
+    max-width:380px;
+    max-height:380px;
     padding:5px;
+    overflow:hidden;
 }
 
 #skc-logo{
     width: 352px ;
+}
+
+.catalog-photo{
+    width:100%;
 }

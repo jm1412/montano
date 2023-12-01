@@ -54,19 +54,3 @@ def open_blog(request, blog_id):
         "blog_body": blog.blog_body,
         "blog_posted_on": blog.created_on
     })
-
-def reorder_todo(request):
-    try:
-        data = json.loads(request.body)
-        task_ids = data.get('taskIds', [])
-        
-        # Loop through the task IDs and update their positions
-        for index, task_id in enumerate(task_ids):
-            task = Task.objects.get(pk=task_id)
-            task.position = index
-            task.save()
-
-        return JsonResponse({'message': 'Tasks reordered successfully'}, status=200)
-    
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
