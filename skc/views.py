@@ -27,6 +27,7 @@ def regular_cakes(request):
 def customized_cakes(request):
     return render(request, "skc/customized-cakes.html")
 
+@requires_csrf_token
 def get_cakes(request, type, page_number):
     """ Gets customized cakes and returns them. """
     if type == "customized":
