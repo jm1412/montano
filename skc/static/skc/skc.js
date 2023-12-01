@@ -79,11 +79,11 @@ async function placePaginatorButtons(current_page = 1){
     
 }
 
-async function getCustomizedCakes(page, product_count = 0){
+async function getCakes(page, type, product_count = 0){
     // Get products and display them
 
     // Get products
-    let response = await fetch(`get-customized-cakes/${page}`, {
+    let response = await fetch(`get-cakes/${type}/${page}`, {
         method:'GET',
         headers:{'X-CSRFToken': getCookie('csrftoken')},
         mode:'same-origin'
@@ -106,6 +106,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     var currentView = window.location.pathname;
     console.log(`DOM Content Loaded, path: ${currentView}`)
     if (currentView=="/customized-cakes"){
-        getCustomizedCakes(1)
+        getCakes(1, "customized")
+    }
+    if (currentView=="/regular-cakes"){
+        getCakes(1, "regular")
+
     }
 })

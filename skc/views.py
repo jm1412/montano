@@ -7,7 +7,8 @@ from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from skc.models import Product
-
+from django.conf import settings
+import os
 from PIL import Image, ImageFilter, ImageOps
 
 import json
@@ -26,10 +27,14 @@ def regular_cakes(request):
 def customized_cakes(request):
     return render(request, "skc/customized-cakes.html")
 
-def get_customized_cakes(request, page_number):
+def get_cakes(request, type, page_number):
     """ Gets customized cakes and returns them. """
+    if type == "customized":
+        customized = True
+    if type == "regular":
+        customized = False
 
-    products = Product.objects.order_by("-date_added").all()
+    products = Product.objects.order_by("-date_added").filter(customized=customized)
     paginator = Paginator(products, POSTS_PER_PAGE)
     page = paginator.page(page_number).object_list
 
@@ -40,6 +45,16 @@ def number_of_pages(request):
     products = Product.objects.all()
     paginator = Paginator(products, POSTS_PER_PAGE)
     return JsonResponse(paginator.num_pages, safe=False)
+
+def make_images_square(request):
+    products = Product.objects.filter(squared=False)
+    skc_media_dir = os.path.join(settings.BASE_DIR,'skc/static')
+
+    if len(products) > 0:
+        for product in products:
+            target_image = skc_media_dir + product.image.url
+            convert_to_square_with_centered_blurred_background(target_image,target_image)
+    return render(request, "skc/index.html")
 
 # Image handler
 def convert_to_square_with_centered_blurred_background(input_path, output_path):

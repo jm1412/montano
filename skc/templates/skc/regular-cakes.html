@@ -2,19 +2,37 @@
 {% block body %}
 {% load static %}
 
-<div class="container col-md-8">
+<div class="container">
     <div class="main-page-container">
-        <div class="main-page-image">
-            <a href="/regular-cakes"><img src="{% static 'skc/images/regular-cakes.jpg' %}"></a>
+        <div id="customized-cake-image-1" class="main-page-image">
         </div>
-        <div class="main-page-image">
-            <img src="{% static 'skc/images/customized-cakes.jpg' %}">
+        <div id="customized-cake-image-2" class="main-page-image">
         </div>
-        <div class="main-page-image">
-            <img src="{% static 'skc/images/breads-and-pastries.jpg' %}">
+        <div id="customized-cake-image-3" class="main-page-image">
         </div>
     </div>
 
+    <div class="main-page-container">
+        <div id="customized-cake-image-4" class="main-page-image">
+        </div>
+        <div id="customized-cake-image-5" class="main-page-image">
+        </div>
+        <div id="customized-cake-image-6" class="main-page-image">
+        </div>
+    </div>
+
+    <div class="main-page-container">
+        <div id="customized-cake-image-7" class="main-page-image">
+        </div>
+        <div id="customized-cake-image-8" class="main-page-image">
+        </div>
+        <div id="customized-cake-image-9" class="main-page-image">
+        </div>
+    </div>
+</div>
+<!-- pagination -->
+<div id="pagination-buttons">
+    <!-- populated by javascript -->
 </div>
 
 {% endblock %}
