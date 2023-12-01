@@ -27,7 +27,6 @@ def regular_cakes(request):
 def customized_cakes(request):
     return render(request, "skc/customized-cakes.html")
 
-@requires_csrf_token
 def get_cakes(request, type, page_number):
     """ Gets customized cakes and returns them. """
     if type == "customized":
@@ -36,8 +35,10 @@ def get_cakes(request, type, page_number):
         customized = False
 
     products = Product.objects.order_by("-date_added").filter(customized=customized)
+    paginator = Paginator(products, POSTS_PER_PAGE)
+    page = paginator.page(page_number).object_list
 
-    return JsonResponse([product.serialize() for product in products], safe=False)
+    return JsonResponse([product.serialize() for product in page], safe=False)
 
 def number_of_pages(request):
     """Returns number of pages for paginator."""

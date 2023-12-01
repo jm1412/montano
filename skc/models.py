@@ -12,7 +12,7 @@ class Product(models.Model):
     name = models.CharField(max_length=128)
     customized = models.BooleanField(default=False) # false = regular cake, true = customized cake
     type = models.CharField(max_length=24) # cake, pastry, drinks, etc
-    image = models.ImageField(upload_to=skc_media_dir) # jpeg
+    image = models.ImageField(upload_to='skc/static/skc/media') # jpeg
     price = models.IntegerField(default=0) # price to sell
     cost = models.IntegerField(default=0) # cost to make, calculated in views.py via production
     squared = models.BooleanField(default=False)
