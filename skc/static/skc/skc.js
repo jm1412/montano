@@ -95,7 +95,7 @@ async function getCakes(page, type, product_count = 0){
         console.log(`displaying ${product.image}`)
         product_count +=1
         target = document.getElementById(`customized-cake-image-${product_count}`)
-        target.innerHTML = `<img class="catalog-photo" src='static${product.image}'>`
+        target.innerHTML = `<img class="catalog-photo" src='${product.image}'>`
 
     })
 
