@@ -18,4 +18,3 @@ class BlogEntry(models.Model):
             "body": self.blog_body,
             "posted_on": self.created_on
         }
-    
