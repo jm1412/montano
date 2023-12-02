@@ -48,12 +48,13 @@ def number_of_pages(request):
 
 def make_images_square(request):
     products = Product.objects.filter(squared=False)
-    skc_media_dir = os.path.join(settings.BASE_DIR,'')
 
     if len(products) > 0:
         for product in products:
-            target_image = skc_media_dir + product.image.url
+            target_image = product.image.path
+            product.squared=True
             convert_to_square_with_centered_blurred_background(target_image,target_image)
+            product.save()
     return render(request, "skc/index.html")
 
 # Image handler
