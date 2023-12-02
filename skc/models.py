@@ -24,3 +24,4 @@ class Product(models.Model):
             "price": self.price,
             "image": self.image.url
         }
+

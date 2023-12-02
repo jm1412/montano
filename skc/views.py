@@ -48,7 +48,7 @@ def number_of_pages(request):
 
 def make_images_square(request):
     products = Product.objects.filter(squared=False)
-    skc_media_dir = os.path.join(settings.BASE_DIR,'skc/static')
+    skc_media_dir = os.path.join(settings.BASE_DIR,'')
 
     if len(products) > 0:
         for product in products:
