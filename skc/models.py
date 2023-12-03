@@ -11,7 +11,7 @@ skc_media_dir = os.path.join(settings.BASE_DIR,'skc/static/skc/media')
 class Product(models.Model):
     name = models.CharField(max_length=128)
     customized = models.BooleanField(default=False) # false = regular cake, true = customized cake
-    type = models.CharField(max_length=24) # cake, pastry, drinks, etc
+    type = models.CharField(max_length=24, choices=[("birthday", "birthday"),("christening","christening"),("valentine","valentine"),("wedding","wedding")])
     image = models.ImageField(upload_to="images/") # jpeg
     price = models.IntegerField(default=0) # price to sell
     cost = models.IntegerField(default=0) # cost to make, calculated in views.py via production
