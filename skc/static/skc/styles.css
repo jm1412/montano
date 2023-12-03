@@ -26,3 +26,10 @@
 .catalog-photo{
     width:100%;
 }
+
+#pagination-buttons{
+    width:auto;
+    margin:auto;
+    display: flex;
+    justify-content: center;
+}

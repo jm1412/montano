@@ -1,0 +1,63 @@
+{% extends 'skc/layout.html' %}
+{% block body %}
+{% load static %}
+
+<div class="container">
+    <div class="main-page-container">
+        <div id="customized-cake-image-1" class="main-page-image">
+            <img class="catalog-photo" src='{{products.0.image}}'>
+        </div>
+        <div id="customized-cake-image-2" class="main-page-image">
+            <img class="catalog-photo" src='{{products.1.image}}'>
+        </div>
+        <div id="customized-cake-image-3" class="main-page-image">
+            <img class="catalog-photo" src='{{products.2.image}}'>
+        </div>
+    </div>
+
+    <div class="main-page-container">
+        <div id="customized-cake-image-4" class="main-page-image">
+            <img class="catalog-photo" src='{{products.3.image}}'>
+        </div>
+        <div id="customized-cake-image-5" class="main-page-image">
+            <img class="catalog-photo" src='{{products.4.image}}'>
+        </div>
+        <div id="customized-cake-image-6" class="main-page-image">
+            <img class="catalog-photo" src='{{products.5.image}}'>
+        </div>
+    </div>
+
+    <div class="main-page-container">
+        <div id="customized-cake-image-7" class="main-page-image">
+            <img class="catalog-photo" src='{{products.6.image}}'>
+        </div>
+        <div id="customized-cake-image-8" class="main-page-image">
+            <img class="catalog-photo" src='{{products.7.image}}'>
+        </div>
+        <div id="customized-cake-image-9" class="main-page-image">
+            <img class="catalog-photo" src='{{products.8.image}}'>
+        </div>
+    </div>
+</div>
+<!-- pagination -->
+<div id="pagination-buttons">
+    <div class="pagination">
+        <span class="step-links">
+            {% if paginated_queryset.has_previous %}
+                <a href="/1">&laquo; first</a>
+                <a href="?page={{ paginated_queryset.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ paginated_queryset.number }} of {{ paginated_queryset.paginator.num_pages }}.
+            </span>
+    
+            {% if paginated_queryset.has_next %}
+                <a href="?page={{ paginated_queryset.next_page_number }}">next</a>
+                <a href="?page={{ paginated_queryset.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+{% endblock %}

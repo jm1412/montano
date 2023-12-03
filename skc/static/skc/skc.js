@@ -21,11 +21,14 @@ async function number_of_pages(){
         headers:{'X-CSRFToken': getCookie('csrftoken')},
         mode: 'same-origin'
     })
+
+    return pages;
 }
 
 async function placePaginatorButtons(current_page = 1){
     let response = await number_of_pages();
     let max_pages = await response.json();
+    console.log(`max_pages is: ${max_pages}`)
 
     // Prepare which buttons to create.
     if (current_page == 1){
@@ -47,7 +50,7 @@ async function placePaginatorButtons(current_page = 1){
 
     pagination_elements.push(`
         <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
+        <ul class="pagination justify-content-center" id="pagination-buttons-themselves">
             <li class="page-item">
                 <a class="page-link" href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
@@ -79,6 +82,7 @@ async function placePaginatorButtons(current_page = 1){
     
 }
 
+// DEPRACATED
 async function getCakes(page, type, product_count = 0){
     // Get products and display them
 
@@ -107,9 +111,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.log(`DOM Content Loaded, path: ${currentView}`)
     if (currentView=="/customized-cakes"){
         getCakes(1, "customized")
+        placePaginatorButtons()
+
     }
     if (currentView=="/regular-cakes"){
-        getCakes(1, "regular")
+        //getCakes(1, "regular")
+        placePaginatorButtons()
 
     }
 })

@@ -37,7 +37,7 @@
         <div class="container ">
             <nav id="sitewide-navbar">
                 <ul>
-                <li><img id="skc-logo" src="{% static 'skc/images/logo-transparent.png' %}"></li>
+                <li><a href="/"><img id="skc-logo" src="{% static 'skc/images/logo-transparent.png' %}"></li></a>
                 </ul>
 
                 <ul>
@@ -46,8 +46,8 @@
                     <details class="apps-popup" role="list">
                     <summary aria-haspopup="listbox">Products</summary>
                     <ul role="listbox">
-                        <li><a href="/regular-cakes">Regular Cakes</a></li>
-                        <li><a href="/customied-cakes">Customized Cakes</a></li>
+                        <li><a href="/cakes/regular?page=1">Regular Cakes</a></li>
+                        <li><a href="/cakes/customized?page=1">Customized Cakes</a></li>
                         <li><a href="/breads-pastries">Breads & Pastries</a></li>
                     </ul>
                     </details>

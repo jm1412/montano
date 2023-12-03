@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import requires_csrf_token
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from skc.models import Product
 from django.conf import settings
 import os
@@ -21,13 +21,32 @@ POSTS_PER_PAGE = 9
 def skc_index(request):
     return render(request, "skc/index.html")
 
-def regular_cakes(request):
-    return render(request, "skc/regular-cakes.html")
+def view_cakes(request, type):
+    page_number = request.GET.get("page")
 
-def customized_cakes(request):
-    return render(request, "skc/customized-cakes.html")
+    # Get products
+    if type == "customized":
+        customized = True
+    if type == "regular":
+        customized = False
 
-def get_cakes(request, type, page_number):
+    # Query products
+    query = Product.objects.order_by("-date_added").filter(customized=customized)
+    paginator = Paginator(query, POSTS_PER_PAGE)
+    page = paginator.page(page_number).object_list
+    products = [product.serialize() for product in page]
+
+    # Get pages
+    try:
+        paginated_queryset = paginator.page(page_number)
+    except PageNotAnInteger:
+        paginated_queryset = paginator.page(1)
+    except EmptyPage:
+        paginated_queryset = paginator.page(paginator.num_pages)
+
+    return render(request, "skc/cakes.html", {"products":products,"page":page_number, 'paginated_queryset': paginated_queryset})
+
+def get_cakes(type, page_number):
     """ Gets customized cakes and returns them. """
     if type == "customized":
         customized = True
@@ -38,7 +57,7 @@ def get_cakes(request, type, page_number):
     paginator = Paginator(products, POSTS_PER_PAGE)
     page = paginator.page(page_number).object_list
 
-    return JsonResponse([product.serialize() for product in page], safe=False)
+    return page
 
 def number_of_pages(request):
     """Returns number of pages for paginator."""
