@@ -35,7 +35,8 @@ class ProductAdmin(admin.ModelAdmin):
             blur_image.paste(original_image,((1080-width)//2, (1080-height)//2))
 
             # Save the resized image back to the same file
-            blur_image.save(obj.image.path)
+            resized_image = blur_image.resize((1080,1080))
+            resized_image.save(obj.image.path)
 
 admin.site.register(Product,ProductAdmin)
 

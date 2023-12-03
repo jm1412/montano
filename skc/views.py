@@ -76,6 +76,17 @@ def make_images_square(request):
             product.save()
     return render(request, "skc/index.html")
 
+def resize_images(request):
+    products = Product.objects.filter(squared=False)
+
+    if len(products) > 0:
+        for product in products:
+            target_image = product.image.path
+            original_image = Image.open(target_image)
+            resized_image = original_image.resize((1024,1024))
+            resized_image.save()
+    return render(request, "skc/index.html")
+
 # Image handler
 def convert_to_square_with_centered_blurred_background(input_path, output_path):
     """
