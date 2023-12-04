@@ -5,37 +5,37 @@
 <div class="container">
     <div class="main-page-container">
         <div id="customized-cake-image-1" class="main-page-image">
-            <img class="catalog-photo" src='{{products.0.image}}'>
+            <img class="catalog-photo" src='{{products.0.image}}' onClick="showCake('{{products.0.image}}');">
         </div>
         <div id="customized-cake-image-2" class="main-page-image">
-            <img class="catalog-photo" src='{{products.1.image}}'>
+            <img class="catalog-photo" src='{{products.1.image}}' onClick="showCake('{{products.1.image}}');">
         </div>
         <div id="customized-cake-image-3" class="main-page-image">
-            <img class="catalog-photo" src='{{products.2.image}}'>
+            <img class="catalog-photo" src='{{products.2.image}}' onClick="showCake('{{products.2.image}}');">
         </div>
     </div>
 
     <div class="main-page-container">
         <div id="customized-cake-image-4" class="main-page-image">
-            <img class="catalog-photo" src='{{products.3.image}}'>
+            <img class="catalog-photo" src='{{products.3.image}}' onClick="showCake('{{products.3.image}}');">
         </div>
         <div id="customized-cake-image-5" class="main-page-image">
-            <img class="catalog-photo" src='{{products.4.image}}'>
+            <img class="catalog-photo" src='{{products.4.image}}' onClick="showCake('{{products.4.image}}');">
         </div>
         <div id="customized-cake-image-6" class="main-page-image">
-            <img class="catalog-photo" src='{{products.5.image}}'>
+            <img class="catalog-photo" src='{{products.5.image}}' onClick="showCake('{{products.5.image}}');">
         </div>
     </div>
 
     <div class="main-page-container">
         <div id="customized-cake-image-7" class="main-page-image">
-            <img class="catalog-photo" src='{{products.6.image}}'>
+            <img class="catalog-photo" src='{{products.6.image}}' onClick="showCake('{{products.6.image}}');">
         </div>
         <div id="customized-cake-image-8" class="main-page-image">
-            <img class="catalog-photo" src='{{products.7.image}}'>
+            <img class="catalog-photo" src='{{products.7.image}}' onClick="showCake('{{products.7.image}}');">
         </div>
         <div id="customized-cake-image-9" class="main-page-image">
-            <img class="catalog-photo" src='{{products.8.image}}'>
+            <img class="catalog-photo" src='{{products.8.image}}' onClick="showCake('{{products.8.image}}');">
         </div>
     </div>
 </div>
@@ -44,7 +44,7 @@
     <div class="pagination">
         <span class="step-links">
             {% if paginated_queryset.has_previous %}
-                <a href="/1">&laquo; first</a>
+                <a href="/?page=1">&laquo; first</a>
                 <a href="?page={{ paginated_queryset.previous_page_number }}">previous</a>
             {% endif %}
     
@@ -61,19 +61,15 @@
 </div>
 
 <!-- modal -->
-<dialog>
+<dialog id="modal">
     <article>
-      <header>
-        <a href="#close" aria-label="Close" class="close"></a>
-        Modal title
-      </header>
-      <p>
-        Nunc nec ligula a tortor sollicitudin dictum in vel enim. 
-        Quisque facilisis turpis vel eros dictum aliquam et nec turpis. 
-        Sed eleifend a dui nec ullamcorper. 
-        Praesent vehicula lacus ac justo accumsan ullamcorper.
-      </p>
+        <span style="float:right;">
+            <a onClick="hideCake();event.stopPropagation();" aria-label="Close" class="close"></a>
+        </span>
+        <span id = "modal-image">
+            <img src='{{products.1.image}}'>
+        </span>
     </article>
-  </dialog>
+</dialog>
 
 {% endblock %}

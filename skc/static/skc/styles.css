@@ -12,7 +12,6 @@
 
 .main-page-image{
     order:1;
-    flex-grow:1;
     max-width:380px;
     max-height:380px;
     padding:5px;

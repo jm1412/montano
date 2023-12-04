@@ -15,108 +15,35 @@ function getCookie(name) {
     return cookieValue;
 };
 
-async function number_of_pages(){
-    let pages = await fetch('number-of-pages',{
-        method:'GET',
-        headers:{'X-CSRFToken': getCookie('csrftoken')},
-        mode: 'same-origin'
-    })
-
-    return pages;
+function showCake(image){
+    modal = document.getElementById("modal");
+    var modalImage = document.getElementById("modal-image");
+    console.log(image)
+    image = `<img src='${image}'>`
+    console.log(image)
+    modalImage.innerHTML = image
+    modal.setAttribute("open", true);
 }
 
-async function placePaginatorButtons(current_page = 1){
-    let response = await number_of_pages();
-    let max_pages = await response.json();
-    console.log(`max_pages is: ${max_pages}`)
+function hideCake(){
+    modal = document.getElementById("modal");
+    modal.setAttribute("open", false);
+}
 
-    // Prepare which buttons to create.
-    if (current_page == 1){
-        var page_numbers = [1, 2];
+function modalHandler(){
+    // Modal listener
 
-        if (max_pages > 2){
-            page_numbers.push(3);
-        }
-    } else {
-        var page_numbers = [current_page-1, current_page];
+    let modal = document.getElementById("modal");
 
-        if (max_pages > current_page){
-            page_numbers.push(current_page+1);
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+        hideCake()
         }
     }
-
-    // Create buttons
-    var pagination_elements = []
-
-    pagination_elements.push(`
-        <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center" id="pagination-buttons-themselves">
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-    `);
-
-    page_numbers.forEach(function(page_number){
-        pagination_elements.push(`
-            <li class="page-item"><a class="page-link" href="#" onClick="getBlogs(${page_number}); return false;">${page_number}</a></li>
-            `)
-    });
-
-    pagination_elements.push(`
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul>
-        </nav>
-    `)
-
-    // Render html
-    var pagination_elements_html = pagination_elements.join('');
-
-    var pagination_area = document.getElementById("pagination-buttons");
-    pagination_area.innerHTML = pagination_elements_html
-    
-}
-
-// DEPRACATED
-async function getCakes(page, type, product_count = 0){
-    // Get products and display them
-
-    // Get products
-    let response = await fetch(`get-cakes/${type}/${page}`, {
-        method:'GET',
-        headers:{'X-CSRFToken': getCookie('csrftoken')},
-        mode:'same-origin'
-    })
-    const products = await response.json();
-
-    // Display products
-    await products.forEach(function(product){
-        console.log(`displaying ${product.image}`)
-        product_count +=1
-        target = document.getElementById(`customized-cake-image-${product_count}`)
-        target.innerHTML = `<img class="catalog-photo" src='${product.image}'>`
-
-    })
-
 }
 
 // Main listener / caller
 document.addEventListener('DOMContentLoaded', async function() {
-    var currentView = window.location.pathname;
-    console.log(`DOM Content Loaded, path: ${currentView}`)
-    if (currentView=="/customized-cakes"){
-        getCakes(1, "customized")
-        placePaginatorButtons()
-
-    }
-    if (currentView=="/regular-cakes"){
-        //getCakes(1, "regular")
-        placePaginatorButtons()
-
-    }
+    modalHandler()
 })
