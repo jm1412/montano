@@ -6,6 +6,11 @@ from PIL import Image, ImageFilter, ImageOps
 # # admin.py
 class ProductAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
+        """
+        Overrides save function on admin panel, converts images to square and resizes to 1080px.
+        
+        """
+
         # Call the save_model method of the parent class
         super().save_model(request, obj, form, change)
 
@@ -14,6 +19,24 @@ class ProductAdmin(admin.ModelAdmin):
             # Open the uploaded image using Pillow
             original_image = Image.open(obj.image.path)
 
+            # Get image data
+            exif = original_image._getexif()
+
+            # Rotate image
+            orientation_key = 274 # cf ExifTags
+            if exif and orientation_key in exif:
+                orientation = exif[orientation_key]
+
+                rotate_values = {
+                    3: Image.ROTATE_180,
+                    6: Image.ROTATE_270,
+                    8: Image.ROTATE_90
+                }
+
+                if orientation in rotate_values:
+                    original_image = original_image.transpose(rotate_values[orientation])
+
+            # Start the blur process
             blur_image = original_image.filter(ImageFilter.GaussianBlur(radius=25))
 
             # Crop the blurred image to square

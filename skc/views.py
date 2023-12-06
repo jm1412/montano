@@ -59,13 +59,8 @@ def get_cakes(type, page_number):
 
     return page
 
-def number_of_pages(request):
-    """Returns number of pages for paginator."""
-    products = Product.objects.all()
-    paginator = Paginator(products, POSTS_PER_PAGE)
-    return JsonResponse(paginator.num_pages, safe=False)
-
 def make_images_square(request):
+    """ Makes all images in media/images square """
     products = Product.objects.filter(squared=False)
 
     if len(products) > 0:
@@ -77,13 +72,14 @@ def make_images_square(request):
     return render(request, "skc/index.html")
 
 def resize_images(request):
+    """ Makes all images in media/images 1080x1080px"""
     products = Product.objects.filter(squared=False)
 
     if len(products) > 0:
         for product in products:
             target_image = product.image.path
             original_image = Image.open(target_image)
-            resized_image = original_image.resize((1024,1024))
+            resized_image = original_image.resize((1080,1080))
             resized_image.save()
     return render(request, "skc/index.html")
 
