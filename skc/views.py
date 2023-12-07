@@ -16,12 +16,12 @@ import json
 # Create your views here.
 POSTS_PER_PAGE = 9
 
-
-
 def skc_index(request):
     return render(request, "skc/index.html")
 
 def view_cakes(request, type):
+    return render(request,"skc/cakes.html",{"type":type})
+
     page_number = request.GET.get("page")
 
     # Get products
@@ -45,6 +45,38 @@ def view_cakes(request, type):
         paginated_queryset = paginator.page(paginator.num_pages)
 
     return render(request, "skc/cakes.html", {"products":products,"page":page_number, 'paginated_queryset': paginated_queryset})
+
+def get_one_image(request, type):
+    page = request.GET.get('page','')
+    return get_images(request,type,1,page)
+
+def get_images(request, type, images_per_page=9, override_page=False):
+    if not override_page:
+        page_number = request.GET.get('page', 1)
+    else:
+        page_number = override_page
+
+    customized = True if type == "customized" else False
+    query = Product.objects.order_by("-date_added").filter(customized=customized)
+    paginator = Paginator(query, images_per_page)
+    page = paginator.page(page_number).object_list
+    products = [product.serialize() for product in page]
+
+    # Get pages    
+    try:
+        paginated_queryset = paginator.page(page_number)
+    except PageNotAnInteger:
+        paginated_queryset = paginator.page(1)
+    except EmptyPage:
+        return JsonResponse({'data': [], 'has_next': False})
+
+
+    products = [product.serialize() for product in page]
+    print(paginated_queryset.has_next())
+    print(paginated_queryset.has_previous)
+    data = {'products': products, 'has_next': paginated_queryset.has_next(), 'has_previous': paginated_queryset.has_previous(), 'max_pages':paginator.num_pages}
+
+    return JsonResponse(data)
 
 def get_cakes(type, page_number):
     """ Gets customized cakes and returns them. """
