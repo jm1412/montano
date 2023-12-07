@@ -72,8 +72,6 @@ def get_images(request, type, images_per_page=9, override_page=False):
 
 
     products = [product.serialize() for product in page]
-    print(paginated_queryset.has_next())
-    print(paginated_queryset.has_previous)
     data = {'products': products, 'has_next': paginated_queryset.has_next(), 'has_previous': paginated_queryset.has_previous(), 'max_pages':paginator.num_pages}
 
     return JsonResponse(data)

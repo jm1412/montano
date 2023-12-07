@@ -68,6 +68,18 @@ async function getNextModal(direction=0, type, currentItemOverride=false){
     })
     const response = await r.json();
 
+    // Change details of modal
+    itemName = document.getElementById("modal-item-name")
+    itemPrice = document.getElementById("modal-item-price")
+
+    itemName.innerHTML = response.products[0].name;
+    
+    if (response.products[0].price > 0){
+        itemPrice.innerHTML = "Php " +response.products[0].price;
+    } else{
+        itemPrice.innerHTML="";
+    }
+
     // To prevent overflow
     if (response.products[0].image == undefined){        
         page -= Number(direction)
