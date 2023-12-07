@@ -17,9 +17,10 @@ function getCookie(name) {
 
 let page = 1;
 let itemNumber = 0;
-
+let currentPage = 0;
 function loadImages(type) {
     const xhr = new XMLHttpRequest();
+    currentPage += 1
 
     xhr.open('GET', `/get-images/${type}?page=${page}`, true);
     xhr.onload = function () {
@@ -27,6 +28,11 @@ function loadImages(type) {
             page += 1;
 
             const data = JSON.parse(xhr.responseText);
+
+            console.log(`data.max_pages:${data.max_pages}`)
+            if (data.max_pages <= currentPage){
+                return false;
+            }
             for (let product of data.products) {
                 itemNumber+=1;
                 const img = document.createElement('img');
