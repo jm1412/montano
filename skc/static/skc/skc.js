@@ -86,6 +86,11 @@ async function getNextModal(direction=0, type, currentItemOverride=false){
         itemPrice.innerHTML="";
     }
 
+    // Change edit button anchor of modal
+    var editButton = document.getElementById("modal-edit-item");
+    editButton.innerHTML = `<a href="/admin/skc/product/${response.products[0].id}/change/" target="_blank" rel="noopener noreferrer">Edit</a>`
+
+
     // To prevent overflow
     if (response.products[0].image == undefined){        
         page -= Number(direction)
@@ -113,9 +118,10 @@ async function getNextModal(direction=0, type, currentItemOverride=false){
 
 function showCake(image, id=0){
     modal = document.getElementById("modal");
+
     var modalImage = document.getElementById("modal-image-container");
     image = `<img id=${id} class="modal-image" src='${image}'>`
-    modalImage.innerHTML = image
+    modalImage.innerHTML = image    
     modal.setAttribute("open", true);
 }
 

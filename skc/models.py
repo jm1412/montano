@@ -20,6 +20,7 @@ class Product(models.Model):
 
     def serialize(self):
         return {
+            "id": self.id,
             "name": self.name,
             "price": self.price,
             "image": self.image.url
