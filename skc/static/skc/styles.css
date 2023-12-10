@@ -82,6 +82,7 @@
     overflow:hidden;
     padding:10px;
     background-color: var(--background-color);
+    border-radius: 5px;
 }
 
 #modal-item-name, #modal-item-price{
