@@ -37,7 +37,8 @@ ALLOWED_HOSTS = [
     'localhost',
     '192.168.1.19',
     'skc.localhost',
-    'skc.montano.ph'
+    'skc.montano.ph',
+    '.montano.ph'
 ]
 
 

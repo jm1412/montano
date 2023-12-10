@@ -30,7 +30,7 @@ function loadImages(type) {
             const data = JSON.parse(xhr.responseText);
 
             console.log(`data.max_pages:${data.max_pages}`)
-            if (data.max_pages <= currentPage){
+            if (data.max_pages < currentPage){
                 return false;
             }
             for (let product of data.products) {
@@ -48,7 +48,7 @@ function loadImages(type) {
 
             // Check if more images need to be loaded immediately after the initial load
             if (window.innerHeight >= document.documentElement.scrollHeight) {
-                if(page<data.max_pages+1){
+                if(page<=data.max_pages+1){
                     loadImages(type);
                 }
             }

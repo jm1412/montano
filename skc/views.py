@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from skc.models import Product
 from django.conf import settings
+from accounts.models import User
 import os
 from PIL import Image, ImageFilter, ImageOps
 
@@ -19,8 +20,27 @@ POSTS_PER_PAGE = 9
 def skc_index(request):
     return render(request, "skc/index.html")
 
+
+# Todo : merge skc_admin and skc_login in one file
+def skc_login(request):
+    if request.method == "POST":
+        email = request.POST["email"]
+        password = request.POST["password"]
+
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+
+            login(request, user)
+            return render(request, "skc/index.html")
+        else:
+            return render(request, "skc/login.html")
+
+    else:
+        return render(request, "skc/login.html")
+    
+
 def view_cakes(request, type):
-    return render(request,"skc/cakes.html",{"type":type})
+    return render(request,"skc/cakes.html",{"type":type, "user": request.user})
 
     page_number = request.GET.get("page")
 
@@ -73,7 +93,6 @@ def get_images(request, type, images_per_page=9, override_page=False):
 
     products = [product.serialize() for product in page]
     data = {'products': products, 'has_next': paginated_queryset.has_next(), 'has_previous': paginated_queryset.has_previous(), 'max_pages':paginator.num_pages}
-
     return JsonResponse(data)
 
 def get_cakes(type, page_number):

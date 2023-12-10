@@ -23,10 +23,16 @@
             <p id="modal-item-name">Chocolate Chiffon</p>
             <p id="modal-item-price"></p>
         </div>
+        
+        {% if user.is_authenticated %}
+            <p id="modal-edit-item">
+                <a href="/admin/skc/product/35/change/" target="_blank" rel="noopener noreferrer">Edit</a>
+            </p>
+        {% endif %}
     </div>
     
     <i id="modal-next-button" onclick="getNextModal(1, '{{type}}');" class="fa-solid fa-circle-chevron-right fa-xl modal-nav-buttons"></i>
-    
+ 
 </dialog>
 
 
