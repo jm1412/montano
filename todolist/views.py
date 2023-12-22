@@ -18,6 +18,7 @@ def todo(request):
     else:
         return redirect("/login/todo")
 
+
 @login_required
 @requires_csrf_token
 def new_entry(request):

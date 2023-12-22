@@ -1,25 +1,18 @@
 from django.contrib import admin
-from .models import Product
+from .models import Product, Sale, SaleItem
 from PIL import Image, ImageFilter, ImageOps
 # Register your models here.
 
-# # admin.py
 class ProductAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         """
         Overrides save function on admin panel, converts images to square and resizes to 1080px.
-        
         """
 
-        # Call the save_model method of the parent class
         super().save_model(request, obj, form, change)
 
-        # Check if the image field has changed
         if 'image' in form.changed_data:
-            # Open the uploaded image using Pillow
             original_image = Image.open(obj.image.path)
-
-            # Get image data
             exif = original_image._getexif()
 
             # Rotate image
@@ -36,12 +29,11 @@ class ProductAdmin(admin.ModelAdmin):
                 if orientation in rotate_values:
                     original_image = original_image.transpose(rotate_values[orientation])
 
-            # Start the blur process
+            # Blur image
             blur_image = original_image.filter(ImageFilter.GaussianBlur(radius=25))
 
-            # Crop the blurred image to square
+            # Crop image
             width, height = blur_image.size   # Get dimensions
-
             left = round((width - 1080)/2)
             top = round((height - 1080)/2)
             x_right = round(width - 1080) - left
@@ -50,7 +42,7 @@ class ProductAdmin(admin.ModelAdmin):
             bottom = height - x_bottom
             blur_image = blur_image.crop((left, top, right, bottom))
 
-            # Resize original image to 1080 longest side
+            # Resize to 1080
             original_image = ImageOps.contain(original_image,(1080,1080))
 
             # Paste original image on top of blurred image
@@ -62,4 +54,5 @@ class ProductAdmin(admin.ModelAdmin):
             resized_image.save(obj.image.path)
 
 admin.site.register(Product,ProductAdmin)
-
+admin.site.register(Sale)
+admin.site.register(SaleItem)

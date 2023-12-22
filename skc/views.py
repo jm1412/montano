@@ -6,7 +6,7 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from skc.models import Product
+from skc.models import Product, Sale, SaleItem
 from django.conf import settings
 from accounts.models import User
 import os
@@ -17,11 +17,44 @@ import json
 # Create your views here.
 POSTS_PER_PAGE = 9
 
+def pos(request):
+    if request.user.is_authenticated:
+        return render(request,"skc/pos.html")
+    else:
+        return redirect("/login")
+
+def pos_submit(request):
+    data = json.loads(request.body)
+    orders = data["orders"]
+    total = 0
+
+    new_sale = Sale.objects.create(
+        user = request.user
+    )
+
+    for item, details in orders.items():
+        product = Product.objects.get(id=item)
+        SaleItem.objects.create(
+            sale = new_sale,
+            product = product,
+            quantity = details["qty"],
+            unit_price = details["price"]
+        )
+        total +=  details["price"] * details["qty"]
+    
+    new_sale.total = total
+    new_sale.save()
+        
+    return JsonResponse({'message': 'success'})
+
 def skc_index(request):
     return render(request, "skc/index.html")
 
+def get_products(request):
+    products = Product.objects.all()
 
-# Todo : merge skc_admin and skc_login in one file
+    return JsonResponse([product.serialize() for product in products], safe=False)
+
 def skc_login(request):
     if request.method == "POST":
         email = request.POST["email"]
@@ -29,7 +62,6 @@ def skc_login(request):
 
         user = authenticate(request, username=email, password=password)
         if user is not None:
-
             login(request, user)
             return render(request, "skc/index.html")
         else:
@@ -38,9 +70,15 @@ def skc_login(request):
     else:
         return render(request, "skc/login.html")
     
+def get_regular_cakes(request):
+    regular_cakes = Product.objects.filter(category="regular")
+    return [regular_cake.serialize() for regular_cake in regular_cakes]
 
 def view_cakes(request, type):
     return render(request,"skc/cakes.html",{"type":type, "user": request.user})
+
+    # Initially made it so that on load, renders and returs products. Decided to break it down to smaller chunks for readability and reusability.
+    # Keeping this chunk of code for if and when I need to paginate the POS (i.e. too many items)
 
     page_number = request.GET.get("page")
 
@@ -82,7 +120,7 @@ def get_images(request, type, images_per_page=9, override_page=False):
     page = paginator.page(page_number).object_list
     products = [product.serialize() for product in page]
 
-    # Get pages    
+    # Get pages
     try:
         paginated_queryset = paginator.page(page_number)
     except PageNotAnInteger:
@@ -96,7 +134,7 @@ def get_images(request, type, images_per_page=9, override_page=False):
     return JsonResponse(data)
 
 def get_cakes(type, page_number):
-    """ Gets customized cakes and returns them. """
+    """ Gets cakes and returns them. """
     if type == "customized":
         customized = True
     if type == "regular":

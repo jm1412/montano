@@ -1,0 +1,58 @@
+{% extends 'skc/pos_template.html' %}
+{% block body %}
+{% load static %}
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+<div id="pos-items-container">
+    <!--populated by javascript-->
+</div>
+
+<!-- modal -->
+<dialog id="modal">
+    <span id="modal-close">
+        <i id="close-icon" class="fa-regular fa-circle-xmark fa-xl" onclick="closeOrder();"></i>
+    </span>
+    
+    <div id="modal-container">
+        <div class="modal-items-container">
+            <div class="modal-items">
+                Item
+            </div>
+            <div class="modal-items">
+                Item
+            </div>
+            <div class="modal-items">
+                Price
+            </div>
+            <div class="modal-items">
+                Qty
+            </div>
+            <div class="modal-items">
+                Total
+            </div>
+        </div>
+        <div id="pos-orders">
+            <!--  populated by javascript -->
+        </div>
+        <div id="pos-confirm">
+            <p id="pos-total-label">Total:  </p><p id="pos-total">0</p>
+            <a href="#" role="button" id="pos-confirm" onclick="posConfirm();">Confirm</a>
+        </div>
+    </div>
+</dialog>
+
+<!-- modal -->
+<dialog id="confirmation-page" close>
+    <div id="modal-container">
+        <div id="pos-orders">
+            Payment <input type="number" id="payment" placeholder="Payment" oninput="calculateChange();">
+            Total <input type="number" id="order-total" disabled>
+            Change <input type="number" id="order-change" disabled>
+        </div>
+        <div id="pos-confirm">
+            <a href="#" role="button" id="pos-confirm" onclick="posSubmit();">Confirm</a>
+        </div>
+    </div>
+</dialog>
+
+{% endblock %}

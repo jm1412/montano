@@ -13,7 +13,11 @@ urlpatterns = [
     path("get-images/<str:type>", views.get_images, name="get_images"),
     path("get-one-image/<str:type>", views.get_one_image, name="get_one_image"),
     path('admin/', admin.site.urls),
-    path("login", views.skc_login, name="skc_login")
+    path("login", views.skc_login, name="skc_login"),
+    path("pos", views.pos, name="pos"),
+    path("get-products", views.get_products, name="get_products"),
+    path("pos-submit", views.pos_submit, name="pos_submit")
+
 ]
 
 if settings.DEBUG:
