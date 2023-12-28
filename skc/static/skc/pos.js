@@ -1,3 +1,11 @@
+// GLOBAL VARIABLES
+// I use sitewide variables so I can load all products and work with those products, reducing server calls.
+let products = "";
+let orders = {};
+
+
+// HELPER FUNCTIONS
+
 function getCookie(name) {
     // For csrf_token    
     let cookieValue = null;
@@ -14,10 +22,6 @@ function getCookie(name) {
     }
     return cookieValue;
 };
-
-// I use sitewide variables so I can load all products and work with those products, reducing server calls.
-let products = "";
-let orders = {};
 
 function clearOrders(){
     // Clear orders object, consequently clears the modal and bottom bars.
@@ -53,6 +57,8 @@ function clearModal(){
     container.innerHTML = "";
 }
 
+// FUNCTIONS
+
 async function getProducts(){
     // This gets run first via DOMContentLoaded
     // Get products and assigns them to global variable products for use sitewide.
@@ -71,11 +77,11 @@ function pos_home(){
     // Loaded via DOMContentLoaded.
     // Shows POS home screen.
     clearPos()
-    createPosItem('http://skc.localhost/static/skc/images/pos-regular.jpg', "showRegularCakes()")
-    createPosItem('http://skc.localhost/static/skc/images/pos-customized.jpg', "test()")
-    createPosItem('http://skc.localhost/static/skc/images/pos-drinks.jpg', "test()")
-    createPosItem('http://skc.localhost/static/skc/images/pos-breads.jpg', "test()")
-    createPosItem('http://skc.localhost/static/skc/images/pos-add.jpg', "test()")
+    createPosItem('http://skc.localhost/static/skc/images/pos-regular.jpg', "showProduct('regular')")
+    createPosItem('http://skc.localhost/static/skc/images/pos-customized.jpg', "showProduct('regular', true)")
+    createPosItem('http://skc.localhost/static/skc/images/pos-drinks.jpg', "showProduct('drinks')")
+    createPosItem('http://skc.localhost/static/skc/images/pos-breads.jpg', "showProduct('bread-pastries')")
+    createPosItem('http://skc.localhost/static/skc/images/pos-add.jpg', "showProduct('addons')")
 }
 
 function modalHandler(){
@@ -129,6 +135,9 @@ async function posConfirm(){
 
 async function posSubmit(){
     // Submit orders to server.
+    submitButton = document.getElementById("pos-confirm-button")
+    submitButton.classList.add("disabled")
+
     let r = await fetch('/pos-submit', {
         method:'POST',
         headers:{'X-CSRFToken': getCookie('csrftoken')},
@@ -137,12 +146,16 @@ async function posSubmit(){
             orders
         })
     })
+    let response = await r.json()
+    
+    if (response.message == "success"){
+        clearConfirmationPage()
+        clearOrders()
+        confirmationPage = document.getElementById("confirmation-page")
+        confirmationPage.setAttribute("open",false)
+    }
 
-    // Close confirmation page
-    clearConfirmationPage()
-    clearOrders()
-    confirmationPage = document.getElementById("confirmation-page")
-    confirmationPage.setAttribute("open",false)
+    submitButton.classList.remove("disabled")
 }
 
 function createOrderEntry(item, quantity, price){
@@ -230,7 +243,7 @@ function updateBottomBar(){
     modalTotal.innerHTML = total
 }
 
-function addToOrder(category, itemId){
+function addToOrder(itemId){
     // When item entry in POS is clicked, add target to order object.
     item = products.find(product => product.id === itemId);
     
@@ -242,22 +255,15 @@ function addToOrder(category, itemId){
     updateBottomBar()
 }
 
-async function showRegularCakes(){
-    // Changes POS view to regular cakes
+function showProduct(category, customized=false){
+    // Changes POS view to product view
     clearPos()
     Object.keys(products).forEach(function(product){
-        var item = products[product]; 
+        var item = products[product];
 
-        if(item.customized == undefined && item.category ==  "regular"){
-            createPosItem(item.image, `addToOrder("regular",${item.id})`)
+        if(item.category == category && item.customized == customized){
+            createPosItem(item.image, `addToOrder(${item.id})`)
         }
-    })
-}
-
-async function showCustomizedCakes(){
-    clearPos()
-    Object.keys(products).forEach(function(product){
-        
     })
 }
 

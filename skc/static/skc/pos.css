@@ -131,3 +131,8 @@ body {
     display: inline-block;
     vertical-align: middle;
 }
+
+.disabled {
+    pointer-events: none; /* Disable pointer events to make it unclickable */
+    opacity: 0.5; /* Optionally, reduce the opacity to visually indicate the disabled state */
+  }

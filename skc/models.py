@@ -37,7 +37,7 @@ class Product(models.Model):
             "name": self.name,
             "price": self.price,
             "image": self.image.url,
-            "customied": self.customized,
+            "customized": self.customized,
             "category": self.category,
             "type": self.type,
             "display": self.display
