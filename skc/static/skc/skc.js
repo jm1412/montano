@@ -87,8 +87,12 @@ async function getNextModal(direction=0, type, currentItemOverride=false){
     }
 
     // Change edit button anchor of modal
-    var editButton = document.getElementById("modal-edit-item");
-    editButton.innerHTML = `<a href="/admin/skc/product/${response.products[0].id}/change/" target="_blank" rel="noopener noreferrer">Edit</a>`
+    try{
+        var editButton = document.getElementById("modal-edit-item");
+        editButton.innerHTML = `<a href="/admin/skc/product/${response.products[0].id}/change/" target="_blank" rel="noopener noreferrer">Edit</a>`    
+    } catch(err){
+        // do nothing
+    }
 
 
     // To prevent overflow
