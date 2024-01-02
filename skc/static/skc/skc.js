@@ -17,19 +17,16 @@ function getCookie(name) {
 
 let page = 1;
 let itemNumber = 0;
-let currentPage = 0;
+let currentPage = 1;
 function loadImages(type) {
     const xhr = new XMLHttpRequest();
-    currentPage += 1
-
-    xhr.open('GET', `/get-images/${type}?page=${page}`, true);
+    xhr.open('GET', `/get-images/${type}?page=${currentPage}`, true);
     xhr.onload = function () {
         if (xhr.status >= 200 && xhr.status < 400) {
-            page += 1;
 
             const data = JSON.parse(xhr.responseText);
 
-            console.log(`data.max_pages:${data.max_pages}`)
+            console.log(`data.max_pages:${data.max_pages} page:${currentPage}`)
             if (data.max_pages < currentPage){
                 return false;
             }
@@ -46,12 +43,15 @@ function loadImages(type) {
                 document.getElementById('image-container').appendChild(img);
             }
 
+            currentPage += 1;
+            
             // Check if more images need to be loaded immediately after the initial load
             if (window.innerHeight >= document.documentElement.scrollHeight) {
-                if(page<=data.max_pages+1){
+                if(currentPage<=data.max_pages+1){
                     loadImages(type);
                 }
             }
+
         } else {
             console.error('Error loading images.');
         }

@@ -11,6 +11,13 @@ from django.conf import settings
 from accounts.models import User
 import os
 from PIL import Image, ImageFilter, ImageOps
+from django.forms.models import model_to_dict
+
+# for report generation
+from tabulate import tabulate
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from io import BytesIO
 
 import json
 
@@ -203,3 +210,46 @@ def convert_to_square_with_centered_blurred_background(input_path, output_path):
 
     # Save
     blur_image.save(output_path)
+
+# Report generator
+    
+def create_pdf_from_dict(data):
+    # Convert dictionary to a list of lists for tabulate
+    table_data = [(key, value) for key, value in data.items()]
+
+    # Generate a table using tabulate
+    table = tabulate(table_data, headers=['Key', 'Value'], tablefmt='grid')
+
+    # Create a PDF buffer using reportlab
+    pdf_buffer = BytesIO()
+    pdf_canvas = canvas.Canvas(pdf_buffer, pagesize=letter)
+
+    # Split the table into lines and draw on the PDF
+    lines = table.split('\n')
+    line_height = 12
+    for i, line in enumerate(lines):
+        pdf_canvas.drawString(72, 780 - i * line_height, line)
+
+    # Save the PDF file
+    pdf_canvas.save()
+
+    # Move the buffer's pointer to the beginning
+    pdf_buffer.seek(0)
+
+    return pdf_buffer
+
+def pdf_view(request):
+    # Get report
+
+    query = Sale.objects.all()
+    sales = model_to_dict(query)
+
+    # Create PDF from dictionary
+    pdf_buffer = create_pdf_from_dict(sales)
+
+    # Create a response with the PDF content
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="output.pdf"'
+    response.write(pdf_buffer.read())
+
+    return response
