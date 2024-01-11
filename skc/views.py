@@ -1,25 +1,30 @@
+import os
+import json
+from datetime import date
+from django.conf import settings
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import requires_csrf_token
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from skc.models import Product, Sale, SaleItem
-from django.conf import settings
 from accounts.models import User
-import os
+
 from PIL import Image, ImageFilter, ImageOps
-from django.forms.models import model_to_dict
 
 # for report generation
+from django.forms.models import model_to_dict
 from tabulate import tabulate
+from reportlab.lib import colors
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import Table, TableStyle
 from io import BytesIO
 
-import json
 
 # Create your views here.
 POSTS_PER_PAGE = 9
@@ -212,28 +217,46 @@ def convert_to_square_with_centered_blurred_background(input_path, output_path):
     blur_image.save(output_path)
 
 # Report generator
-    
-def create_pdf_from_dict(data):
-    # Convert dictionary to a list of lists for tabulate
-    table_data = [(key, value) for key, value in data.items()]
-
-    # Generate a table using tabulate
-    table = tabulate(table_data, headers=['Key', 'Value'], tablefmt='grid')
-
-    # Create a PDF buffer using reportlab
+def create_pdf_from_dict(sales):
+  
+    filename = "sales_report.pdf"
     pdf_buffer = BytesIO()
-    pdf_canvas = canvas.Canvas(pdf_buffer, pagesize=letter)
+    pdf_canvas = canvas.Canvas(pdf_buffer, pagesize=A4)
+    
+    # Set font
+    pdf_canvas.setFont("Helvetica", 7)
 
-    # Split the table into lines and draw on the PDF
-    lines = table.split('\n')
-    line_height = 12
-    for i, line in enumerate(lines):
-        pdf_canvas.drawString(72, 780 - i * line_height, line)
+    # Add content to the PDF
+    pdf_canvas.drawString(100, 750, "Sales Report")
+    pdf_canvas.drawString(100, 700, "-" * 50)
 
-    # Save the PDF file
+
+    # y_position = 650
+    # for sale in sales:
+    #     pdf_canvas.drawString(100, y_position, f"ID: {sale['sale'].serialize()}") 
+
+    #     y_position -= 15
+
+
+
+    # TEST TABLES
+    sales_table = []
+    for sale in sales:
+        sales_table.append(
+            [
+                sale["product"].serialize()["name"],
+                sale["quantity"],
+                sale["unit_price"],
+                sale["subtotal"]
+            ]
+        )
+        
+    t=Table(sales_table)
+    t.wrapOn(pdf_canvas,400,100)
+    t.drawOn(pdf_canvas,100,100)
+
+    # Save the PDF
     pdf_canvas.save()
-
-    # Move the buffer's pointer to the beginning
     pdf_buffer.seek(0)
 
     return pdf_buffer
@@ -241,11 +264,17 @@ def create_pdf_from_dict(data):
 def pdf_view(request):
     # Get report
 
-    query = Sale.objects.all()
-    sales = model_to_dict(query)
+    sales_with_items = SaleItem.objects.all() # FOR TESTING ONLY
 
-    # Create PDF from dictionary
-    pdf_buffer = create_pdf_from_dict(sales)
+    sales = SaleItem.objects.filter(sale__date__contains=date(2024,1,11)) # template for production
+    
+    result = []
+    for sale in sales_with_items:
+        sale_data = sale.serialize()
+        result.append(sale_data)
+
+
+    pdf_buffer = create_pdf_from_dict(result)
 
     # Create a response with the PDF content
     response = HttpResponse(content_type='application/pdf')
