@@ -216,6 +216,10 @@ def convert_to_square_with_centered_blurred_background(input_path, output_path):
     # Save
     blur_image.save(output_path)
 
+
+def pos_reports(request):
+    return render(request, "skc/reports.html")
+
 # Report generator
 def create_pdf_from_dict(sales):
   
@@ -227,8 +231,8 @@ def create_pdf_from_dict(sales):
     pdf_canvas.setFont("Helvetica", 7)
 
     # Add content to the PDF
-    pdf_canvas.drawString(100, 750, "Sales Report")
-    pdf_canvas.drawString(100, 700, "-" * 50)
+    # pdf_canvas.drawString(100, 750, "Sales Report")
+    # pdf_canvas.drawString(100, 730, "-" * 50)
 
 
     # y_position = 650
@@ -240,7 +244,7 @@ def create_pdf_from_dict(sales):
 
 
     # TEST TABLES
-    sales_table = []
+    sales_table = [["Product","Quantity","Unit Price","Total"]]
     for sale in sales:
         sales_table.append(
             [
@@ -253,7 +257,7 @@ def create_pdf_from_dict(sales):
         
     t=Table(sales_table)
     t.wrapOn(pdf_canvas,400,100)
-    t.drawOn(pdf_canvas,100,100)
+    t.drawOn(pdf_canvas,100,700)
 
     # Save the PDF
     pdf_canvas.save()
