@@ -244,8 +244,9 @@ def create_pdf_from_dict(sales):
 
 
     # TEST TABLES
-    sales_table = [["Product","Quantity","Unit Price","Total"]]
+    sales_table = [["ID","Product","Quantity","Unit Price","Total"]]
     for sale in sales:
+        
         sales_table.append(
             [
                 sale["product"].serialize()["name"],
@@ -257,7 +258,7 @@ def create_pdf_from_dict(sales):
         
     t=Table(sales_table)
     t.wrapOn(pdf_canvas,400,100)
-    t.drawOn(pdf_canvas,100,700)
+    t.drawOn(pdf_canvas,100,200)
 
     # Save the PDF
     pdf_canvas.save()
