@@ -221,7 +221,7 @@ def pos_reports(request):
     return render(request, "skc/reports.html")
 
 # Report generator
-def create_pdf_from_dict(sales):
+def create_pdf_from_dict(table):
   
     filename = "sales_report.pdf"
     pdf_buffer = BytesIO()
@@ -233,30 +233,8 @@ def create_pdf_from_dict(sales):
     # Add content to the PDF
     # pdf_canvas.drawString(100, 750, "Sales Report")
     # pdf_canvas.drawString(100, 730, "-" * 50)
-
-
-    # y_position = 650
-    # for sale in sales:
-    #     pdf_canvas.drawString(100, y_position, f"ID: {sale['sale'].serialize()}") 
-
-    #     y_position -= 15
-
-
-
-    # TEST TABLES
-    sales_table = [["ID","Product","Quantity","Unit Price","Total"]]
-    for sale in sales:
-        
-        sales_table.append(
-            [
-                sale["product"].serialize()["name"],
-                sale["quantity"],
-                sale["unit_price"],
-                sale["subtotal"]
-            ]
-        )
-        
-    t=Table(sales_table)
+            
+    t=Table(table)
     t.wrapOn(pdf_canvas,400,100)
     t.drawOn(pdf_canvas,100,200)
 
@@ -266,20 +244,40 @@ def create_pdf_from_dict(sales):
 
     return pdf_buffer
 
+def prepare_by_product_table(sales):
+    table = [["ID","Product","Quantity","Unit Price","Total"]]
+    
+    for sale in sales:
+        for index, item in enumerate(table):
+            # 
+
+    
+            if sale.product.id == item[0]:
+                table[index][2] += sale.quantity
+                table[index][4] += sale.subtotal
+                break
+            
+            elif index+1 == len(table):
+                table.append([
+                    sale.product.id,
+                    sale.product.name,
+                    sale.quantity,
+                    sale.unit_price,
+                    sale.subtotal
+            ])
+
+    return table
+
 def pdf_view(request):
     # Get report
 
-    sales_with_items = SaleItem.objects.all() # FOR TESTING ONLY
+    sales = SaleItem.objects.all() # FOR TESTING ONLY
 
-    sales = SaleItem.objects.filter(sale__date__contains=date(2024,1,11)) # template for production
+    # sales = SaleItem.objects.filter(sale__date__contains=date(2024,1,11)) # template for production
     
-    result = []
-    for sale in sales_with_items:
-        sale_data = sale.serialize()
-        result.append(sale_data)
+    table = prepare_by_product_table(sales)
 
-
-    pdf_buffer = create_pdf_from_dict(result)
+    pdf_buffer = create_pdf_from_dict(table)
 
     # Create a response with the PDF content
     response = HttpResponse(content_type='application/pdf')
