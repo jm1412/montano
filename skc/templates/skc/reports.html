@@ -3,6 +3,36 @@
 {% load static %}
 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
-Reports Generator
+<div id="reports-container" class="container col-md-4">
+    <form>      
+        <!-- Report Type -->
+        <fieldset>
+        <legend>Report Type</legend>
+        <label for="byProduct">
+            <input type="radio" id="byProduct" name="size" value="byProduct" checked>
+            By Product
+        </label>
+        <label for="byCategory">
+            <input type="radio" id="byCategory" name="size" value="byCategory">
+            By Category
+        </label>
+        </fieldset>
+      
+        <div class="grid">
+            <!-- Markup example 2: input is after label -->
+            <label for="reportFromDate">From:
+                <input type="text" id="reportFromDate" name="reportFromDate" required>
+            </label>
 
+            <label for="reportToDate">To:
+                <input type="text" id="reportToDate" name="reportToDate" required>
+            </label>
+        
+
+        </div>
+        <!-- Button -->
+        <button type="submit">Generate</button>
+      
+      </form>
+</div>
 {% endblock %} 

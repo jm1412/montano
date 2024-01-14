@@ -283,8 +283,6 @@ def prepare_by_product_table(sales, report_type):
                         sale.unit_price,
                         sale.subtotal
                     ])
-                
-                
     return table
 
 def pdf_view(request):

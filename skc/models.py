@@ -30,6 +30,7 @@ class Product(models.Model):
     cost = models.IntegerField(default=0) # cost to make, calculated in views.py via production
     display = models.BooleanField(default=True) # if item is displayed on website
     date_added = models.DateTimeField(auto_now_add=True)
+    discontinued = models.BooleanField(default=False) # if item is discontinued
 
     def serialize(self):
         return {
@@ -40,7 +41,8 @@ class Product(models.Model):
             "customized": self.customized,
             "category": self.category,
             "type": self.type,
-            "display": self.display
+            "display": self.display,
+            "discontinued": self.discontinued
         }
 
 class Sale(models.Model):
