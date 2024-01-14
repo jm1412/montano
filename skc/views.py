@@ -228,15 +228,17 @@ def create_pdf_from_dict(table):
     pdf_canvas = canvas.Canvas(pdf_buffer, pagesize=A4)
     
     # Set font
-    pdf_canvas.setFont("Helvetica", 7)
+    #pdf_canvas.setFont("Helvetica", 7)
 
     # Add content to the PDF
-    # pdf_canvas.drawString(100, 750, "Sales Report")
-    # pdf_canvas.drawString(100, 730, "-" * 50)
+    pdf_canvas.drawString(100, 800, "Sales Report")
+    pdf_canvas.drawString(100, 780, "-" * 50)
             
     t=Table(table)
-    t.wrapOn(pdf_canvas,400,100)
-    t.drawOn(pdf_canvas,100,200)
+    t.wrapOn(pdf_canvas,550,750)
+    w, h = t.wrap(0,0)
+    
+    t.drawOn(pdf_canvas,((550-w)/2),750-h)
 
     # Save the PDF
     pdf_canvas.save()
@@ -244,28 +246,45 @@ def create_pdf_from_dict(table):
 
     return pdf_buffer
 
-def prepare_by_product_table(sales):
-    table = [["ID","Product","Quantity","Unit Price","Total"]]
-    
-    for sale in sales:
-        for index, item in enumerate(table):
-            # 
+def prepare_by_product_table(sales, report_type):
 
-    
-            if sale.product.id == item[0]:
-                table[index][2] += sale.quantity
-                table[index][4] += sale.subtotal
-                break
-            
-            elif index+1 == len(table):
-                table.append([
-                    sale.product.id,
-                    sale.product.name,
-                    sale.quantity,
-                    sale.unit_price,
-                    sale.subtotal
-            ])
-
+    if report_type == "by_product":
+        table = [["ID","Product","Quantity","Unit Price","Total"]]
+        
+        for sale in sales:
+            for index, item in enumerate(table):
+                # Checks every item in table, if item not in table, append
+                if sale.product.id == item[0]:
+                    table[index][2] += sale.quantity
+                    table[index][4] += sale.subtotal
+                    break
+                
+                elif index+1 == len(table):
+                    table.append([
+                        sale.product.id,
+                        sale.product.name,
+                        sale.quantity,
+                        sale.unit_price,
+                        sale.subtotal
+                    ])
+    elif report_type == "by_category":
+        table = [["Category","Quantity","Unit Price","Total"]]
+        for sale in sales:
+            for index, item in enumerate(table):
+                if sale.product.category == item[0]:
+                    table[index][1] += sale.quantity
+                    table[index][3] += sale.subtotal
+                    break
+                
+                elif index+1 == len(table):
+                    table.append([
+                        sale.product.category,
+                        sale.quantity,
+                        sale.unit_price,
+                        sale.subtotal
+                    ])
+                
+                
     return table
 
 def pdf_view(request):
@@ -275,7 +294,7 @@ def pdf_view(request):
 
     # sales = SaleItem.objects.filter(sale__date__contains=date(2024,1,11)) # template for production
     
-    table = prepare_by_product_table(sales)
+    table = prepare_by_product_table(sales,"by_category")
 
     pdf_buffer = create_pdf_from_dict(table)
 
