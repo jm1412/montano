@@ -290,6 +290,26 @@ function calculateChange(){
     change.value = payment - total
 }
 
+async function generateReport(){
+    // Gets called from reports.html, value from html and submits to django for processing.
+    fromDate = document.getElementById("reportFromDate")
+    toDate = document.getElementById("reportToDate")
+    reportType = document.querySelector('input[name="reportType"]:checked').value
+    
+    let r = await fetch('/generate_report', {
+        method:'POST',
+        headers:{'X-CSRFToken': getCookie('csrftoken')},
+        mode:'same-origin',
+        body: JSON.stringify({
+            "from_date": fromDate,
+            "to_date": toDate,
+            "report_type": report_type
+        })
+    })
+    let response = await r.json()
+    
+}
+
 // Run these on load
 document.addEventListener('DOMContentLoaded', async function() {
     modalHandler();

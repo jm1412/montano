@@ -17,6 +17,7 @@ from accounts.models import User
 from PIL import Image, ImageFilter, ImageOps
 
 # for report generation
+from datetime import datetime
 from django.forms.models import model_to_dict
 from tabulate import tabulate
 from reportlab.lib import colors
@@ -89,7 +90,7 @@ def get_regular_cakes(request):
 def view_cakes(request, type):
     return render(request,"skc/cakes.html",{"type":type, "user": request.user})
 
-    # Initially made it so that on load, renders and returs products. Decided to break it down to smaller chunks for readability and reusability.
+    # Initially made it so that on load, renders and returns products. Decided to break it down to smaller chunks for readability and reusability.
     # Keeping this chunk of code for if and when I need to paginate the POS (i.e. too many items)
 
     page_number = request.GET.get("page")
@@ -218,7 +219,14 @@ def convert_to_square_with_centered_blurred_background(input_path, output_path):
 
 
 def pos_reports(request):
-    return render(request, "skc/reports.html")
+    report_type = request.GET.get("reportType")
+    from_date = request.GET.get("reportFromDate")
+    to_date = request.GET.get("reportToDate")
+    
+    if(report_type == None or from_date == None or to_date == None):
+        return render(request, "skc/reports.html")
+    else:
+        return generate_pdf(report_type, from_date, to_date)
 
 # Report generator
 def create_pdf_from_dict(table):
@@ -269,30 +277,36 @@ def prepare_by_product_table(sales, report_type):
                     ])
     elif report_type == "by_category":
         table = [["Category","Quantity","Unit Price","Total"]]
+        
         for sale in sales:
+            custom_category = f"{sale.product.category}-{sale.unit_price}"
+            
             for index, item in enumerate(table):
-                if sale.product.category == item[0]:
+                if custom_category == item[0]:
                     table[index][1] += sale.quantity
                     table[index][3] += sale.subtotal
                     break
                 
                 elif index+1 == len(table):
                     table.append([
-                        sale.product.category,
+                        custom_category,
                         sale.quantity,
                         sale.unit_price,
                         sale.subtotal
                     ])
     return table
 
-def pdf_view(request):
+def generate_pdf(report_type, from_date, to_date):
     # Get report
 
-    sales = SaleItem.objects.all() # FOR TESTING ONLY
-
-    # sales = SaleItem.objects.filter(sale__date__contains=date(2024,1,11)) # template for production
+    #sales = SaleItem.objects.all() # FOR TESTING ONLY
     
-    table = prepare_by_product_table(sales,"by_category")
+    from_date = datetime.strptime(from_date, "%Y-%m-%d").date()
+    to_date = datetime.strptime(to_date, "%Y-%m-%d").date()
+    
+    sales = SaleItem.objects.filter(sale__date__range=(from_date, to_date)) # template for production
+    
+    table = prepare_by_product_table(sales,report_type)
 
     pdf_buffer = create_pdf_from_dict(table)
 

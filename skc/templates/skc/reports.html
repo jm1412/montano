@@ -9,11 +9,11 @@
         <fieldset>
         <legend>Report Type</legend>
         <label for="byProduct">
-            <input type="radio" id="byProduct" name="size" value="byProduct" checked>
+            <input type="radio" id="byProduct" name="reportType" value="by_product" checked>
             By Product
         </label>
         <label for="byCategory">
-            <input type="radio" id="byCategory" name="size" value="byCategory">
+            <input type="radio" id="byCategory" name="reportType" value="by_category">
             By Category
         </label>
         </fieldset>
@@ -21,17 +21,17 @@
         <div class="grid">
             <!-- Markup example 2: input is after label -->
             <label for="reportFromDate">From:
-                <input type="text" id="reportFromDate" name="reportFromDate" required>
+                <input type="date" id="reportFromDate" name="reportFromDate" required>
             </label>
 
             <label for="reportToDate">To:
-                <input type="text" id="reportToDate" name="reportToDate" required>
+                <input type="date" id="reportToDate" name="reportToDate" required>
             </label>
         
 
         </div>
         <!-- Button -->
-        <button type="submit">Generate</button>
+        <button onsubmit="#" onclick="generateReport(); return false;">Generate</button>
       
       </form>
 </div>

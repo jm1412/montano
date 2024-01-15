@@ -17,7 +17,6 @@ urlpatterns = [
     path("pos", views.pos, name="pos"),
     path("get-products", views.get_products, name="get_products"),
     path("pos-submit", views.pos_submit, name="pos_submit"),
-    path('generate_pdf/', views.pdf_view, name='generate_pdf'),
     path('reports/', views.pos_reports, name="pos_reports")
 ]
 
