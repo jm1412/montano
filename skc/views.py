@@ -17,7 +17,7 @@ from accounts.models import User
 from PIL import Image, ImageFilter, ImageOps
 
 # for report generation
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.forms.models import model_to_dict
 from tabulate import tabulate
 from reportlab.lib import colors
@@ -302,8 +302,8 @@ def prepare_by_product_table(sales, report_type):
 def generate_pdf(report_type, from_date, to_date, user):
     # Get report
     
-    from_date = datetime.strptime(from_date, "%Y-%m-%d").date()
-    to_date = datetime.strptime(to_date, "%Y-%m-%d").date()
+    from_date = datetime.strptime(from_date, "%Y-%m-%d").replace(tzinfo=None)
+    to_date = datetime.strptime(to_date, "%Y-%m-%d").replace(tzinfo=None) + timedelta(days=1)
     
     sales = SaleItem.objects.filter(sale__date__range=(from_date, to_date)) # template for production
     
