@@ -217,32 +217,28 @@ def convert_to_square_with_centered_blurred_background(input_path, output_path):
     # Save
     blur_image.save(output_path)
 
-
-def pos_reports(request):
-    report_type = request.GET.get("reportType")
-    from_date = request.GET.get("reportFromDate")
-    to_date = request.GET.get("reportToDate")
-    
-    if(report_type == None or from_date == None or to_date == None):
-        return render(request, "skc/reports.html")
-    else:
-        return generate_pdf(report_type, from_date, to_date)
-
 # Report generator
-def create_pdf_from_dict(table):
+def create_pdf_from_dict(table, from_date, to_date, user):
   
     filename = "sales_report.pdf"
     pdf_buffer = BytesIO()
     pdf_canvas = canvas.Canvas(pdf_buffer, pagesize=A4)
     
     # Set font
-    #pdf_canvas.setFont("Helvetica", 7)
+    pdf_canvas.setFont("Helvetica", 8)
 
     # Add content to the PDF
-    pdf_canvas.drawString(100, 800, "Sales Report")
-    pdf_canvas.drawString(100, 780, "-" * 50)
+    pdf_canvas.drawString(100, 800, f"Sales Report by {table[0][0]}")
+    pdf_canvas.drawString(100, 785, f"Username: {user.username}")
+    pdf_canvas.drawString(100, 770, f"Date: {from_date} to {to_date}")
+    pdf_canvas.drawString(100, 755, "-" * 50)
             
     t=Table(table)
+    style = TableStyle([('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                        ('FONTSIZE', (0, 0), (-1, -1), 8),
+                        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey)
+                    ])  # (startCol, startRow), (endCol, endRow)
+    t.setStyle(style)
     t.wrapOn(pdf_canvas,550,750)
     w, h = t.wrap(0,0)
     
@@ -255,6 +251,7 @@ def create_pdf_from_dict(table):
     return pdf_buffer
 
 def prepare_by_product_table(sales, report_type):
+    total = 0
 
     if report_type == "by_product":
         table = [["ID","Product","Quantity","Unit Price","Total"]]
@@ -265,6 +262,7 @@ def prepare_by_product_table(sales, report_type):
                 if sale.product.id == item[0]:
                     table[index][2] += sale.quantity
                     table[index][4] += sale.subtotal
+                    total += sale.subtotal
                     break
                 
                 elif index+1 == len(table):
@@ -275,9 +273,11 @@ def prepare_by_product_table(sales, report_type):
                         sale.unit_price,
                         sale.subtotal
                     ])
+                    total += sale.subtotal
+        table.append(["","","","",total])
     elif report_type == "by_category":
         table = [["Category","Quantity","Unit Price","Total"]]
-        
+
         for sale in sales:
             custom_category = f"{sale.product.category}-{sale.unit_price}"
             
@@ -285,6 +285,7 @@ def prepare_by_product_table(sales, report_type):
                 if custom_category == item[0]:
                     table[index][1] += sale.quantity
                     table[index][3] += sale.subtotal
+                    total += sale.subtotal
                     break
                 
                 elif index+1 == len(table):
@@ -294,21 +295,21 @@ def prepare_by_product_table(sales, report_type):
                         sale.unit_price,
                         sale.subtotal
                     ])
+                    total += sale.subtotal
+        table.append(["","","",total])
     return table
 
-def generate_pdf(report_type, from_date, to_date):
+def generate_pdf(report_type, from_date, to_date, user):
     # Get report
-
-    #sales = SaleItem.objects.all() # FOR TESTING ONLY
     
     from_date = datetime.strptime(from_date, "%Y-%m-%d").date()
     to_date = datetime.strptime(to_date, "%Y-%m-%d").date()
     
     sales = SaleItem.objects.filter(sale__date__range=(from_date, to_date)) # template for production
     
-    table = prepare_by_product_table(sales,report_type)
+    table = prepare_by_product_table(sales, report_type)
 
-    pdf_buffer = create_pdf_from_dict(table)
+    pdf_buffer = create_pdf_from_dict(table, from_date, to_date, user)
 
     # Create a response with the PDF content
     response = HttpResponse(content_type='application/pdf')
@@ -316,3 +317,14 @@ def generate_pdf(report_type, from_date, to_date):
     response.write(pdf_buffer.read())
 
     return response
+
+def pos_reports(request):
+    report_type = request.GET.get("reportType")
+    from_date = request.GET.get("reportFromDate")
+    to_date = request.GET.get("reportToDate")
+    user = request.user
+    
+    if(report_type == None or from_date == None or to_date == None):
+        return render(request, "skc/reports.html")
+    else:
+        return generate_pdf(report_type, from_date, to_date, user)
