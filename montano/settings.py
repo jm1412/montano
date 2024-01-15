@@ -133,7 +133,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False # was set to true, causing issues with autodatetimeadd
 
 
 # Static files (CSS, JavaScript, Images)
