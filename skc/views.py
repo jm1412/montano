@@ -305,7 +305,7 @@ def generate_pdf(report_type, from_date, to_date, user):
     from_date = datetime.strptime(from_date, "%Y-%m-%d").replace(tzinfo=None)
     to_date = datetime.strptime(to_date, "%Y-%m-%d").replace(tzinfo=None) + timedelta(days=1)
     
-    sales = SaleItem.objects.filter(sale__date__range=(from_date, to_date)) # template for production
+    sales = SaleItem.objects.filter(sale__date__range=(from_date, to_date)).filter(sale__user=user)
     
     table = prepare_by_product_table(sales, report_type)
 
