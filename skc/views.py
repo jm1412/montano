@@ -39,6 +39,7 @@ def pos(request):
 def pos_submit(request):
     data = json.loads(request.body)
     orders = data["orders"]
+    print(orders)
     total = 0
 
     new_sale = Sale.objects.create(
@@ -46,6 +47,7 @@ def pos_submit(request):
     )
 
     for item, details in orders.items():
+        print(details["qty"])
         product = Product.objects.get(id=item)
         SaleItem.objects.create(
             sale = new_sale,
@@ -274,6 +276,7 @@ def prepare_by_product_table(sales, report_type):
                         sale.subtotal
                     ])
                     total += sale.subtotal
+                    break # add break because if I don't the for loop runs once more because there's a new item
         table.append(["","","","",total])
     elif report_type == "by_category":
         table = [["Category","Quantity","Unit Price","Total"]]
@@ -300,15 +303,13 @@ def prepare_by_product_table(sales, report_type):
     return table
 
 def generate_pdf(report_type, from_date, to_date, user):
-    # Get report
+    """ Main function for report generation. """
     
     from_date = datetime.strptime(from_date, "%Y-%m-%d").replace(tzinfo=None)
     to_date = datetime.strptime(to_date, "%Y-%m-%d").replace(tzinfo=None) + timedelta(days=1)
     
     sales = SaleItem.objects.filter(sale__date__range=(from_date, to_date)).filter(sale__user=user)
-    
     table = prepare_by_product_table(sales, report_type)
-
     pdf_buffer = create_pdf_from_dict(table, from_date, to_date, user)
 
     # Create a response with the PDF content
@@ -319,6 +320,10 @@ def generate_pdf(report_type, from_date, to_date, user):
     return response
 
 def pos_reports(request):
+    """ 
+    Gets called on page load. 
+    Decides wether or not to generate the report.
+    """
     report_type = request.GET.get("reportType")
     from_date = request.GET.get("reportFromDate")
     to_date = request.GET.get("reportToDate")
