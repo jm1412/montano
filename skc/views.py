@@ -356,3 +356,19 @@ def pos_reports(request):
         return render(request, "skc/reports.html", {"staff": staff})
     else:
         return generate_pdf(report_type, from_date, to_date, user, report_by)
+        
+@login_required
+def transaction_history(request):
+    """
+    Views transaction history of current day. Filters automatically by logged in user.
+    No option to delete, only view.
+    """
+    user = request.user
+    
+    query_items = SaleItem.objects.filter(sale__date__contains=date.today()).filter(sale__user=user)
+    query_sales = Sale.objects.filter(date__contains=date.today()).filter(user=user)
+    
+    items = [item.serialize() for item in query_items]
+    sales = [sale.serialize() for sale in query_sales]
+    
+    return render(request, "skc/transaction-histoy.html", {"items": items, "sales": sales})
