@@ -5,17 +5,39 @@
 
 <div id="reports-container" class="container col-md-4">
     <form>      
+    
+        {% if request.user.is_superuser %}
+        <fieldset>
+            <legend>User:</legend>
+
+            <label for="all-stores"> 
+                <input type="radio" id="0" name="reportUser" value="0">
+                All Stores / Users
+            </label>
+            
+            <!-- populate via django using for loop-->
+            {% for user in staff %}
+            <label for="{{user.username}}">
+                <input type="radio" id="{{user.id}}" name="reportUser" value="{{user.id}}">
+                {{user.username}}
+            </label>
+            {% endfor %}
+            
+            
+        </fieldset>
+        {% endif %}
+    
         <!-- Report Type -->
         <fieldset>
-        <legend>Report Type</legend>
-        <label for="byProduct">
-            <input type="radio" id="byProduct" name="reportType" value="by_product" checked>
-            By Product
-        </label>
-        <label for="byCategory">
-            <input type="radio" id="byCategory" name="reportType" value="by_category">
-            By Category
-        </label>
+            <legend>Report Type</legend>
+            <label for="byProduct">
+                <input type="radio" id="byProduct" name="reportType" value="by_product" checked>
+                By Product
+            </label>
+            <label for="byCategory">
+                <input type="radio" id="byCategory" name="reportType" value="by_category">
+                By Category
+            </label>
         </fieldset>
       
         <div class="grid">

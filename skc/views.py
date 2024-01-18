@@ -220,7 +220,7 @@ def convert_to_square_with_centered_blurred_background(input_path, output_path):
     blur_image.save(output_path)
 
 # Report generator
-def create_pdf_from_dict(table, from_date, to_date, user):
+def create_pdf_from_dict(table, from_date, to_date, report_by):
   
     filename = "sales_report.pdf"
     pdf_buffer = BytesIO()
@@ -231,7 +231,7 @@ def create_pdf_from_dict(table, from_date, to_date, user):
 
     # Add content to the PDF
     pdf_canvas.drawString(100, 800, f"Sales Report by {table[0][0]}")
-    pdf_canvas.drawString(100, 785, f"Username: {user.username}")
+    pdf_canvas.drawString(100, 785, f"Username: {report_by}")
     pdf_canvas.drawString(100, 770, f"Date: {from_date} to {to_date}")
     pdf_canvas.drawString(100, 755, "-" * 50)
             
@@ -299,18 +299,38 @@ def prepare_by_product_table(sales, report_type):
                         sale.subtotal
                     ])
                     total += sale.subtotal
+                    break
+                
         table.append(["","","",total])
     return table
 
-def generate_pdf(report_type, from_date, to_date, user):
-    """ Main function for report generation. """
+def generate_pdf(report_type, from_date, to_date, user, report_by):
+    """
+    Main function for report generation. 
     
+    By default, generates report of current logged user,
+        but if the user is an admin and report_by argument is supplied, generates that report instead.
+        report_by accepts user.id, if report_by == 0, generates report for all branches.
+    """
+
     from_date = datetime.strptime(from_date, "%Y-%m-%d").replace(tzinfo=None)
     to_date = datetime.strptime(to_date, "%Y-%m-%d").replace(tzinfo=None) + timedelta(days=1)
     
-    sales = SaleItem.objects.filter(sale__date__range=(from_date, to_date)).filter(sale__user=user)
+    
+    if report_by == None:
+        sales = SaleItem.objects.filter(sale__date__range=(from_date, to_date)).filter(sale__user=user)
+        report_by = user.username
+    elif report_by == "0":
+        report_by = "All Stores / Users"
+        sales = SaleItem.objects.filter(sale__date__range=(from_date, to_date))
+    else:
+        user = User.objects.get(id=int(report_by))
+        report_by = user.username
+        sales = SaleItem.objects.filter(sale__date__range=(from_date, to_date)).filter(sale__user=user)
+    
+    
     table = prepare_by_product_table(sales, report_type)
-    pdf_buffer = create_pdf_from_dict(table, from_date, to_date, user)
+    pdf_buffer = create_pdf_from_dict(table, from_date, to_date, report_by)
 
     # Create a response with the PDF content
     response = HttpResponse(content_type='application/pdf')
@@ -327,9 +347,11 @@ def pos_reports(request):
     report_type = request.GET.get("reportType")
     from_date = request.GET.get("reportFromDate")
     to_date = request.GET.get("reportToDate")
+    report_by = request.GET.get("reportUser") # Returns user.id
     user = request.user
     
     if(report_type == None or from_date == None or to_date == None):
-        return render(request, "skc/reports.html")
+        staff = User.objects.filter(is_staff = True)
+        return render(request, "skc/reports.html", {"staff": staff})
     else:
-        return generate_pdf(report_type, from_date, to_date, user)
+        return generate_pdf(report_type, from_date, to_date, user, report_by)
