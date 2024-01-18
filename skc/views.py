@@ -78,12 +78,13 @@ def skc_login(request):
         user = authenticate(request, username=email, password=password)
         if user is not None:
             login(request, user)
-            return render(request, "skc/index.html")
+            return render(request, "skc/pos.html")
         else:
             return render(request, "skc/login.html")
 
     else:
         return render(request, "skc/login.html")
+        
     
 def get_regular_cakes(request):
     regular_cakes = Product.objects.filter(category="regular")
