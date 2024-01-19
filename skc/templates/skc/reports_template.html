@@ -1,0 +1,81 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html class="sitewide" lang="en">
+    <head>
+        <title>Simply Cakes</title>
+
+        <!-- web app -->
+        <meta name="theme-color" content="#ba2166">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <link rel="apple-touch-icon" href="{% static 'shared/apple-icon.png' %}">
+        <link rel="apple-touch-startup-image" href="{% static 'shared/splash-screen.jpg' %}">
+
+        <!-- meta -->
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Simply Cakes" />
+        <meta name="author" content="Juan Montano" />
+
+        <!-- bootstrap -->
+        <link rel="stylesheet" href="{% static 'shared/sitewide.css' %}">
+        <link rel="stylesheet" href="{% static 'skc/styles.css' %}">
+        <link rel="stylesheet" href="{% static 'skc/pos.css' %}">
+
+        <!-- pico css -->
+        <link rel="stylesheet" href="{% static 'shared/pico-bootstrap-grid.css' %}">
+
+        <!-- fontawesome -->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+        <script src="{% static 'skc/pos.js' %}"></script>
+    </head>
+
+    <body>
+        <div id="pos-container">
+            <!-- navbar -->
+            <div class="container ">
+                <nav id="sitewide-navbar">
+                    <ul>
+                    <li><a href="/pos"><img id="skc-logo" src="{% static 'skc/images/logo-transparent.png' %}"></li></a>
+                    </ul>
+                    <ul>
+                    <li>
+                        <details class="apps-popup" role="list">
+                        <summary aria-haspopup="listbox">Options</summary>
+                        <ul role="listbox">
+                            <li><a href="/cakes/regular?page=1">Add Products</a></li>
+                            <li><a href="/reports">Reports</a></li>
+                        </ul>
+                        </details>
+                    </li>
+                    </ul>
+                </nav>
+            </div>
+
+                {% block body %}
+                {% endblock %}        
+
+            <!-- bottom bar -->
+            <div id="pos-buttons-container">
+                <span>
+
+                    <p id="bottom-bar-count" class="bottom-bar-text">0 Items</p>
+
+                    <p class="bottom-bar-text">|</p>
+
+                    <p id="bottom-bar-total" class="bottom-bar-text">Php 0</p>
+
+                    <a href="#" role="button" id="pos-enter" onclick="viewOrder();">View Order</a>
+
+                    <p onclick="clearOrders();"class="bottom-bar-text" id="bottom-bar-cancel">
+                        Cancel
+                    </p>
+                </span>
+            </div>
+        </div>        
+    </body>
+
+</html>
