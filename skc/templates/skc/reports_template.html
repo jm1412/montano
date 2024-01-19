@@ -22,7 +22,7 @@
         <!-- bootstrap -->
         <link rel="stylesheet" href="{% static 'shared/sitewide.css' %}">
         <link rel="stylesheet" href="{% static 'skc/styles.css' %}">
-        <link rel="stylesheet" href="{% static 'skc/pos.css' %}">
+        <link rel="stylesheet" href="{% static 'skc/transaction-history.css' %}">
 
         <!-- pico css -->
         <link rel="stylesheet" href="{% static 'shared/pico-bootstrap-grid.css' %}">
@@ -46,7 +46,7 @@
                         <details class="apps-popup" role="list">
                         <summary aria-haspopup="listbox">Options</summary>
                         <ul role="listbox">
-                            <li><a href="/cakes/regular?page=1">Add Products</a></li>
+                            <li><a href="/transaction-history">Transaction History</a></li>
                             <li><a href="/reports">Reports</a></li>
                         </ul>
                         </details>
@@ -58,23 +58,6 @@
                 {% block body %}
                 {% endblock %}        
 
-            <!-- bottom bar -->
-            <div id="pos-buttons-container">
-                <span>
-
-                    <p id="bottom-bar-count" class="bottom-bar-text">0 Items</p>
-
-                    <p class="bottom-bar-text">|</p>
-
-                    <p id="bottom-bar-total" class="bottom-bar-text">Php 0</p>
-
-                    <a href="#" role="button" id="pos-enter" onclick="viewOrder();">View Order</a>
-
-                    <p onclick="clearOrders();"class="bottom-bar-text" id="bottom-bar-cancel">
-                        Cancel
-                    </p>
-                </span>
-            </div>
         </div>        
     </body>
 
