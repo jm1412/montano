@@ -78,7 +78,7 @@ function pos_home(){
     // Shows POS home screen.
     clearPos()
     createPosItem('/static/skc/images/pos-regular.jpg', "showProduct('regular')")
-    createPosItem('/static/skc/images/pos-bento.jpg', "showProduct('bento)")
+    createPosItem('/static/skc/images/pos-bento.jpg', "showProduct('bento')")
     createPosItem('/static/skc/images/pos-customized.jpg', "showProduct('regular', true)")
     createPosItem('/static/skc/images/pos-drinks.jpg', "showProduct('drinks')")
     createPosItem('/static/skc/images/pos-breads.jpg', "showProduct('bread-pastries')")
