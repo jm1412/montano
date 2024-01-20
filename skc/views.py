@@ -352,7 +352,7 @@ def pos_reports(request):
     user = request.user
     
     if(report_type == None or from_date == None or to_date == None):
-        staff = User.objects.filter(is_staff = True)
+        staff = User.objects.filter(is_staff = True).filter(is_active=True).filter(is_superuser=False)
         return render(request, "skc/reports.html", {"staff": staff})
     else:
         return generate_pdf(report_type, from_date, to_date, user, report_by)
