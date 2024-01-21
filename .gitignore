@@ -1,3 +1,5 @@
 db.sqlite3
 settings.py
 skc/__pycache__/views.cpython-311.pyc
+static/
+**/__pycache__
