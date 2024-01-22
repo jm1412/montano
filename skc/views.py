@@ -370,5 +370,7 @@ def transaction_history(request):
     
     items = [item.serialize() for item in query_items]
     sales = [sale.serialize() for sale in query_sales]
+    print(items)
+    print(sales)
     
     return render(request, "skc/transaction-history.html", {"items": items, "sales": sales})

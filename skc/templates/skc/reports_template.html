@@ -31,6 +31,12 @@
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
         <script src="{% static 'skc/pos.js' %}"></script>
+        
+        <!-- access json data from django -->
+        <script>
+            var items = {{ items|safe }};
+            var sales = {{ sales|safe }};
+        </script>
     </head>
 
     <body>

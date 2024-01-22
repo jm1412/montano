@@ -217,7 +217,8 @@ function updateBottomBar(){
     // Updates count and total in bottom bar.
     let total = 0
     let count = 0
-    Object.keys(orders).forEach(function(order){
+    Object.keys(orders).
+    (function(order){
         let quantity = orders[order].qty
         let price = orders[order].price
         
@@ -310,9 +311,15 @@ async function generateReport(){
     
 }
 
+function showTransactionHistory(){
+    salesContainer = documents.getElementById("sales-container");
+    
+    sales.forEach(function(sale){
+        salesContainer.innerHTML+=sale.quantity;
+    })
+}
+
 // Run these on load
 document.addEventListener('DOMContentLoaded', async function() {
-    modalHandler();
-    getProducts(); // Load all products in memory
-    pos_home();
+    showTransactionHistory();
 })
