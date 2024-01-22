@@ -18,7 +18,8 @@ urlpatterns = [
     path("get-products", views.get_products, name="get_products"),
     path("pos-submit", views.pos_submit, name="pos_submit"),
     path("reports/", views.pos_reports, name="pos_reports"),
-    path("transaction-history", views.transaction_history, name="transaction_history")
+    path("transaction-history", views.transaction_history, name="transaction_history"),
+    path("get-transactions", views.get_transactions, name="get_transactions")
 ]
 
 if settings.DEBUG:

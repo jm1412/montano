@@ -359,18 +359,14 @@ def pos_reports(request):
         
 @login_required
 def transaction_history(request):
-    """
-    Views transaction history of current day. Filters automatically by logged in user.
-    No option to delete, only view.
-    """
+    return render(request, "skc/transaction-history.html")
+
+def get_transactions(request):
     user = request.user
     
     query_items = SaleItem.objects.filter(sale__date__contains=date.today()).filter(sale__user=user)
     query_sales = Sale.objects.filter(date__contains=date.today()).filter(user=user)
     
-    items = [item.serialize() for item in query_items]
-    sales = [sale.serialize() for sale in query_sales]
-    print(items)
-    print(sales)
-    
-    return render(request, "skc/transaction-history.html", {"items": items, "sales": sales})
+    items = {instance.id: model_to_dict(instance) for instance in query_items}
+    sales = {instance.id: model_to_dict(instance) for instance in query_sales}
+    return JsonResponse({"items": items, "sales": sales})

@@ -58,7 +58,6 @@ function clearModal(){
 }
 
 // FUNCTIONS
-
 async function getProducts(){
     // This gets run first via DOMContentLoaded
     // Get products and assigns them to global variable products for use sitewide.
