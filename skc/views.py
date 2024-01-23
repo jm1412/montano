@@ -1,5 +1,8 @@
 import os
 import json
+import ujson
+import pandas as pd
+import decimal
 from datetime import date
 from django.conf import settings
 from django.urls import reverse
@@ -329,6 +332,16 @@ def generate_pdf(report_type, from_date, to_date, user, report_by):
         report_by = user.username
         sales = SaleItem.objects.filter(sale__date__range=(from_date, to_date)).filter(sale__user=user)
     
+    # Early termination if user only wants json
+    if report_type == "json":
+        csv_string = "SALES BY PRODUCT\n\n"
+        for sale in sales:
+            csv_string += f"{sale.product.id}, {sale.product.name},{sale.quantity}, {sale.unit_price}, {sale.subtotal}\n"
+        
+        csv_string += "\n\n\n\nSALES BY CATEGORY\n\n"
+        for sale in sales:
+            csv_string += f"{sale.product.category}-{sale.unit_price},{sale.quantity},{sale.subtotal},{sale.subtotal}\n"
+        return HttpResponse(csv_string, content_type="text/plain")
     
     table = prepare_by_product_table(sales, report_type)
     pdf_buffer = create_pdf_from_dict(table, from_date, to_date, report_by)
@@ -356,7 +369,7 @@ def pos_reports(request):
         return render(request, "skc/reports.html", {"staff": staff})
     else:
         return generate_pdf(report_type, from_date, to_date, user, report_by)
-        
+
 @login_required
 def transaction_history(request):
     return render(request, "skc/transaction-history.html")
