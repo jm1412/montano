@@ -19,6 +19,10 @@ function getCookie(name) {
     return cookieValue;
 };
 
+// Global var
+let sales = "";
+let items = "";
+
 async function showTransactionHistory(){
     salesContainer = document.getElementById("sales-container");
 
@@ -31,8 +35,25 @@ async function showTransactionHistory(){
     sales = data.sales
     items = data.items
 
-    Object.keys(sales).forEach(function(i){
+    Object.keys(sales).reverse().forEach(function(i){
         sale = sales[i]
+        salesContainer.innerHTML+=`
+            <div class="list-sales" onclick="showItems(${sale.id});">Sale: ${sale.id} | Total: ${sale.total}</div>
+        `
+    })
+}
+
+function showItems(saleId){
+    itemsContainer = document.getElementById("items-container")
+    itemsContainer.innerHTML=""
+    Object.keys(items).forEach(function(i){
+        item = items[i]
+        
+        if (item[0] == saleId){
+            itemsContainer.innerHTML += `
+                <div class="list-items">${item[2]}, ${item[3]} x ${item[4]}, Total: ${item.subtotal}</div>
+            `
+        }
 
     })
 }

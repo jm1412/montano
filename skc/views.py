@@ -379,7 +379,16 @@ def get_transactions(request):
     
     query_items = SaleItem.objects.filter(sale__date__contains=date.today()).filter(sale__user=user)
     query_sales = Sale.objects.filter(date__contains=date.today()).filter(user=user)
-    
-    items = {instance.id: model_to_dict(instance) for instance in query_items}
     sales = {instance.id: model_to_dict(instance) for instance in query_sales}
+    items = []
+    for item in query_items:
+        items.append([
+            item.sale.id,
+            item.product.id,
+            item.product.name,
+            item.quantity,
+            item.unit_price,
+            item.subtotal
+        ])
+     
     return JsonResponse({"items": items, "sales": sales})
