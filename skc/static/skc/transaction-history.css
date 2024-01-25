@@ -23,6 +23,14 @@ body {
 
 .list-sales{
     border-style: solid;
-    height: 25px;
+    border-width: 0.5px;
+    border-radius: 5px;
+    width:80%;
+
+    height: 30px;
+    line-height: 30px;
     margin-bottom: 5px;
+    padding-left: 5%;
+
+    border-color: rgba(0, 0, 0, .5);
 }
