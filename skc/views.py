@@ -1,7 +1,6 @@
 import os
 import json
 import ujson
-import pandas as pd
 import decimal
 from datetime import date
 from django.conf import settings

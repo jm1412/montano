@@ -51,7 +51,7 @@ function showItems(saleId){
         
         if (item[0] == saleId){
             itemsContainer.innerHTML += `
-                <div class="list-items">${item[2]}, ${item[3]} x ${item[4]}, Total: ${item.subtotal}</div>
+                <div class="list-items">${item[2]}, ${item[3]} x ${item[4]}, Total: ${item[5]}</div>
             `
         }
 

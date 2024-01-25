@@ -9,9 +9,6 @@ body {
     font-size:small;
 }
 
-span {
-    border-style: solid;
-}
 #flex-container{
     display: flex;
 }
@@ -22,4 +19,10 @@ span {
 
 #items-container{
     flex-grow:3;
+}
+
+.list-sales{
+    border-style: solid;
+    height: 25px;
+    margin-bottom: 5px;
 }
