@@ -44,7 +44,7 @@ ALLOWED_HOSTS = [
 
 # Application definition
 INSTALLED_APPS = [
-    'ipon_goodbot'
+    'ipon_goodbot',
     'app_calendar',
     'todolist',
     'accounts',
