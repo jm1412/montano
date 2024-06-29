@@ -7,7 +7,7 @@ def gasto_new_entry(request):
     data = json.loads(request.body)
     telegram_id = data.get("telegram_id", "")
     amount_spent = data.get("amount", "")
-    #date_spent = data.get("date", "")
+    date_spent = data.get("date", "")
 
     gasto = Gasto(
         telegram_id = telegram_id,
