@@ -30,5 +30,6 @@ urlpatterns = [
     path('calendar/', include('app_calendar.urls')),
     path('todo/', include('todolist.urls')),
     path('blog/', include('blog.urls')),
-    path('skc/', include('skc.urls'))
+    path('skc/', include('skc.urls')),
+    path('ipon_goodbot/', include('ipon_goodbot.urls'))
 ]
