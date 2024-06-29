@@ -2,12 +2,12 @@ from django.shortcuts import render
 from .models import *
 
 # Create your views here.
-def new_entry(request):
+def gasto_new_entry(request):
     """Create new entry."""
     data = json.loads(request.body)
     telegram_id = data.get("telegram_id", "")
-    amount_spent = data.get("amount_spent", "")
-    date_spent = data.get("date_spent", "")
+    amount_spent = data.get("amount", "")
+    date_spent = data.get("date", "")
 
     gasto = Gasto(
         telegram_id = telegram_id,
