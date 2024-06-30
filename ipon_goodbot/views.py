@@ -9,6 +9,8 @@ from django.conf import settings
 # Create your views here.
 def request_authorized(request):
     auth_header = request.headers.get('Authorization')
+    print(auth_header)
+    print(settings.TELEGRAM_TOKEN)
     if auth_header != f"Bearer {settings.TELEGRAM_TOKEN}":
         return False
     return True
