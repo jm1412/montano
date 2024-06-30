@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from .models import *
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
+@csrf_exempt
 def gasto_new_entry(request):
     """Create new entry."""
     data = json.loads(request.body)
