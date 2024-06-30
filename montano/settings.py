@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
+# Tokens
+TELEGRAM_TOKEN = '5dd31bc89de7e6c829725b0d7f7a2c60afa618f42c98b5e27d413583955cc81d'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = BASE_DIR / "media"

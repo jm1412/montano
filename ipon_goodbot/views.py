@@ -4,13 +4,12 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from datetime import datetime, date
-
-secret_token = "5dd31bc89de7e6c829725b0d7f7a2c60afa618f42c98b5e27d413583955cc81d"
+from django.conf import settings
 
 # Create your views here.
 def request_authorized(request):
     auth_header = request.headers.get('Authorization')
-    if auth_header != f"Bearer {settings.SECRET_TOKEN}":
+    if auth_header != f"Bearer {settings.TELEGRAM_TOKEN}":
         return False
     return True
     
