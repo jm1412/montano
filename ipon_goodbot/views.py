@@ -5,10 +5,21 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from datetime import datetime, date
 
+secret_token = "5dd31bc89de7e6c829725b0d7f7a2c60afa618f42c98b5e27d413583955cc81d"
+
 # Create your views here.
+def request_authorized(request):
+    auth_header = request.headers.get('Authorization')
+    if auth_header != f"Bearer {settings.SECRET_TOKEN}":
+        return False
+    return True
+    
 @csrf_exempt
 def gasto_new_entry(request):
     """Create new entry."""
+    if not request_authorized(request):
+      return JsonResponse({"error": "Unauthorized"}, status=401)
+        
     data = json.loads(request.body)
     telegram_id = data.get("telegram_id", "")
     amount_spent = data.get("amount", "")
