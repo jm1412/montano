@@ -7,11 +7,16 @@ import json
 @csrf_exempt
 def gasto_new_entry(request):
     """Create new entry."""
-    data = json.loads(request.body)
-    telegram_id = data.get("telegram_id", "")
-    amount_spent = data.get("amount", "")
-    date_spent = data.get("date", "")
+#    data = json.loads(request.body)
+#    telegram_id = data.get("telegram_id", "")
+#    amount_spent = data.get("amount", "")
+#    date_spent = data.get("date", "")
 
+
+    telegram_id = request.POST.get('telegram_id')
+    amount_spent = request.POST.get('amount')
+    date_spent = request.POST.get('date')
+    
     gasto = Gasto(
         telegram_id = telegram_id,
         amount_spent = amount_spent
