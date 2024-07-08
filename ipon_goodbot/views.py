@@ -55,7 +55,8 @@ def get_saved_timezones(request):
     if not request_authorized(request):
         return JsonResponse({"error": "Unauthorized"}, status=401)
     user_timezones = Timezone.objects.all()
-    return user_timezones
+    
+    return JsonResponse([user_timezone.serialize() for user_timezone in user_timezones], safe=False)
     
 @csrf_exempt
 def get_expenses_today(request):

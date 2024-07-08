@@ -10,3 +10,9 @@ class Gasto(models.Model):
 class Timezone(models.Model):
     telegram_id = models.CharField(max_length=255)
     timezone = models.CharField(max_length=255) # Europe/London
+    
+    def serialize(self):
+        return {
+            "telegram_id": self.telegram_id,
+            "user_timezone": self.timezone,
+        }
