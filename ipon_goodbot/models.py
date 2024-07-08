@@ -6,3 +6,7 @@ class Gasto(models.Model):
     amount_spent = models.FloatField(default=0)
     date_spent = models.DateTimeField()
     created_on = models.DateTimeField(auto_now_add=True)
+    
+class Timezone(models.Model):
+    telegram_id = models.CharField(max_length=255)
+    timezone = models.CharField(max_length=255) # Europe/London

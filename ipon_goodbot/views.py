@@ -38,3 +38,39 @@ def gasto_new_entry(request):
     return JsonResponse({
         "message": "success"
     })
+    
+@csrf_exempt
+def save_user_timezone(request):
+    """Saves user timezone."""
+    if not request_authorized(request):
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+    
+    data = json.loads(request.body)
+    telegram_id = data.get("telegram_id", "")
+    timezone = data.get("timezone", "")
+    
+@csrf_exempt
+def get_saved_timezones(request):
+    """Gets ALL users' timezones."""
+    if not request_authorized(request):
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+    user_timezones = Timezone.objects.all()
+    return user_timezones
+    
+@csrf_exempt
+def get_expenses_today(request):
+    """ Returns all expense entries by user. """
+
+    data = json.loads(request.body)
+    status = data.get("status","")
+    user = request.user
+
+    try:
+        if status == None:
+            todo_items = Todo.objects.order_by("status", "position").filter(user=user)
+        else:
+            todo_items = Todo.objects.order_by("status", "position").filter(user=user, status=status)
+        return JsonResponse([todo.serialize() for todo in todo_items], safe=False)
+    
+    except Exception as e:
+        return JsonResponse({'error':str(e)}, status=500)
