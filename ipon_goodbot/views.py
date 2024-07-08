@@ -57,7 +57,23 @@ def get_saved_timezones(request):
     user_timezones = Timezone.objects.all()
     
     return JsonResponse([user_timezone.serialize() for user_timezone in user_timezones], safe=False)
+
+@csrf_exempt
+def save_user_timezone(request):
+    """Save user timezone."""
+    if not request_authorized(request):
+        return JsonResponse({"error": "Unauthorized"}, status=401})
     
+    data = json.loads(request.body)
+    telegram_id = data.get("telegram_id", "")
+    timezone = data.get("timezone", "")
+
+    new_timezone = Timezone(
+        telegram_id = telegram_id,
+        timezone = timezone
+        )
+    new_timezone.save()
+
 @csrf_exempt
 def get_expenses_today(request):
     """ Returns all expense entries by user. """
