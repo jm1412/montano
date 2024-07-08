@@ -62,7 +62,7 @@ def get_saved_timezones(request):
 def save_user_timezone(request):
     """Save user timezone."""
     if not request_authorized(request):
-        return JsonResponse({"error": "Unauthorized"}, status=401})
+        return JsonResponse({"error": "Unauthorized"}, status=401)
     
     data = json.loads(request.body)
     telegram_id = data.get("telegram_id", "")
