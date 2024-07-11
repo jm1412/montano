@@ -6,7 +6,7 @@ class Gasto(models.Model):
     amount_spent = models.FloatField(default=0)
     date_spent = models.DateTimeField()
     created_on = models.DateTimeField(auto_now_add=True)
-    timezone = models.CharField(max_length=255)
+    user_timezone = models.CharField(max_length=255)
     
     def serualize(self):
         return {
@@ -14,7 +14,7 @@ class Gasto(models.Model):
             "amount_spent": self.amount_spent,
             "date_spent": self.date_spent,
             "created_on": self.created_on,
-            "Timezone": self.timezone
+            "timezone": self.user_timezone
         }
     
 class Timezone(models.Model):
