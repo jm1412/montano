@@ -6,7 +6,7 @@ class Gasto(models.Model):
     amount_spent = models.FloatField(default=0)
     date_spent = models.DateTimeField()
     created_on = models.DateTimeField(auto_now_add=True)
-    date_spent_timezone = models.CharField()
+    date_spent_timezone = models.CharField(max_length=255)
     def serualize(self):
         return {
             "telegram_id": self.telegram_id,
