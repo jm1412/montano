@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Gasto(models.Model):
-    telegram_id = models.CharField(max_length=255)
+    telegram_id = models.IntegerField()
     amount_spent = models.FloatField(default=0)
     date_spent = models.DateTimeField()
     created_on = models.DateTimeField(auto_now_add=True)
