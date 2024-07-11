@@ -14,7 +14,7 @@ class Gasto(models.Model):
             "amount_spent": self.amount_spent,
             "date_spent": self.date_spent,
             "created_on": self.created_on,
-            "timezone": self.user_timezone
+            "user_timezone": self.user_timezone
         }
     
 class Timezone(models.Model):
