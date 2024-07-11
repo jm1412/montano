@@ -29,7 +29,7 @@ def gasto_new_entry(request):
     datetime_obj = datetime.strptime(date_spent, "%Y-%m-%d")
     date_obj = datetime_obj.date()
     
-    gasto = Gasto(
+    gasto = Expense(
         telegram_id = telegram_id,
         amount_spent = amount_spent,
         date_spent = date_obj,
@@ -56,7 +56,7 @@ def get_saved_timezones(request):
     """Gets ALL users' timezones."""
     if not request_authorized(request):
         return JsonResponse({"error": "Unauthorized"}, status=401)
-    user_timezones = Timezone.objects.all()
+    user_timezones = UserTimezone.objects.all()
     return JsonResponse([user_timezone.serialize() for user_timezone in user_timezones], safe=False)
 
 @csrf_exempt
@@ -69,7 +69,7 @@ def save_user_timezone(request):
     telegram_id = data.get("telegram_id", "")
     timezone = data.get("timezone", "")
 
-    new_timezone = Timezone(
+    new_timezone = UserTimezone(
         telegram_id = telegram_id,
         timezone = timezone
         )
@@ -102,7 +102,7 @@ def get_expense_amount_today(request):
     telegram_id = data.get("telegram_id","")
     timezone = data.get("timezone", "")
     date_spent = data.get("date","")
-    user_expenses_today = Gasto.objects.filter(telegram_id=telegram_id, date_spent=date_spent)
+    user_expenses_today = Expense.objects.filter(telegram_id=telegram_id, date_spent=date_spent)
     
     expense_amount_today = 0
     for item in user_expenses_today:

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Gasto, Timezone
+from .models import Expense, UserTimezone
 
-admin.site.register(Gasto)
-admin.site.register(Timezone)
+admin.site.register(Expense)
+admin.site.register(UserTimezone)
