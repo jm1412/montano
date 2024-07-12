@@ -33,7 +33,7 @@ def gasto_new_entry(request):
         telegram_id = telegram_id,
         amount_spent = amount_spent,
         date_spent = date_obj,
-        timezone = timezone
+        date_timezone = timezone
     )
     gasto.save()
 
