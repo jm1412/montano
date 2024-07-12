@@ -102,7 +102,10 @@ def get_expense_amount_today(request):
     data = json.loads(request.body)
     telegram_id = data.get("telegram_id","")
     timezone = data.get("timezone", "")
-    date_spent = data.get("date","")
+    
+    user_tz = pytz.timezone(timezone)
+    date_spent = datetime.now(user_tz).date()
+    
     user_expenses_today = Expense.objects.filter(telegram_id=telegram_id, date_spent=date_spent)
     
     expense_amount_today = 0
