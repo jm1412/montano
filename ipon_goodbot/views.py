@@ -22,19 +22,26 @@ def gasto_new_entry(request):
       return JsonResponse({"error": "Unauthorized"}, status=401)
         
     data = json.loads(request.body)
+    
     telegram_id = data.get("telegram_id", "")
     amount_spent = data.get("amount", "")
-    date_spent = data.get("date", "")
     timezone = data.get("timezone", "")
-    
+    expense_comment = data.get("expense_comment", "")
+    category = data.get("category", "")    
+    date_spent = data.get("date", "")
+
     datetime_obj = datetime.strptime(date_spent, "%Y-%m-%d")
     date_obj = datetime_obj.date()
+    
+
     
     gasto = Expense(
         telegram_id = telegram_id,
         amount_spent = amount_spent,
         date_spent = date_obj,
-        date_timezone = timezone
+        date_timezone = timezone,
+        expense_comment = expense_comment,
+        category = category
     )
     gasto.save()
 
