@@ -40,7 +40,8 @@ ALLOWED_HOSTS = [
     '192.168.1.19',
     'skc.localhost',
     'skc.montano.ph',
-    '.montano.ph'
+    '.montano.ph',
+    'temppy.eu.pythonanywhere.com'
 ]
 
 
@@ -59,20 +60,23 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_hosts',
-    'ckeditor'
+    'ckeditor',
+    'corsheaders',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
     'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_hosts.middleware.HostsResponseMiddleware'
-]
+    ]
 
 ROOT_URLCONF = 'montano.urls'
 ROOT_HOSTCONF = 'montano.hosts'
@@ -175,3 +179,14 @@ LOGGING = {
         },
     },
     }
+
+# Allow the Authorization header
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',  # Add authorization header
+    'x-csrftoken',
+    'x-requested-with'
+]
+
+# Or allow all headers (less secure, but useful for debugging)
+CORS_ALLOW_ALL_HEADERS = True

@@ -9,8 +9,9 @@ import pytz
 
 # Create your views here.
 def request_authorized(request):
+    print("running")
     auth_header = request.headers.get('Authorization')
-
+    print(request.headers)
     if auth_header != f"Bearer {settings.TELEGRAM_TOKEN}":
         return False
     return True
@@ -133,7 +134,7 @@ def get_expenses(request):
     Accepts single date or range; one of which can be None.
     Does not check if both are None or if both are supplied, prioritizes range.
     """
-    
+    print("running get_expenses")
     if not request_authorized(request):
         return JsonResponse({"error": "Unauthorized"}, status=401)
 
@@ -155,5 +156,5 @@ def get_expenses(request):
     else:
         date = datetime.strptime(date_str, '%Y-%m-%d').date()
         expenses = Expense.objects.filter(date_spent=date, telegram_id=telegram_id)
-    
+    print(f"sending {expenses}")
     return JsonResponse([expense.serialize() for expense in expenses], safe=False, status=200)
