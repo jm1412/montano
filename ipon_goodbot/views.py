@@ -23,6 +23,7 @@ def gasto_new_entry(request):
       return JsonResponse({"error": "Unauthorized"}, status=401)
         
     data = json.loads(request.body)
+    user = request.user
     
     telegram_id = data.get("telegram_id", "")
     amount_spent = data.get("amount", "")
@@ -134,7 +135,6 @@ def get_expenses(request):
     Accepts single date or range; one of which can be None.
     Does not check if both are None or if both are supplied, prioritizes range.
     """
-    print("running get_expenses")
     if not request_authorized(request):
         return JsonResponse({"error": "Unauthorized"}, status=401)
 

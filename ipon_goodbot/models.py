@@ -1,7 +1,10 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 # Create your models here.
 class Expense(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="expense_maker")
     telegram_id = models.IntegerField()
     amount_spent = models.FloatField(default=0)
     date_spent = models.DateTimeField()
@@ -22,6 +25,7 @@ class Expense(models.Model):
         }
     
 class UserTimezone(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="expense_entries")
     telegram_id = models.CharField(max_length=255)
     timezone = models.CharField(max_length=255) # Europe/London
     
@@ -29,4 +33,3 @@ class UserTimezone(models.Model):
         return {
             self.telegram_id: self.timezone
         }
-        

@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -190,3 +191,11 @@ CORS_ALLOW_HEADERS = [
 
 # Or allow all headers (less secure, but useful for debugging)
 CORS_ALLOW_ALL_HEADERS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+CORS_ALLOW_ALL_ORIGINS = True
