@@ -1,3 +1,7 @@
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
 from django.shortcuts import render
 from .models import Expense, UserTimezone
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -9,47 +13,53 @@ import pytz
 
 # Create your views here.
 def request_authorized(request):
-    print("running")
-    auth_header = request.headers.get('Authorization')
-    print(request.headers)
-    if auth_header != f"Bearer {settings.TELEGRAM_TOKEN}":
-        return False
+    # print("running")
+    # auth_header = request.headers.get('Authorization')
+    # print(request.headers)
+    # if auth_header != f"Bearer {settings.TELEGRAM_TOKEN}":
+    #     print("returning FALSE")
+    #     return False
+    print("returning TRUE")
     return True
     
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def gasto_new_entry(request):
     """Create new entry."""
-    if not request_authorized(request):
-      return JsonResponse({"error": "Unauthorized"}, status=401)
-        
-    data = json.loads(request.body)
-    user = request.user
+    print("GASTO NEW ENTRY")
     
+    # Check if the request is authorized (assuming this is custom logic)
+    if not request_authorized(request):
+        return Response({"error": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    # Parse request data
+    data = request.data
+    user = request.user  # This is now the authenticated user
+
     telegram_id = data.get("telegram_id", "")
     amount_spent = data.get("amount", "")
     timezone = data.get("timezone", "")
-    expense_comment = data.get("expense_comment", "") 
-    category = data.get("category", "")    
+    expense_comment = data.get("expense_comment", "")
+    category = data.get("category", "")
     date_spent = data.get("date", "")
 
+    # Convert date string to date object
     datetime_obj = datetime.strptime(date_spent, "%Y-%m-%d")
     date_obj = datetime_obj.date()
-    
 
-    
+    # Create a new Expense entry
     gasto = Expense(
-        telegram_id = telegram_id,
-        amount_spent = amount_spent,
-        date_spent = date_obj,
-        date_timezone = timezone,
-        expense_comment = expense_comment,
-        category = category
+        user=user,
+        telegram_id=telegram_id,
+        amount_spent=amount_spent,
+        date_spent=date_obj,
+        date_timezone=timezone,
+        expense_comment=expense_comment,
+        category=category,
     )
     gasto.save()
 
-    return JsonResponse({
-        "message": "success"
-    })
+    return Response({"message": "success"}, status=status.HTTP_201_CREATED)
     
 @csrf_exempt
 def save_user_timezone(request):

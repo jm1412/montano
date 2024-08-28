@@ -8,3 +8,5 @@ urlpatterns = [
     path("get_expense_amount_today/", views.get_expense_amount_today, name="get_expense_amount_today"),
     path("get_expenses/", views.get_expenses, name="get_expenses")
 ]
+
+
