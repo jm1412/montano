@@ -19,18 +19,16 @@ def request_authorized(request):
     # if auth_header != f"Bearer {settings.TELEGRAM_TOKEN}":
     #     print("returning FALSE")
     #     return False
-    print("returning TRUE")
     return True
     
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def gasto_new_entry(request):
     """Create new entry."""
-    print("GASTO NEW ENTRY")
     
-    # Check if the request is authorized (assuming this is custom logic)
-    if not request_authorized(request):
-        return Response({"error": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
+    # # Check if the request is authorized (assuming this is custom logic)
+    # if not request_authorized(request):
+    #     return Response({"error": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
 
     # Parse request data
     data = request.data

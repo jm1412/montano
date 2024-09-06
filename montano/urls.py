@@ -24,6 +24,7 @@ urlpatterns = [
     path('blog/', include('blog.urls')),
     path('skc/', include('skc.urls')),
     path('ipon_goodbot/', include('ipon_goodbot.urls')),
+    path('sudoku/', include('sudoku.urls')),
     
     # Authentication and API URLs
     path('accounts/', include('accounts.urls')),  # Ensure 'accounts.urls' has the appropriate endpoints
