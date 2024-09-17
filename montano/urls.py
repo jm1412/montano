@@ -25,7 +25,8 @@ urlpatterns = [
     path('skc/', include('skc.urls')),
     path('ipon_goodbot/', include('ipon_goodbot.urls')),
     path('sudoku/', include('sudoku.urls')),
-    
+    path('wordle/', include('wordle.urls')),
+
     # Authentication and API URLs
     path('accounts/', include('accounts.urls')),  # Ensure 'accounts.urls' has the appropriate endpoints
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

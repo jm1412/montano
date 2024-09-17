@@ -41,12 +41,14 @@ ALLOWED_HOSTS = [
     'skc.localhost',
     'skc.montano.ph',
     '.montano.ph',
-    'temppy.eu.pythonanywhere.com'
+    'temppy.eu.pythonanywhere.com',
+    '192.168.0.15'
 ]
 
 
 # Application definition
 INSTALLED_APPS = [
+    'wordle',
     'ipon_goodbot',
     'app_calendar',
     'todolist',
@@ -222,4 +224,5 @@ CORS_ALLOW_HEADERS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Your React development server
+    "http://192.168.0.15:5173"
 ]
