@@ -84,6 +84,7 @@ def new_wordle(request):
             word_tokens[token] = selected_word
 
             # Return the selected word and token as JSON
+            print(f"selected_word: {selected_word}")
             return JsonResponse({'word': selected_word, 'token': token})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
@@ -117,12 +118,15 @@ def submit_guess(request):
 
 def get_feedback(guess, correct_word):
     """Generate feedback for the guessed word."""
+    guess = guess.lower()
+    print(f"correct_word: {correct_word}, guess: {guess}")
     feedback = []
     for g, c in zip(guess, correct_word):
         if g == c:
-            feedback.append(f"{g} is correct!")
+            feedback.append("correct")
         elif g in correct_word:
-            feedback.append(f"{g} is in the word but in the wrong position.")
+            feedback.append("present")
         else:
-            feedback.append(f"{g} is not in the word.")
+            feedback.append("absent")
+    print(f"feedback: {feedback}")
     return feedback
