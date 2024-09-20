@@ -22,14 +22,13 @@ def scrape_mangapark(request, num_pages=2):
         try:
             for page in range(1, num_pages + 1):
                 url = f"{base_url}?page={page}"
-                response = requests.get(url)
+                response = requests.get(url, proxies={"http": None, "https": None})
                 if response.status_code == 200:
-                    with open(output_file, 'a', encoding='utf-8') as file:  # Append to file
+                    with open(output_file, 'a', encoding='utf-8') as file:
                         file.write(response.text)
                 else:
                     return HttpResponse(f"Error fetching page: {response.status_code}", status=500)
 
-            # Read the content from the output file
             with open(output_file, 'r', encoding='utf-8') as file:
                 html_content = file.read()
 
@@ -37,12 +36,10 @@ def scrape_mangapark(request, num_pages=2):
             return HttpResponse(f"Error fetching page: {str(e)}", status=500)
 
     print("parsing")
-    # Parse the HTML content with BeautifulSoup
     soup = BeautifulSoup(html_content, 'html.parser')
     manga_dict = {}
     print("starting to extract")
 
-    # Extract manga titles and chapter links
     manga_items = soup.select('.pl-3')
 
     for item in manga_items:
@@ -54,7 +51,6 @@ def scrape_mangapark(request, num_pages=2):
         if chapter_list:
             manga_dict[manga_title] = manga_dict.get(manga_title, []) + chapter_list
 
-    # Generate XML structure
     root = Element('manga_updates')
 
     for manga, chapters in manga_dict.items():
@@ -64,7 +60,6 @@ def scrape_mangapark(request, num_pages=2):
             chapter_element.set('title', chapter_title)
             chapter_element.set('link', f"https://mangapark.com{chapter_link}")
 
-    # Convert the XML structure to a string
     xml_string = tostring(root, encoding='utf-8', method='xml').decode('utf-8')
 
     return HttpResponse(xml_string, content_type='application/xml')
