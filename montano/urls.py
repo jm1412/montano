@@ -26,6 +26,7 @@ urlpatterns = [
     path('ipon_goodbot/', include('ipon_goodbot.urls')),
     path('sudoku/', include('sudoku.urls')),
     path('wordle/', include('wordle.urls')),
+    path('rss/', include('rss.urls')),
 
     # Authentication and API URLs
     path('accounts/', include('accounts.urls')),  # Ensure 'accounts.urls' has the appropriate endpoints

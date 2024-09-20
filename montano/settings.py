@@ -48,6 +48,7 @@ ALLOWED_HOSTS = [
 
 # Application definition
 INSTALLED_APPS = [
+    'rss',
     'wordle',
     'ipon_goodbot',
     'app_calendar',
