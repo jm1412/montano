@@ -4,3 +4,5 @@ skc/__pycache__/views.cpython-311.pyc
 static/
 **/__pycache__
 *.pyc
+secret_key.txt
+secret_key_telegram.txt

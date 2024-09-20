@@ -14,7 +14,9 @@ from pathlib import Path
 import os
 
 # Tokens
-TELEGRAM_TOKEN = '5dd31bc89de7e6c829725b0d7f7a2c60afa618f42c98b5e27d413583955cc81d'
+with open(os.path.join(BASE_DIR, 'secret_key_telegram.txt')) as f:
+    TELEGRAM_TOKEN = f.read().strip()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_ROOT = BASE_DIR / "media"
@@ -24,7 +26,8 @@ MEDIA_URL = "/media/"
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s%7+dyghl9pcq8fwuwt3zi$6d-6((91jyr_r9lv8bcm$ew*w$$'
+with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
