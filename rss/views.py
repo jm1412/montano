@@ -6,15 +6,19 @@ from bs4 import BeautifulSoup
 from xml.etree.ElementTree import Element, SubElement, tostring
 
 def scrape_mangapark(request, num_pages=2):
+    print("running: scrape_mangapark")
     base_url = 'https://mangapark.com/latest'
     output_file = 'mangapark_latest.html'
     cache_duration = 30 * 60  # 30 minutes in seconds
 
     # Check if the output file exists and is not older than 30 minutes
+    print("checking if file exists")
     if os.path.exists(output_file) and (time.time() - os.path.getmtime(output_file)) < cache_duration:
+        print("file already exists")
         with open(output_file, 'r', encoding='utf-8') as file:
             html_content = file.read()
     else:
+        print("downloading new file")        
         try:
             # Use wget to fetch the webpage
             with open(output_file, 'w', encoding='utf-8') as file:
@@ -29,10 +33,12 @@ def scrape_mangapark(request, num_pages=2):
         except Exception as e:
             return HttpResponse(f"Error fetching page: {str(e)}", status=500)
 
+    print("parsing")
     # Parse the HTML content with BeautifulSoup
     soup = BeautifulSoup(html_content, 'html.parser')
     manga_dict = {}
 
+    print("starting to extract")
     # Extract manga titles and chapter links
     manga_items = soup.select('.pl-3')  # Select the parent container
 
