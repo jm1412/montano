@@ -1,65 +1,55 @@
+import json
 import os
-import time
-from django.http import HttpResponse
-from bs4 import BeautifulSoup
+from django.http import HttpResponse, JsonResponse
 from xml.etree.ElementTree import Element, SubElement, tostring
 import requests
 
-def scrape_mangapark(request, num_pages=2):
-    print("running: scrape_mangapark")
-    base_url = 'https://mangapark.com/latest'
-    output_file = os.path.join(os.path.dirname(__file__), 'mangapark_latest.html')
-    cache_duration = 30 * 60  # 30 minutes in seconds
+# Path to JSON file on GitHub
+JSON_FILE_URL = 'https://jm1412.github.io/mangapark_latest.json'
 
-    # Check if the output file exists and is not older than 30 minutes
-    print("checking if file exists")
-    if os.path.exists(output_file) and (time.time() - os.path.getmtime(output_file)) < cache_duration:
-        print("file already exists")
-        with open(output_file, 'r', encoding='utf-8') as file:
-            html_content = file.read()
+def fetch_json():
+    response = requests.get(JSON_FILE_URL)
+    if response.status_code == 200:
+        return response.json()
     else:
-        print("downloading new file")
-        try:
-            for page in range(1, num_pages + 1):
-                url = f"{base_url}?page={page}"
-                response = requests.get(url, proxies={"http": None, "https": None})
-                if response.status_code == 200:
-                    with open(output_file, 'a', encoding='utf-8') as file:
-                        file.write(response.text)
-                else:
-                    return HttpResponse(f"Error fetching page: {response.status_code}", status=500)
+        return None
 
-            with open(output_file, 'r', encoding='utf-8') as file:
-                html_content = file.read()
+def generate_xml_from_json(data):
+    root = Element('rss', version="2.0")
+    channel = SubElement(root, 'channel')
 
-        except Exception as e:
-            return HttpResponse(f"Error fetching page: {str(e)}", status=500)
+    title_channel = SubElement(channel, 'title')
+    title_channel.text = "MangaPark Latest Releases"
+    
+    link_channel = SubElement(channel, 'link')
+    link_channel.text = "https://mangapark.com/"
+    
+    description_channel = SubElement(channel, 'description')
+    description_channel.text = "Latest manga release information."
 
-    print("parsing")
-    soup = BeautifulSoup(html_content, 'html.parser')
-    manga_dict = {}
-    print("starting to extract")
+    for entry in data:
+        item_element = SubElement(channel, 'item')
+        
+        chapter_title_element = SubElement(item_element, 'title')
+        chapter_title_element.text = f"{entry['manga']} - {entry['chapter']}"
+        
+        chapter_link_element = SubElement(item_element, 'link')
+        chapter_link_element.text = entry['link']
 
-    manga_items = soup.select('.pl-3')
+    return tostring(root, encoding='utf-8', method='xml').decode('utf-8')
 
-    for item in manga_items:
-        manga_title = item.find('h3').get_text(strip=True)
-        chapters = item.select('a.link-hover.link-primary')
+def mangapark_rss(request, filter=None):
+    data = fetch_json()
+    if not data:
+        return JsonResponse({"error": "Unable to fetch data."}, status=500)
 
-        chapter_list = [(chapter.get_text(strip=True), chapter['href']) for chapter in chapters]
+    if filter:
+        filter = filter.lower()
+        filtered_data = [entry for entry in data if filter in entry['manga'].lower()]
+        if not filtered_data:
+            return JsonResponse({"error": f"No entries found for filter: {filter}"}, status=404)
+    else:
+        filtered_data = data
 
-        if chapter_list:
-            manga_dict[manga_title] = manga_dict.get(manga_title, []) + chapter_list
-
-    root = Element('manga_updates')
-
-    for manga, chapters in manga_dict.items():
-        manga_element = SubElement(root, 'manga', title=manga)
-        for chapter_title, chapter_link in chapters:
-            chapter_element = SubElement(manga_element, 'chapter')
-            chapter_element.set('title', chapter_title)
-            chapter_element.set('link', f"https://mangapark.com{chapter_link}")
-
-    xml_string = tostring(root, encoding='utf-8', method='xml').decode('utf-8')
-
+    xml_string = generate_xml_from_json(filtered_data)
     return HttpResponse(xml_string, content_type='application/xml')
